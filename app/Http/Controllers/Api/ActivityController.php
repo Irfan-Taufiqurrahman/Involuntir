@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 // use App\Mail\ActivityCreated;
 use App\Models\Activity;
 use App\Models\Category;
-use App\Models\Donation;
+use App\Models\Participation;
 use App\Models\KabarTerbaru;
 use Carbon\Carbon;
 use Error;
@@ -26,17 +26,17 @@ class ActivityController extends Controller
 {
     private $data = NULL;
 
-    // private function categoryFiltering($kategori)
-    // {
-    //     $this->data = Activity::where("kategori_campaign", ucwords(str_replace('_', ' & ', $kategori)));
-    // }
+    private function categoryFiltering(Category $kategori)
+    {
+        $this->data = Activity::where("category_id", $kategori->id);
+    }
 
     private function orderByFiltering($order)
     {
         if ($order === "mendesak") {
             $this->data = $this->data ? $this->data->orderBy('activities.batas_waktu', 'ASC') : Activity::orderBy('activities.batas_waktu', 'ASC');
-        // } else if ($order === "populer") {
-        //     $this->data = $this->data ? $this->data->orderBy(DB::raw('donations_count'), 'DESC') : Campaign::orderBy(DB::raw('donations_count'), 'DESC');
+        } else if ($order === "populer") {
+            $this->data = $this->data ? $this->data->orderBy(DB::raw('total_volunteer'), 'DESC') : Activity::orderBy(DB::raw('total_volunteer'), 'DESC');
         } else if ($order === "terbaru") {
             $this->data = $this->data ? $this->data->orderBy('activities.created_at', 'DESC') : Activity::orderBy('activities.created_at', 'DESC');
         }else {
@@ -49,13 +49,13 @@ class ActivityController extends Controller
         $this->data = $this->data ? $this->data->join('users', 'users.id', "=", 'activities.user_id')->where('users.tipe', $filter) : Activity::join('users', 'users.id', "=", 'activities.user_id')->where('users.tipe', $filter);
     }
 
-    // private function getAllActivitiesWithoutFiltering() {
-    //     return Campaign::leftJoin("donations", "donations.campaign_id", "=", "campaigns.id")->groupBy("campaigns.id")->orderBy('campaigns.created_at', 'DESC')->where('status_publish', 'published')->orWhere('status_publish', NULL)->get(['campaigns.id', "judul_campaign", "campaigns.judul_slug", "foto_campaign", "nominal_campaign", "batas_waktu_campaign", "campaigns.created_at", DB::raw("SUM(IF(donations.status_donasi = 'Approved', donations.donasi, 0)) as total_donasi, sum(if(donations.status_donasi = 'Approved', 1, 0)) as donations_count")]);
-    // }
+    private function getAllActivitiesWithoutFiltering() {
+        return Activity::join("participations", "participations.activity_id", "=", "activities.id")->groupBy("activities.id")->orderBy('activities.created_at', 'DESC')->where('status_publish', 'published')->orWhere('status_publish', NULL)->get(['activities.id', "judul_activity", "judul_slug", "foto_activity", "batas_waktu", "activities.created_at", DB::raw("COUNT(*) as total_volunteer")]);
+    }
 
-    // private function getAllCampaignsWithoutFilteringWithLimit($limit) {
-    //     return Campaign::leftJoin("donations", "donations.campaign_id", "=", "campaigns.id")->groupBy("campaigns.id")->limit($limit)->orderBy('campaigns.created_at', 'DESC')->where('status_publish', 'published')->orWhere('status_publish', NULL)->get(['campaigns.id', "judul_campaign", "campaigns.judul_slug", "foto_campaign", "nominal_campaign", "batas_waktu_campaign", "campaigns.created_at", DB::raw("SUM(IF(donations.status_donasi = 'Approved', donations.donasi, 0)) as total_donasi, sum(if(donations.status_donasi = 'Approved', 1, 0)) as donations_count")]);
-    // }
+    private function getAllActivitiesWithoutFilteringWithLimit($limit) {
+        return Activity::join("participations", "participations.activity_id", "=", "activities.id")->groupBy("activities.id")->limit($limit)->orderBy('activities.created_at', 'DESC')->where('status_publish', 'published')->orWhere('status_publish', NULL)->get(['activities.id', "judul_activity", "judul_slug", "foto_activity", "batas_waktu", "activities.created_at", DB::raw("COUNT(*) as total_volunteer")]);
+    }
 
     public function index()
     {
@@ -72,13 +72,13 @@ class ActivityController extends Controller
                 $this->byFiltering(request()->filter);
             }
 
-            // if(request()->limit) {
-            //     $this->data = $this->data ? $this->data->leftJoin("donations", "donations.campaign_id", "=", "campaigns.id")->groupBy("campaigns.id")->limit(request()->limit)->orderBy('campaigns.created_at', 'DESC')->where('status_publish', 'published')->orWhere('status_publish', NULL)->get(['campaigns.id', "judul_campaign", "campaigns.judul_slug", "foto_campaign", "nominal_campaign", "batas_waktu_campaign", "campaigns.created_at", DB::raw("SUM(IF(donations.status_donasi = 'Approved', donations.donasi, 0)) as total_donasi, sum(if(donations.status_donasi = 'Approved', 1, 0)) as donations_count")]) : $this->getAllCampaignsWithoutFilteringWithLimit(request()->limit);
-            // }else {
-            //     $this->data = $this->data ? $this->data->leftJoin("donations", "donations.campaign_id", "=", "campaigns.id")->groupBy("campaigns.id")->orderBy('campaigns.created_at', 'DESC')->where('status_publish', 'published')->orWhere('status_publish', NULL)->get(['campaigns.id', "judul_campaign", "campaigns.judul_slug", "foto_campaign", "nominal_campaign", "batas_waktu_campaign", "campaigns.created_at", DB::raw("SUM(IF(donations.status_donasi = 'Approved', donations.donasi, 0)) as total_donasi, sum(if(donations.status_donasi = 'Approved', 1, 0)) as donations_count")]) : $this->getAllCampaignsWithoutFiltering();
-            // }
+            if(request()->limit) {
+                $this->data = $this->data ? $this->data->join("participations", "participations.activity_id", "=", "activities.id")->groupBy("activities.id")->limit(request()->limit)->orderBy('activities.created_at', 'DESC')->where('status_publish', 'published')->orWhere('status_publish', NULL)->get(['activities.id', "judul_activity", "judul_slug", "foto_activity", "batas_waktu", "activities.created_at", DB::raw("COUNT(*) as total_volunteer")]) : $this->getAllActivitiesWithoutFilteringWithLimit(request()->limit);
+            }else {
+                $this->data = $this->data ? $this->data->join("participations", "participations.activity_id", "=", "activities.id")->groupBy("activities.id")->orderBy('activities.created_at', 'DESC')->where('status_publish', 'published')->orWhere('status_publish', NULL)->get(['activities.id', "judul_activity", "judul_slug", "foto_activity", "batas_waktu", "activities.created_at", DB::raw("COUNT(*) as total_volunteer")]) : $this->getAllActivitiesWithoutFiltering();
+            }
 
-            // return response()->json(["data" => $this->data ? $this->data : $this->getAllCampaignsWithoutFiltering()]);
+            return response()->json(["data" => $this->data ? $this->data : $this->getAllActivitiesWithoutFiltering()]);
         }catch(Error $err) {
             return response()->json(["message" => $err->getMessage()], 401);
         }
@@ -101,30 +101,15 @@ class ActivityController extends Controller
             ->where('id', $id_activist)
             ->get(['users.id', 'photo', 'name', 'status_akun', 'role', 'tipe']);
 
-        // $curr_donation = DB::table('donations')
-        //     ->selectRaw('SUM(donasi) current_donation')
-        //     ->where('campaign_id', $id_campaign)
-        //     ->where('status_donasi', 'Approved')
-        //     ->get();
 
-        // $jumlah_donatur = DB::table('donations')
-        //     ->selectRaw('COUNT(id) jumlah_donatur')
-        //     ->where('campaign_id', $id_campaign)
-        //     ->where('status_donasi', 'Approved')
-        //     ->first();
-
-        // $doa_donatur = DB::table('donations')->join('users', 'user_id', '=', 'users.id')
-        //     ->select('komentar', 'nama', 'photo', 'users.id')
-        //     ->where('campaign_id', $id_campaign)
-        //     ->where('status_donasi', 'Approved')
-        //     ->where('komentar', '!=', NULL)
-        //     ->get();
-
-        // $donatur = Donation::join('users', 'user_id', '=', 'users.id')->where('campaign_id', $id_campaign)
-        //     ->where('status_donasi', 'Approved')
-        //     ->get(['users.id', 'donasi', 'photo', 'nama', 'donations.created_at']);
-
-        // $kabar_terbaru = KabarTerbaru::join('users', 'user_id', '=', 'users.id')->where('campaign_id', $id_campaign)->get(['kabar_terbarus.id as id', 'judul', 'body', 'kabar_terbarus.created_at as tanggal_dibuat', 'user_id', 'name', 'photo', 'status_akun', 'role', 'tipe']);
+        $total_volunteer = DB::table('participations')
+                           ->select(DB::raw('COUNT(*) as total_volunteer'))
+                           ->where('activity_id', '=', $id_activity)
+                           ->get();
+        
+        $volunteer = Participation::join('users', 'user_id', '=', 'users.id')
+                     ->where('activity_id', $id_activity)
+                     ->get(['users.id', 'photo', 'name', 'nomor_hp', 'participations.created_at']);
 
         $user = auth('api')->user();
 
@@ -132,11 +117,8 @@ class ActivityController extends Controller
             'data' => [
                 'activity' => $data_activity,
                 'user' => $activist,
-                // 'current_donation' => $curr_donation,
-                // 'jumlah_donatur' => $jumlah_donatur,
-                // 'doa_donatur' => $doa_donatur,
-                // 'kabar_terbaru' => $kabar_terbaru,
-                // 'donatur' => $donatur,
+                'total_volunteer' => $total_volunteer,
+                'volunteer' => $volunteer,
                 'is_mine' => $user ? ($user->id === $id_activist) : false
             ]
         ]);
@@ -146,24 +128,17 @@ class ActivityController extends Controller
     {
         $id_activity = $activity->id;
 
-        // $curr_donation = DB::table('donations')
-        //     ->selectRaw('SUM(donasi) current_donation')
-        //     ->where('campaign_id', $id_campaign)
-        //     ->where('status_donasi', 'Approved')
-        //     ->get();
-
-        // $jumlah_donatur = DB::table('donations')
-        //     ->selectRaw('COUNT(id) jumlah_donatur')
-        //     ->where('campaign_id', $id_campaign)
-        //     ->where('status_donasi', 'Approved')
-        //     ->first();
+        $total_volunteer = DB::table('participations')
+                           ->select(DB::raw('COUNT(*) as total_volunteer'))
+                           ->where('activity_id', '=', $id_activity)
+                           ->get();
+        
+        $user = $activity->user;
 
         return response()->json([
             'data' => [
                 'activity' => $activity,
-                'user' => $activity->user,
-                // 'current_donation' => $curr_donation,
-                // 'jumlah_donatur' => $jumlah_donatur
+                'total_volunteer' => $total_volunteer
             ]
         ]);
     }
@@ -272,12 +247,13 @@ class ActivityController extends Controller
             'judul_activity'  => $request->judul_activity,
             'judul_slug'      => $judul_slug,
             'foto_activity'   => $foto_activity,
-            'detail_activity' => $detail_activity,
+            'detail_activity' => $request->detail_activity,
             'batas_waktu'     => Carbon::now()->addDays($request->batas_waktu),
             'waktu_activity'  => $request->waktu_activity,
             'lokasi'          => $request->lokasi,
             'tipe_activity'   => $request->tipe_activity,
             'status_publish'  => $request->status_publish,
+            'status'          => 'Pending',
             'updated_at'      => $request->status_publish === 'published' ? Carbon::now() : null
         ]);
 
@@ -446,32 +422,32 @@ class ActivityController extends Controller
         return response()->json(['message' => 'berhasil membuat campaign', 'data' => $campaign, 'error' => false]);
     }
 
-    private function getCategory(string $category)
+    private function getCategory(Category $category)
     {
-        return Campaign::orderBy('campaigns.created_at')
-            ->where('kategori_campaign', $category)->leftJoin("donations", "donations.campaign_id", "=", "campaigns.id")->groupBy("campaigns.id")->get(['campaigns.id', "judul_campaign", "campaigns.judul_slug", "foto_campaign", "nominal_campaign", "batas_waktu_campaign", DB::raw('sum(donasi) as total_donasi')]);
+        return Activity::orderBy('activities.created_at')
+            ->where('category_id', $category->id)->join("participations", "participations.activity_id", "=", "activities.id")->groupBy("activities.id")->get(['activities.id', "judul_activity", "judul_slug", "foto_activity", "batas_waktu", "activities.created_at", DB::raw("COUNT(*) as total_volunteer")]);
     }
 
     public function isExist($slug) {
-        return response()->json(['isExist' => Activity::where('juduL_slug', $slug)->first() ? true : false]);
+        return response()->json(['isExist' => Activity::where('judul_slug', $slug)->first() ? true : false]);
     }
 
     public function destroy(Activity $activity) {
         // old image is not deleted because this is a soft delete
-        $campaign->delete();
+        $activity->delete();
         return response()->json(['message' => 'berhasil menghapus activity'], 200);
     }
 
-    // public function myCampaigns() {
-    //     $user = Auth::user();
+    public function myActivities() {
+        $user = Auth::user();
 
-    //     $campaigns = Campaign::where('campaigns.user_id', $user->id)->leftJoin("donations", "donations.campaign_id", "=", "campaigns.id")
-    //                 ->groupBy("campaigns.id")->orderBy('campaigns.created_at', 'DESC')
-    //                 ->get(['campaigns.id', "judul_campaign", "campaigns.judul_slug",
-    //                         "foto_campaign", "nominal_campaign", "batas_waktu_campaign",
-    //                         "campaigns.created_at",
-    //                         DB::raw("SUM(IF(donations.status_donasi = 'Approved', donations.donasi, 0)) as total_donasi, sum(if(donations.status_donasi = 'Approved', 1, 0)) as donations_count")]);;
+        $activities = Activity::where('activities.user_id', $user->id)->join("participations", "participations.activity_id", "=", "activities.id")
+                    ->groupBy("activities.id")->orderBy('activities.created_at', 'DESC')
+                    ->get(['activities.id', "judul_activity", "judul_slug",
+                            "foto_activity", "batas_waktu",
+                            "activities.created_at",
+                            DB::raw("COUNT(*) as total_volunteer")]);
 
-    //     return response()->json(["data" => $campaigns], 200);
-    // }
+        return response()->json(["data" => $activities], 200);
+    }
 }

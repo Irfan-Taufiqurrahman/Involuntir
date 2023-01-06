@@ -3,6 +3,8 @@
 use App\Http\Controllers\Api\{AccountVerificationController,
     Admin\UserAdminController,
     Admin\CampaignAdminController,
+    ActivityController,
+    ParticipationController,
     CampaignController,
     CategoryController,
     CompanyController,
@@ -92,6 +94,21 @@ Route::prefix('galangdana')->group(function () {
 
 Route::get('/galangdanasaya', [CampaignController::class, 'myCampaigns'])->middleware('jwt.verify');
 
+Route::prefix('aktivitas')->group(function () {
+    Route::get('/', [ActivityController::class, 'index']);
+    Route::get('/{activity}', [ActivityController::class, 'show']);
+    Route::get('/byslug/{activity}', [ActivityController::class, 'bySlug']);
+
+    Route::post('/create', [ActivityController::class, 'create'])->middleware('jwt.verify');
+    Route::post('/create/publish', [ActivityController::class, 'publish'])->middleware('jwt.verify');
+    Route::post('/create/draft', [ActivityController::class, 'draft'])->middleware('jwt.verify');
+    Route::put('/{id}/update', [ActivityController::class, 'update'])->middleware('jwt.verify');
+    Route::delete('/{activity:id}/delete', [ActivityController::class, 'destroy'])->middleware('jwt.verify');
+
+    Route::get('isExist/{slug}', [ActivityController::class, 'isExist']);
+});
+
+Route::get('/aktivitassaya', [ActivityController::class, 'myActivities'])->middleware('jwt.verify');
 
 Route::prefix('kabar_terbaru')->middleware('jwt.verify')->group(function() {
     Route::post('upload', [KabarTerbaruController::class, 'upload']);
@@ -128,6 +145,11 @@ Route::prefix('donation')->group(function () {
     Route::get('/histories', [DonationController::class, 'histories'])->middleware('jwt.verify');
     Route::get('/histories/{id}/details', [DonationController::class, 'detailsHistory'])->middleware('jwt.verify');
     Route::get('/transaction/{kode_id}', [DonationController::class, 'transactionHistory']);
+});
+
+Route::prefix('participation')->middleware('jwt.verify')->group(function () {
+    Route::post('/', [ParticipationController::class, 'submit']);
+    Route::get('/{activity}/participants', [ParticipationController::class, 'participants']);
 });
 
 Route::post('/payments/midtrans-notification', [PaymentCallbackController::class, 'receive']);
