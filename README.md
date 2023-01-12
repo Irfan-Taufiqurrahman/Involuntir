@@ -1,9 +1,25 @@
 
-# Peduly
+# Involuntir
 
+* [Aktivitas](#aktivitas)
 
+  * [Create](#1-create-aktivitas)
+  * [All](#2-all-aktivitas)
+  * [Specific](#3-specific-aktivitas)
+  * [By Slug](#4-by-slug-aktivitas)
+  * [Publish](#5-publish-aktivitas)
+  * [Draft](#6-draft-aktivitas)
+  * [Update](#7-update-aktivitas)
+  * [Delete](#8-delete-aktivitas)
+  * [Is Exist](#9-is-exist-aktivitas)
+
+* [Partisipasi](#partisipasi)
+  * [Submit](#1-submit-partisipasi)
+  * [Partisipan](#2-specific-partisipan)
 
 ## Indices
+
+
 
 * [Auth](#auth)
 
@@ -114,6 +130,651 @@
 * [ADMIN](#admin)
     * [Get Users](#1-admin-get-users)
     * [Galang Dana](#2-admin-galang-dana)
+
+## Aktivitas
+
+### 1. Create Aktivitas
+
+***Endpoint:***
+```bash
+Method: POST
+Type: 
+URL: http://127.0.0.1:8000/api/aktivitas/create
+```
+
+***Body:***
+
+| Key | Value | Description |
+| --- | ------|-------------|
+| status_publish | published |  |
+| category_id | 2 |  |
+| judul_activity | Judul2 |  |
+| judul_slug | tes_slug2 |  |
+| foto_activity | Image Object |  |
+| detail_activity | tesdetail2 |  |
+| batas_waktu | 21 |  |
+| waktu_activity | 2023-12-31 |  |
+| lokasi | rumah |  |
+| tipe_activity | In-Person |  |
+
+***Response:***
+```js
+{
+    "data": {
+        "category_id": "2",
+        "user_id": 3,
+        "judul_activity": "Judul2",
+        "judul_slug": "tes_slug2",
+        "foto_activity": "tes_slug2.png",
+        "detail_activity": "tesdetail2",
+        "batas_waktu": "2023-01-24T16:52:00.787353Z",
+        "waktu_activity": "2023-01-31",
+        "lokasi": "rumah",
+        "tipe_activity": "In-Person",
+        "status_publish": "published",
+        "status": "Pending",
+        "updated_at": "2023-01-10T16:52:00.000000Z",
+        "created_at": "2023-01-10T16:52:00.000000Z",
+        "id": 2,
+        "user": {
+            "id": 3,
+            "socialite_id": null,
+            "socialite_name": null,
+            "name": "Developer Peduly",
+            "role": "Admin",
+            "tipe": "Individu",
+            "username": null,
+            "email": "developer@peduly.com",
+            "email_verified_at": "2022-12-14T06:42:38.000000Z",
+            "status_akun": "Verified",
+            "no_telp": "081333544085",
+            "usia": "32",
+            "jenis_kelamin": "Pria",
+            "alamat": "rumahrumahrumah",
+            "provinsi": 0,
+            "kabupaten": 0,
+            "kecamatan": 0,
+            "tempat_lahir": "rumahrumahrumah",
+            "tanggal_lahir": "1990-01-01",
+            "pekerjaan": "Pendeta",
+            "jenis_organisasi": null,
+            "tanggal_berdiri": null,
+            "photo": null,
+            "foto_ktp": null,
+            "bank": "Mandiri",
+            "no_rek": "999999",
+            "created_at": "2022-12-14T06:41:14.000000Z",
+            "updated_at": "2022-12-14T06:42:38.000000Z",
+            "deleted_at": "-000001-11-29T16:52:48.000000Z"
+        }
+    }
+}
+```
+
+***Status Code:*** 200
+
+### 2. All Aktivitas
+
+***Endpoint:***
+```bash
+Method: GET
+Type: 
+URL: http://127.0.0.1:8000/api/aktivitas
+```
+
+***Response:***
+```js
+{
+    "data": [
+        {
+            "id": 5,
+            "judul_activity": "Judul2",
+            "judul_slug": "tes_slug2",
+            "foto_activity": "tes_slug2.jpg",
+            "batas_waktu": "2023-01-26 18:15:47",
+            "created_at": "2023-01-12T11:15:48.000000Z",
+            "total_volunteer": 0
+        },
+        {
+            "id": 4,
+            "judul_activity": "judultiga",
+            "judul_slug": "slug-3-tes",
+            "foto_activity": "slug-3-tes.jpg",
+            "batas_waktu": "2023-02-11 00:11:45",
+            "created_at": "2023-01-11T17:11:45.000000Z",
+            "total_volunteer": 0
+        },
+        {
+            "id": 1,
+            "judul_activity": "gantijudul",
+            "judul_slug": "tes_slug",
+            "foto_activity": "tes_slug.jpg",
+            "batas_waktu": "2023-01-20 13:35:12",
+            "created_at": "2023-01-06T06:35:12.000000Z",
+            "total_volunteer": 1
+        }
+    ]
+}
+```
+
+***Status Code:*** 200
+
+### 3. Specific Aktivitas
+
+***Endpoint:***
+```bash
+Method: GET
+Type: 
+URL: http://127.0.0.1:8000/api/aktivitas/{id}
+```
+
+***Response:***
+```js
+{
+    "data": {
+        "activity": {
+            "id": 2,
+            "category_id": 2,
+            "user_id": 3,
+            "judul_activity": "Judul2",
+            "judul_slug": "tes_slug2",
+            "foto_activity": "tes_slug2.png",
+            "detail_activity": "tesdetail2",
+            "batas_waktu": "2023-01-24 23:52:00",
+            "waktu_activity": "2023-01-31",
+            "lokasi": "rumah",
+            "tipe_activity": "In-Person",
+            "status_publish": "published",
+            "status": "Pending",
+            "created_at": "2023-01-10T16:52:00.000000Z",
+            "updated_at": "2023-01-10T16:52:00.000000Z",
+            "deleted_at": null,
+            "user": {
+                "id": 3,
+                "socialite_id": null,
+                "socialite_name": null,
+                "name": "Developer Peduly",
+                "role": "Admin",
+                "tipe": "Individu",
+                "username": null,
+                "email": "developer@peduly.com",
+                "email_verified_at": "2022-12-14T06:42:38.000000Z",
+                "status_akun": "Verified",
+                "no_telp": "081333544085",
+                "usia": "32",
+                "jenis_kelamin": "Pria",
+                "alamat": "rumahrumahrumah",
+                "provinsi": 0,
+                "kabupaten": 0,
+                "kecamatan": 0,
+                "tempat_lahir": "rumahrumahrumah",
+                "tanggal_lahir": "1990-01-01",
+                "pekerjaan": "Pendeta",
+                "jenis_organisasi": null,
+                "tanggal_berdiri": null,
+                "photo": null,
+                "foto_ktp": null,
+                "bank": "Mandiri",
+                "no_rek": "999999",
+                "created_at": "2022-12-14T06:41:14.000000Z",
+                "updated_at": "2022-12-14T06:42:38.000000Z",
+                "deleted_at": "-000001-11-29T16:52:48.000000Z"
+            }
+        },
+        "total_volunteer": [
+            {
+                "total_volunteer": 0
+            }
+        ]
+    }
+}
+```
+
+***Status Code:*** 200
+
+### 4. By Slug Aktivitas
+
+***Endpoint:***
+```bash
+Method: GET
+Type: 
+URL: http://127.0.0.1:8000/api/aktivitas/byslug/{slug}
+```
+
+***Response:***
+```js
+{
+    "data": {
+        "activity": [
+            {
+                "id": 1,
+                "category_id": 1,
+                "user_id": 3,
+                "judul_activity": "gantijudul",
+                "judul_slug": "tes_slug",
+                "foto_activity": "tes_slug.jpg",
+                "detail_activity": "tesdetailll",
+                "batas_waktu": "2023-01-20 13:35:12",
+                "waktu_activity": "2023-01-31",
+                "lokasi": "rumahgw",
+                "tipe_activity": "Virtual",
+                "status_publish": "published",
+                "status": "Pending",
+                "created_at": "2023-01-06 13:35:12",
+                "updated_at": "2023-01-12 00:42:11",
+                "deleted_at": null
+            }
+        ],
+        "user": [
+            {
+                "id": 3,
+                "photo": null,
+                "name": "Developer Peduly",
+                "status_akun": "Verified",
+                "role": "Admin",
+                "tipe": "Individu"
+            }
+        ],
+        "total_volunteer": [
+            {
+                "total_volunteer": 1
+            }
+        ],
+        "volunteer": [
+            {
+                "id": 3,
+                "photo": null,
+                "name": "Developer Peduly",
+                "nomor_hp": "081081081081",
+                "created_at": "2023-01-06T07:27:22.000000Z"
+            }
+        ],
+        "tugas": [],
+        "kriteria": [],
+        "is_mine": false
+    }
+}
+```
+
+***Status Code:*** 200
+
+### 5. Publish Aktivitas
+
+***Endpoint:***
+```bash
+Method: POST
+Type: 
+URL: http://127.0.0.1:8000/api/aktivitas/create/publish
+```
+
+***Body:***
+
+| Key | Value | Description |
+| --- | ------|-------------|
+| category_id | 1 |  |
+| judul_activity | judulempat |  |
+| foto_activity | Image Object |  |
+| judul_slug | slug-4-tes |  |
+| detail_activity | detailx4 |  |
+| batas_waktu | 30 |  |
+| waktu_activity | 2000-01-01 |  |
+| lokasi | kantor |  |
+| tipe_activity | Virtual |  |
+| tasks[] | testask1 |  |
+| tasks[] | testatsk2 |  |
+| criterias[] | testcriterias333 |  |
+
+***Response:***
+```js
+{
+    "data": {
+        "category_id": 1,
+        "user_id": 3,
+        "judul_activity": "judulempat",
+        "judul_slug": "slug-4-tes",
+        "foto_activity": "slug-4-tes.jpg",
+        "detail_activity": "detailx4",
+        "batas_waktu": "2023-02-11T12:01:12.766214Z",
+        "waktu_activity": "2000-01-01",
+        "lokasi": "kantor",
+        "tipe_activity": "Virtual",
+        "status_publish": "published",
+        "status": "Pending",
+        "updated_at": "2023-01-12T12:01:12.000000Z",
+        "created_at": "2023-01-12T12:01:12.000000Z",
+        "id": 30,
+        "tasks": [
+            "testask1",
+            "testatsk2"
+        ],
+        "criterias": [
+            "testcriterias333"
+        ],
+        "user": {
+            "id": 3,
+            "socialite_id": null,
+            "socialite_name": null,
+            "name": "Developer Peduly",
+            "role": "Admin",
+            "tipe": "Individu",
+            "username": null,
+            "email": "developer@peduly.com",
+            "email_verified_at": "2022-12-14T06:42:38.000000Z",
+            "status_akun": "Verified",
+            "no_telp": "081333544085",
+            "usia": "32",
+            "jenis_kelamin": "Pria",
+            "alamat": "rumahrumahrumah",
+            "provinsi": 0,
+            "kabupaten": 0,
+            "kecamatan": 0,
+            "tempat_lahir": "rumahrumahrumah",
+            "tanggal_lahir": "1990-01-01",
+            "pekerjaan": "Pendeta",
+            "jenis_organisasi": null,
+            "tanggal_berdiri": null,
+            "photo": null,
+            "foto_ktp": null,
+            "bank": "Mandiri",
+            "no_rek": "999999",
+            "created_at": "2022-12-14T06:41:14.000000Z",
+            "updated_at": "2022-12-14T06:42:38.000000Z",
+            "deleted_at": "-000001-11-29T16:52:48.000000Z"
+        }
+    }
+}
+```
+
+***Status Code:*** 201
+
+### 6. Draft Aktivitas
+
+***Endpoint:***
+```bash
+Method: POST
+Type: 
+URL: http://127.0.0.1:8000/api/aktivitas/create/draft
+```
+
+***Body:***
+
+| Key | Value | Description |
+| --- | ------|-------------|
+| category_id | 1 |  |
+| judul_activity | judul555 |  |
+| foto_activity | Image Object |  |
+| judul_slug | slug5 |  |
+| detail_activity | detaillima |  |
+| batas_waktu | 1 |  |
+| waktu_activity | 2023-05-02 |  |
+| lokasi | btul |  |
+| tipe_activity | In-Person |  |
+| tasks[] | testask99 |  |
+| tasks[] | testatsk999 |  |
+| criterias[] | testcriterias9 |  |
+
+***Response:***
+```js
+{
+    "data": {
+        "category_id": 1,
+        "user_id": 3,
+        "judul_activity": "judul555",
+        "judul_slug": "slug5",
+        "foto_activity": "slug5.jpg",
+        "detail_activity": "detaillima",
+        "batas_waktu": "2023-01-13T12:20:20.656956Z",
+        "waktu_activity": "2023-05-02",
+        "lokasi": "btul",
+        "tipe_activity": "In-Person",
+        "status_publish": "drafted",
+        "status": "Pending",
+        "updated_at": "2023-01-12T12:20:20.000000Z",
+        "created_at": "2023-01-12T12:20:20.000000Z",
+        "id": 31,
+        "tasks": [
+            "testask99",
+            "testask999"
+        ],
+        "criterias": [
+            "testcriterias9"
+        ],
+        "user": {
+            "id": 3,
+            "socialite_id": null,
+            "socialite_name": null,
+            "name": "Developer Peduly",
+            "role": "Admin",
+            "tipe": "Individu",
+            "username": null,
+            "email": "developer@peduly.com",
+            "email_verified_at": "2022-12-14T06:42:38.000000Z",
+            "status_akun": "Verified",
+            "no_telp": "081333544085",
+            "usia": "32",
+            "jenis_kelamin": "Pria",
+            "alamat": "rumahrumahrumah",
+            "provinsi": 0,
+            "kabupaten": 0,
+            "kecamatan": 0,
+            "tempat_lahir": "rumahrumahrumah",
+            "tanggal_lahir": "1990-01-01",
+            "pekerjaan": "Pendeta",
+            "jenis_organisasi": null,
+            "tanggal_berdiri": null,
+            "photo": null,
+            "foto_ktp": null,
+            "bank": "Mandiri",
+            "no_rek": "999999",
+            "created_at": "2022-12-14T06:41:14.000000Z",
+            "updated_at": "2022-12-14T06:42:38.000000Z",
+            "deleted_at": "-000001-11-29T16:52:48.000000Z"
+        }
+    }
+}
+```
+
+***Status Code:*** 201
+
+### 7. Update Aktivitas
+
+***Endpoint:***
+```bash
+Method: POST
+Type: 
+URL: http://127.0.0.1:8000/api/aktivitas/{id}/update
+```
+
+***Body:***
+| Key | Value | Description |
+| --- | ------|-------------|
+| _method | PUT |  |
+| status_publish | published |  |
+| judul | gantilagi |  |
+
+***Response:***
+```js
+{
+    "data": {
+        "id": 1,
+        "category_id": 1,
+        "user_id": 3,
+        "judul_activity": "gantilagi",
+        "judul_slug": "tes_slug",
+        "foto_activity": "tes_slug.jpg",
+        "detail_activity": "tesdetailll",
+        "batas_waktu": "2023-01-20 13:35:12",
+        "waktu_activity": "2023-01-31",
+        "lokasi": "rumahgw",
+        "tipe_activity": "Virtual",
+        "status_publish": "published",
+        "status": "Pending",
+        "created_at": "2023-01-06T06:35:12.000000Z",
+        "updated_at": "2023-01-12T12:26:27.000000Z",
+        "deleted_at": null,
+        "user": {
+            "id": 3,
+            "socialite_id": null,
+            "socialite_name": null,
+            "name": "Developer Peduly",
+            "role": "Admin",
+            "tipe": "Individu",
+            "username": null,
+            "email": "developer@peduly.com",
+            "email_verified_at": "2022-12-14T06:42:38.000000Z",
+            "status_akun": "Verified",
+            "no_telp": "081333544085",
+            "usia": "32",
+            "jenis_kelamin": "Pria",
+            "alamat": "rumahrumahrumah",
+            "provinsi": 0,
+            "kabupaten": 0,
+            "kecamatan": 0,
+            "tempat_lahir": "rumahrumahrumah",
+            "tanggal_lahir": "1990-01-01",
+            "pekerjaan": "Pendeta",
+            "jenis_organisasi": null,
+            "tanggal_berdiri": null,
+            "photo": null,
+            "foto_ktp": null,
+            "bank": "Mandiri",
+            "no_rek": "999999",
+            "created_at": "2022-12-14T06:41:14.000000Z",
+            "updated_at": "2022-12-14T06:42:38.000000Z",
+            "deleted_at": "-000001-11-29T16:52:48.000000Z"
+        }
+    }
+}
+```
+
+***Status Code:*** 201
+
+### 8. Delete Aktivitas
+
+***Endpoint:***
+```bash
+Method: DELETE
+Type: 
+URL: http://127.0.0.1:8000/api/aktivitas/{id}/delete
+```
+
+***Response:***
+```js
+{
+    "message": "berhasil menghapus activity"
+}
+```
+
+***Status Code:*** 200
+
+### 9. Is Exist Aktivitas
+
+***Endpoint:***
+```bash
+Method: GET
+Type: 
+URL: http://127.0.0.1:8000/api/aktivitas/isExist/{slug}
+```
+
+***Response:***
+```js
+{
+    "isExist": true
+}
+```
+
+***Status Code:*** 200
+
+## Partisipasi
+
+### 1. Submit Partisipasi
+
+***Endpoint:***
+```bash
+Method: POST
+Type: 
+URL: http://127.0.0.1:8000/api/participation
+```
+
+***Body:***
+| Key | Value | Description |
+| --- | ------|-------------|
+| activity_id | 2 |  |
+| nomor_hp | 081234567890 |  |
+| akun_linkedin | nihil |  |
+| pesan | tes123 |  |
+
+***Response:***
+```js
+{
+    "data": {
+        "activity_id": "2",
+        "user_id": 3,
+        "nomor_hp": "081234567890",
+        "akun_linkedin": "nihil",
+        "pesan": "tes123",
+        "updated_at": "2023-01-10T17:12:18.000000Z",
+        "created_at": "2023-01-10T17:12:18.000000Z",
+        "id": 6
+    }
+}
+```
+
+***Status Code:*** 200
+
+### 2. Specific Partisipan
+
+***Endpoint:***
+```bash
+Method: GET
+Type: 
+URL: http://127.0.0.1:8000/api/participation/{id}/participants
+```
+
+***Response:***
+```js
+{
+    "data": [
+        {
+            "id": 3,
+            "socialite_id": null,
+            "socialite_name": null,
+            "name": "Developer Peduly",
+            "role": "Admin",
+            "tipe": "Individu",
+            "username": null,
+            "email": "developer@peduly.com",
+            "email_verified_at": "2022-12-14 13:42:38",
+            "password": "$2y$10$UuBPq/csIpzwoWQUZSS/ZuQNpj432mFRdLStFrO3qL61P1IXuczDe",
+            "status_akun": "Verified",
+            "no_telp": "081333544085",
+            "usia": "32",
+            "jenis_kelamin": "Pria",
+            "alamat": "rumahrumahrumah",
+            "provinsi": 0,
+            "kabupaten": 0,
+            "kecamatan": 0,
+            "tempat_lahir": "rumahrumahrumah",
+            "tanggal_lahir": "1990-01-01",
+            "pekerjaan": "Pendeta",
+            "jenis_organisasi": null,
+            "tanggal_berdiri": null,
+            "photo": null,
+            "foto_ktp": null,
+            "bank": "Mandiri",
+            "no_rek": "999999",
+            "remember_token": null,
+            "created_at": "2022-12-14 13:41:14",
+            "updated_at": "2022-12-14 13:42:38",
+            "deleted_at": "0000-00-00"
+        }
+    ]
+}
+```
+
+***Status Code:*** 200
+
+----------
 
 ## Auth
 
