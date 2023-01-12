@@ -1,0 +1,3537 @@
+{
+	"info": {
+		"_postman_id": "fdede91f-e3d9-4302-ae97-a8a2fc102d97",
+		"name": "Involuntir API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "24074037"
+	},
+	"item": [
+		{
+			"name": "GALANGDANA",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{base_url}}/api/galangdana/",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"galangdana",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "LOGIN",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\": \"developer@peduly.com\",\r\n    \"password\": \"peduly1818\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/api/auth/login",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"auth",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Register",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\": \"developer@peduly.com\",\r\n    \"password\": \"peduly1818\",\r\n    \"name\": \"Developer Peduly\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/api/auth/register",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"auth",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CEK VERIF EMAIL",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\": \"developer@peduly.com\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/api/auth/checkverifemail",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"auth",
+						"checkverifemail"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "SEND VERIF EMAIL",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC8xMjcuMC4wLjE6ODAwMFwvYXBpXC9hdXRoXC9sb2dpbiIsImlhdCI6MTY1NjA1NDIxOSwiZXhwIjoxNjU2MDU3ODE5LCJuYmYiOjE2NTYwNTQyMTksImp0aSI6IkExdG1qOUtMT0Y3RWszUHgiLCJzdWIiOjIxOTUsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.6TlJ-k0D-F7bFRCW0n4cekS-lobSftg2jW6YtzT9i1k",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{base_url}}/api/auth/sendverifemail",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"auth",
+						"sendverifemail"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "BANTUAN MENDESAK",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{base_url}}/api/urgent",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"urgent"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[URGENT] tambah",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDAvYXBpL2F1dGgvbG9naW4iLCJpYXQiOjE2NjcxOTg1MDgsImV4cCI6MTY2NzIwMjEwOCwibmJmIjoxNjY3MTk4NTA4LCJqdGkiOiI5YW0ySmJhbGVrQk9OZXNWIiwic3ViIjoiMjE4OSIsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.T7yf_LEVjAYFRMpOqSd3Ek9ikm_2pTe0nEVKZp8uJ6M",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{base_url}}/api/galangdana/1059/asurgent",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"galangdana",
+						"1059",
+						"asurgent"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[SEARCH] pencarian",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{base_url}}/api/search?keyword=tes",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"search"
+					],
+					"query": [
+						{
+							"key": "keyword",
+							"value": "tes"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[Donation] riwayat",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDAvYXBpL2F1dGgvbG9naW4iLCJpYXQiOjE2NzEwMDAxOTUsImV4cCI6MTY3MTAwMzc5NSwibmJmIjoxNjcxMDAwMTk1LCJqdGkiOiJiak9weWN2SlNTUzdmekNMIiwic3ViIjoiMyIsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.eQNu-KRbZsXICa2NtFfJV0o1PYMzDEv9PlykKfi4WcM",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{base_url}}/api/donation/histories",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"donation",
+						"histories"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[Donation] riwayat details",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2Rldi5wZWR1bHkuY29tL2FwaS9hdXRoL2xvZ2luIiwiaWF0IjoxNjY4Mzk1NDY3LCJleHAiOjE2NzcwMzU0NjcsIm5iZiI6MTY2ODM5NTQ2NywianRpIjoieTBQT2tkMGdXYmMwM2RmRiIsInN1YiI6IjIxODkiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.96Pl18xP_QdvxAbsW58f8N56UIyv15jK02iCjdAUcH8",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{base_url}}/api/donation/histories/2201/details",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"donation",
+						"histories",
+						"2201",
+						"details"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[Donation] submit",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2Rldi5wZWR1bHkuY29tL2FwaS9hdXRoL2xvZ2luIiwiaWF0IjoxNjY3OTE3MzMzLCJleHAiOjE2NzY1NTczMzMsIm5iZiI6MTY2NzkxNzMzMywianRpIjoibVlrUDI4ZlF5eFVWRXdEMiIsInN1YiI6IjIxODkiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.nr5pBaSLY9ahvX6pNqw_SjdjmmuDOSkJBL4D0LAldiM",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/api/donation?nominal=20000&metode=cod&nama_lengkap=Juan%20Angela%20Alma&alamat_email=cpktnwt@gmail.com&nomor_ponsel=83111064482&kode_referensi=pdljna&pesan_baik=&user_id=1&campaign_id=1143&pesan_baik=Semangat yaa :)",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"donation"
+					],
+					"query": [
+						{
+							"key": "nominal",
+							"value": "20000"
+						},
+						{
+							"key": "metode",
+							"value": "cod"
+						},
+						{
+							"key": "nama_lengkap",
+							"value": "Juan%20Angela%20Alma"
+						},
+						{
+							"key": "alamat_email",
+							"value": "cpktnwt@gmail.com"
+						},
+						{
+							"key": "nomor_ponsel",
+							"value": "83111064482"
+						},
+						{
+							"key": "kode_referensi",
+							"value": "pdljna"
+						},
+						{
+							"key": "pesan_baik",
+							"value": ""
+						},
+						{
+							"key": "user_id",
+							"value": "1"
+						},
+						{
+							"key": "campaign_id",
+							"value": "1143"
+						},
+						{
+							"key": "pesan_baik",
+							"value": "Semangat yaa :)"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[Donation] details",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDAvYXBpL2F1dGgvbG9naW4iLCJpYXQiOjE2NjcxOTg1MDgsImV4cCI6MTY2NzIwMjEwOCwibmJmIjoxNjY3MTk4NTA4LCJqdGkiOiI5YW0ySmJhbGVrQk9OZXNWIiwic3ViIjoiMjE4OSIsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.T7yf_LEVjAYFRMpOqSd3Ek9ikm_2pTe0nEVKZp8uJ6M",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/api/donation/transaction/INVD16632279336825",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"donation",
+						"transaction",
+						"INVD16632279336825"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[Fndraiser] tolak",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDAvYXBpL2F1dGgvbG9naW4iLCJpYXQiOjE2NjAyODQ0OTUsImV4cCI6MTY2MDI4ODA5NSwibmJmIjoxNjYwMjg0NDk1LCJqdGkiOiJma3pmcHlkbVU1NUtmRkJYIiwic3ViIjoiMjE4OSIsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.jjXOY-HZr4Q7-SFb63723HqMeHPAwWiDyUD0TZKss3Q",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id_donasi\": 1904\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/api/fundraiser/ditolak",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"fundraiser",
+						"ditolak"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[Fndraiser] accept",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDAvYXBpL2F1dGgvbG9naW4iLCJpYXQiOjE2NjU1MDM4MzEsImV4cCI6MTY3NDE0MzgzMSwibmJmIjoxNjY1NTAzODMxLCJqdGkiOiJPTXczTW1sOHQ0SkxHNlFOIiwic3ViIjoiMjE4OSIsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.OCtjhrxbzMoYc7S08_VNn_w6ef24qaT80K2rdqknSc8",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id_donasi\": 1955\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/api/fundraiser/approve",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"fundraiser",
+						"approve"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[Donation] EMONEY",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/api/donation/emoney?nominal=50000&metode=emoney&nama_lengkap=Juan%20Angela%20Alma&alamat_email=adawdaw@gmail.com&nomor_ponsel=83111064482&kode_referensi=pdljna&pesan_baik=&user_id=1&campaign_id=1068&emoney_name=dana",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"donation",
+						"emoney"
+					],
+					"query": [
+						{
+							"key": "nominal",
+							"value": "50000"
+						},
+						{
+							"key": "metode",
+							"value": "emoney"
+						},
+						{
+							"key": "nama_lengkap",
+							"value": "Juan%20Angela%20Alma"
+						},
+						{
+							"key": "alamat_email",
+							"value": "adawdaw@gmail.com"
+						},
+						{
+							"key": "nomor_ponsel",
+							"value": "83111064482"
+						},
+						{
+							"key": "kode_referensi",
+							"value": "pdljna"
+						},
+						{
+							"key": "pesan_baik",
+							"value": ""
+						},
+						{
+							"key": "user_id",
+							"value": "1"
+						},
+						{
+							"key": "campaign_id",
+							"value": "1068"
+						},
+						{
+							"key": "emoney_name",
+							"value": "dana"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GALANGDANA",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{base_url}}/api/galangdana/byslug/berbagimakanan",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"galangdana",
+						"byslug",
+						"berbagimakanan"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "{{base_url}}/api/galangdana",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"Juan alma\",\r\n    \"email\": \"juanaaann@gmail.com\",\r\n    \"password\": \"cpktnwt123\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/api/auth/",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"auth",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[USER] detail",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDAvYXBpL2F1dGgvbG9naW4iLCJpYXQiOjE2NjczNjA1MTgsImV4cCI6MTY2NzM2NDExOCwibmJmIjoxNjY3MzYwNTE4LCJqdGkiOiJOMEhkNjg1THlOY1liR0pWIiwic3ViIjoiMjE4OSIsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.N9HOYHJERSz75vu5XHjLmGQlEGLO69V9XBIF7STwPo8",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{base_url}}/api/user",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"user"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[Upload] file",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDAvYXBpL2F1dGgvbG9naW4iLCJpYXQiOjE2NjczNjA1MTgsImV4cCI6MTY2NzM2NDExOCwibmJmIjoxNjY3MzYwNTE4LCJqdGkiOiJOMEhkNjg1THlOY1liR0pWIiwic3ViIjoiMjE4OSIsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.N9HOYHJERSz75vu5XHjLmGQlEGLO69V9XBIF7STwPo8",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "file",
+							"type": "file",
+							"src": "test.jpg"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{base_url}}/api/kabar_terbaru/upload",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"kabar_terbaru",
+						"upload"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[Kabar terbaru]",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDAvYXBpL2F1dGgvbG9naW4iLCJpYXQiOjE2NjczNjA1MTgsImV4cCI6MTY2NzM2NDExOCwibmJmIjoxNjY3MzYwNTE4LCJqdGkiOiJOMEhkNjg1THlOY1liR0pWIiwic3ViIjoiMjE4OSIsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.N9HOYHJERSz75vu5XHjLmGQlEGLO69V9XBIF7STwPo8",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"judul\": \"Ini adalah judul\",\r\n    \"campaign_id\": 1058,\r\n    \"body\": \"ini adaah body\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/api/kabar_terbaru/store",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"kabar_terbaru",
+						"store"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[Ubah profile] user",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2Rldi5wZWR1bHkuY29tL2FwaS9hdXRoL2xvZ2luIiwiaWF0IjoxNjYyNjk3NjQwLCJleHAiOjE2NzEzMzc2NDAsIm5iZiI6MTY2MjY5NzY0MCwianRpIjoicUdKd1RSY0xvdjZqck9NMCIsInN1YiI6IjIyMjIiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.60AsmS9Yqoc6vcYYMFc1l0lYwYsfdkXNu5Ycq6po1ww",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "photo",
+							"type": "file",
+							"src": "/C:/Users/juanl/Pictures/Screenshots/Screenshot (1).png"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{base_url}}/api/user",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"user"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "BANK DONATION",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{base_url}}/api/donation/bank_transfer?nominal=10000&metode=bank_transfer&nama_lengkap=Juan%20Angela%20Alma&alamat_email=juan@gmail.com&nomor_ponsel=83111064482&kode_referensi=FR05&pesan_baik=&user_id=1&campaign_id=1059&bank_name=bni&pesan_baik=Semoga lekas sembuh yaa:)",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"donation",
+						"bank_transfer"
+					],
+					"query": [
+						{
+							"key": "nominal",
+							"value": "10000"
+						},
+						{
+							"key": "metode",
+							"value": "bank_transfer"
+						},
+						{
+							"key": "nama_lengkap",
+							"value": "Juan%20Angela%20Alma"
+						},
+						{
+							"key": "alamat_email",
+							"value": "juan@gmail.com"
+						},
+						{
+							"key": "nomor_ponsel",
+							"value": "83111064482"
+						},
+						{
+							"key": "kode_referensi",
+							"value": "FR05"
+						},
+						{
+							"key": "pesan_baik",
+							"value": ""
+						},
+						{
+							"key": "user_id",
+							"value": "1"
+						},
+						{
+							"key": "campaign_id",
+							"value": "1059"
+						},
+						{
+							"key": "bank_name",
+							"value": "bni"
+						},
+						{
+							"key": "pesan_baik",
+							"value": "Semoga lekas sembuh yaa:)"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "BALANCE DONATION",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDAvYXBpL2F1dGgvbG9naW4iLCJpYXQiOjE2NjM5NTA4NTcsImV4cCI6MTY3MjU5MDg1NywibmJmIjoxNjYzOTUwODU3LCJqdGkiOiJVRkdEOGhWYmQ0T1JXM2R3Iiwic3ViIjoiMjE4OSIsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.uXgAIAGlFgIj240hfVnJdo1HamvwtAqO4oOUWKsPY30",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{base_url}}/api/donation/balance?nominal=10000&metode=balance",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"donation",
+						"balance"
+					],
+					"query": [
+						{
+							"key": "nominal",
+							"value": "10000"
+						},
+						{
+							"key": "nama_lengkap",
+							"value": "Juan%20Angela%20Alma",
+							"disabled": true
+						},
+						{
+							"key": "alamat_email",
+							"value": "juan@gmail.com",
+							"disabled": true
+						},
+						{
+							"key": "nomor_ponsel",
+							"value": "83111064482",
+							"disabled": true
+						},
+						{
+							"key": "kode_referensi",
+							"value": "FR05",
+							"disabled": true
+						},
+						{
+							"key": "pesan_baik",
+							"value": "",
+							"disabled": true
+						},
+						{
+							"key": "user_id",
+							"value": "1",
+							"disabled": true
+						},
+						{
+							"key": "bank_name",
+							"value": "bni",
+							"disabled": true
+						},
+						{
+							"key": "campaign_id",
+							"value": "1059",
+							"disabled": true
+						},
+						{
+							"key": "metode",
+							"value": "balance"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[Campaign] Create",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDAvYXBpL2F1dGgvbG9naW4iLCJpYXQiOjE2Njc4MzQ1OTAsImV4cCI6MTY3NjQ3NDU5MCwibmJmIjoxNjY3ODM0NTkwLCJqdGkiOiJZSThTMmQ1OW5IYmU1N2plIiwic3ViIjoiMjE4OSIsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.NtrfSPgguGfjx4OPdKg8F1w2NUd1Ih5kEJkqK-FOnI0",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "campaign_type",
+							"value": "event",
+							"type": "text"
+						},
+						{
+							"key": "judul_campaign",
+							"value": "Peduly Jatim",
+							"type": "text"
+						},
+						{
+							"key": "foto_campaign",
+							"type": "file",
+							"src": []
+						},
+						{
+							"key": "kategori_penerima_manfaat",
+							"value": "sendiri",
+							"type": "text"
+						},
+						{
+							"key": "penerima",
+							"value": "Dani",
+							"type": "text"
+						},
+						{
+							"key": "tujuan",
+							"value": "Untuk rumah sakit",
+							"type": "text"
+						},
+						{
+							"key": "nominal_campaign",
+							"value": "6000000",
+							"type": "text"
+						},
+						{
+							"key": "batas_waktu_campaign",
+							"value": "1",
+							"type": "text"
+						},
+						{
+							"key": "tujuan",
+							"value": "Untuk anak yatim",
+							"type": "text"
+						},
+						{
+							"key": "lokasi",
+							"value": "surabaya",
+							"type": "text"
+						},
+						{
+							"key": "alamat",
+							"value": "ini adalah alamat",
+							"type": "text"
+						},
+						{
+							"key": "rincian_penggunaan",
+							"value": "untuk bergai sesama",
+							"type": "text"
+						},
+						{
+							"key": "cerita",
+							"value": "ini adlaah cerita",
+							"type": "text"
+						},
+						{
+							"key": "ajakan",
+							"value": "ayo kita bekerja",
+							"type": "text"
+						},
+						{
+							"key": "category_id",
+							"value": "1",
+							"type": "text"
+						},
+						{
+							"key": "status_publish",
+							"value": "drafted",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "foto_campaign_2",
+							"type": "file",
+							"src": "/C:/Users/juanl/Downloads/casual-life-3d-doctor-sitting-on-the-floor-with-books.png"
+						},
+						{
+							"key": "foto_campaign_3",
+							"type": "file",
+							"src": [],
+							"disabled": true
+						},
+						{
+							"key": "foto_campaign_4",
+							"type": "file",
+							"src": [],
+							"disabled": true
+						}
+					]
+				},
+				"url": {
+					"raw": "{{base_url}}/api/galangdana/create/publish",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"galangdana",
+						"create",
+						"publish"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[Campaign] Delete",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDAvYXBpL2F1dGgvbG9naW4iLCJpYXQiOjE2NjA3OTYxMDMsImV4cCI6MTY2MDc5OTcwMywibmJmIjoxNjYwNzk2MTAzLCJqdGkiOiJ5RnhwZHN0bU5BMTZ1U0NMIiwic3ViIjoiMjE4OSIsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.OirrGDNwJjgW4ALZZOqBnHZfhfz_8ASRGpRsjlDXFUc",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "judul_campaign",
+							"value": "Peduly Jatim",
+							"type": "text"
+						},
+						{
+							"key": "kategori_campaign",
+							"value": "kesehatan",
+							"type": "text"
+						},
+						{
+							"key": "batas_waktu_campaign",
+							"value": "2023-06-23",
+							"type": "text"
+						},
+						{
+							"key": "lokasi",
+							"value": "Surabaya",
+							"type": "text"
+						},
+						{
+							"key": "detail_campaign",
+							"value": "Ini detail",
+							"type": "text"
+						},
+						{
+							"key": "foto_campaign",
+							"type": "file",
+							"src": "/C:/Users/juanl/Downloads/Date 1 (1).png"
+						},
+						{
+							"key": "target_donasi",
+							"value": "6000000",
+							"type": "text"
+						},
+						{
+							"key": "alamat_lengkap",
+							"value": "Gubeng Surabaya",
+							"type": "text"
+						},
+						{
+							"key": "tujuan",
+							"value": "Untuk anak yatim",
+							"type": "text"
+						},
+						{
+							"key": "penerima",
+							"value": "bpk haji samsudin",
+							"type": "text"
+						},
+						{
+							"key": "rincian",
+							"value": "ini adalah rincian",
+							"type": "text"
+						},
+						{
+							"key": "judul_slug",
+							"value": "peduly-jatim-indonesia",
+							"type": "text",
+							"disabled": true
+						}
+					]
+				},
+				"url": {
+					"raw": "{{base_url}}/api/galangdana/39403/delete",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"galangdana",
+						"39403",
+						"delete"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "https://dev.peduly.com/api/fundraiser/donaturreferal?id_fundraiser=2228",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://dev.peduly.com/api/fundraiser/donaturreferal?id_fundraiser=2228",
+					"protocol": "https",
+					"host": [
+						"dev",
+						"peduly",
+						"com"
+					],
+					"path": [
+						"api",
+						"fundraiser",
+						"donaturreferal"
+					],
+					"query": [
+						{
+							"key": "id_fundraiser",
+							"value": "2228"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[Fundraiser] Get Donations",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDAvYXBpL2F1dGgvbG9naW4iLCJpYXQiOjE2Njc1NDE0NDksImV4cCI6MTY2NzU0NTA0OSwibmJmIjoxNjY3NTQxNDQ5LCJqdGkiOiJTMlJiQWNGRUZBTkRVbzl5Iiwic3ViIjoiMjE4OSIsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.LaFrlgmazTAiw6JlY2gE-4acBPOewv8o20mFKspM17Q",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/api/fundraiser/donations",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"fundraiser",
+						"donations"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[Fundraiser] Dashboard",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2Rldi5wZWR1bHkuY29tL2FwaS9hdXRoL2xvZ2luIiwiaWF0IjoxNjYzMjI3NTk0LCJleHAiOjE2NzE4Njc1OTQsIm5iZiI6MTY2MzIyNzU5NCwianRpIjoibjNlRHZnbGwyaXpJcWozciIsInN1YiI6IjIxODkiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.8bGAFkoVsDflacr-TtwjfqlVqeYeQlmWI4kuAwq9-_I",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id_fundraiser\": \"2196\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/api/fundraiser/ringkasan",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"fundraiser",
+						"ringkasan"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[Fundraiser] Details Donation",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2Rldi5wZWR1bHkuY29tL2FwaS9hdXRoL2xvZ2luIiwiaWF0IjoxNjU5NTA4MTg1LCJleHAiOjE2NTk1MTE3ODUsIm5iZiI6MTY1OTUwODE4NSwianRpIjoiaGZDMmJlSVgyOXFSU2NUbSIsInN1YiI6IjIxODkiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.0NCpkgXWcPZsRqwvVPr36TZ9zPnfB5IU0VBbEl12aX8",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id_fundraiser\": \"2196\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/api/fundraiser/donations/1781/details",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"fundraiser",
+						"donations",
+						"1781",
+						"details"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[USER] Reset Password",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\": \"juanangelaalma@gmail.com\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/api/password/resetemail",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"password",
+						"resetemail"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[Wishlist] GET",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2Rldi5wZWR1bHkuY29tL2FwaS9hdXRoL2xvZ2luIiwiaWF0IjoxNjY4Mzk1NDY3LCJleHAiOjE2NzcwMzU0NjcsIm5iZiI6MTY2ODM5NTQ2NywianRpIjoieTBQT2tkMGdXYmMwM2RmRiIsInN1YiI6IjIxODkiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.96Pl18xP_QdvxAbsW58f8N56UIyv15jK02iCjdAUcH8",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/api/wishlists",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"wishlists"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[List]pekerjaan",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2Rldi5wZWR1bHkuY29tL2FwaS9hdXRoL2xvZ2luIiwiaWF0IjoxNjYzMTQzMzA4LCJleHAiOjE2NzE3ODMzMDgsIm5iZiI6MTY2MzE0MzMwOCwianRpIjoiYUpTN2RxbDlVTVdNRHpxRyIsInN1YiI6IjIyMjIiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.fJtNx3eOQow616l-IKOSR-fqkeAamFq867VPtpclEZg",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/api/pekerjaan",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"pekerjaan"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[List]organisasi",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2Rldi5wZWR1bHkuY29tL2FwaS9hdXRoL2xvZ2luIiwiaWF0IjoxNjYzMTQzMzA4LCJleHAiOjE2NzE3ODMzMDgsIm5iZiI6MTY2MzE0MzMwOCwianRpIjoiYUpTN2RxbDlVTVdNRHpxRyIsInN1YiI6IjIyMjIiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.fJtNx3eOQow616l-IKOSR-fqkeAamFq867VPtpclEZg",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/api/organisasi",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"organisasi"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[List]provinsi",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2Rldi5wZWR1bHkuY29tL2FwaS9hdXRoL2xvZ2luIiwiaWF0IjoxNjYzMTQzMzA4LCJleHAiOjE2NzE3ODMzMDgsIm5iZiI6MTY2MzE0MzMwOCwianRpIjoiYUpTN2RxbDlVTVdNRHpxRyIsInN1YiI6IjIyMjIiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.fJtNx3eOQow616l-IKOSR-fqkeAamFq867VPtpclEZg",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/api/prov",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"prov"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[List]kabupaten",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2Rldi5wZWR1bHkuY29tL2FwaS9hdXRoL2xvZ2luIiwiaWF0IjoxNjYzMTQzMzA4LCJleHAiOjE2NzE3ODMzMDgsIm5iZiI6MTY2MzE0MzMwOCwianRpIjoiYUpTN2RxbDlVTVdNRHpxRyIsInN1YiI6IjIyMjIiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.fJtNx3eOQow616l-IKOSR-fqkeAamFq867VPtpclEZg",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/api/kab?provinceId=31",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"kab"
+					],
+					"query": [
+						{
+							"key": "provinceId",
+							"value": "31"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[List]kecamatan",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2Rldi5wZWR1bHkuY29tL2FwaS9hdXRoL2xvZ2luIiwiaWF0IjoxNjYzMTQzMzA4LCJleHAiOjE2NzE3ODMzMDgsIm5iZiI6MTY2MzE0MzMwOCwianRpIjoiYUpTN2RxbDlVTVdNRHpxRyIsInN1YiI6IjIyMjIiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.fJtNx3eOQow616l-IKOSR-fqkeAamFq867VPtpclEZg",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "regencyId",
+						"value": "1202",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{base_url}}/api/kec?regencyId=3101",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"kec"
+					],
+					"query": [
+						{
+							"key": "regencyId",
+							"value": "3101"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[Wishlist] Post new",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2Rldi5wZWR1bHkuY29tL2FwaS9hdXRoL2xvZ2luIiwiaWF0IjoxNjY4Mzk1NDY3LCJleHAiOjE2NzcwMzU0NjcsIm5iZiI6MTY2ODM5NTQ2NywianRpIjoieTBQT2tkMGdXYmMwM2RmRiIsInN1YiI6IjIxODkiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.96Pl18xP_QdvxAbsW58f8N56UIyv15jK02iCjdAUcH8",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"campaign_id\": 1072\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/api/wishlists/create",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"wishlists",
+						"create"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[Wishlist] Delete a wishlist",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2Rldi5wZWR1bHkuY29tL2FwaS9hdXRoL2xvZ2luIiwiaWF0IjoxNjY4Mzk1NDY3LCJleHAiOjE2NzcwMzU0NjcsIm5iZiI6MTY2ODM5NTQ2NywianRpIjoieTBQT2tkMGdXYmMwM2RmRiIsInN1YiI6IjIxODkiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.96Pl18xP_QdvxAbsW58f8N56UIyv15jK02iCjdAUcH8",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{base_url}}/api/wishlists/1072/delete",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"wishlists",
+						"1072",
+						"delete"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[User] Change password ",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDAvYXBpL2F1dGgvbG9naW4iLCJpYXQiOjE2Njc1NDYwNzQsImV4cCI6MTY2NzU0OTY3NCwibmJmIjoxNjY3NTQ2MDc0LCJqdGkiOiJFaE8wZE1PM3RiTkxBUjBZIiwic3ViIjoiMjE4OSIsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.3hEauAIUjRjvLDg0Dxb75dikQODF9_2PMOoR6QzHqnc",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"old_password\": \"cpktnwt1234\",\r\n    \"new_password\": \"cpktnwt123\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/api/user/change_password",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"user",
+						"change_password"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[Carousel] get all",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDAvYXBpL2F1dGgvbG9naW4iLCJpYXQiOjE2NTk5MzU5MjAsImV4cCI6MTY4MTk2NzkyMCwibmJmIjoxNjU5OTM1OTIwLCJqdGkiOiJ2ejB2SFBURHp3cmhsOFBHIiwic3ViIjoiMjE4OSIsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.N8GbYXFIEo6EaJOgWwUFtbURfNpLnFzFDz9TB_jI7RY",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"old_password\": \"12345678\",\r\n    \"new_password\": \"cpktnwt123\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/api/slides",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"slides"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[Carousel] create",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {
+					"accept": true
+				}
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDAvYXBpL2F1dGgvbG9naW4iLCJpYXQiOjE2Njc1NDYwNzQsImV4cCI6MTY2NzU0OTY3NCwibmJmIjoxNjY3NTQ2MDc0LCJqdGkiOiJFaE8wZE1PM3RiTkxBUjBZIiwic3ViIjoiMjE4OSIsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.3hEauAIUjRjvLDg0Dxb75dikQODF9_2PMOoR6QzHqnc",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "url",
+							"value": "https://youtube.com",
+							"type": "text"
+						},
+						{
+							"key": "image",
+							"type": "file",
+							"src": "/W:/xampp/htdocs/Peduly-Backend/public/images/images_campaign/175826907.png"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{base_url}}/api/slides/create",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"slides",
+						"create"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[Carousel] Update",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {
+					"accept": true
+				}
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDAvYXBpL2F1dGgvbG9naW4iLCJpYXQiOjE2Njc1NDYwNzQsImV4cCI6MTY2NzU0OTY3NCwibmJmIjoxNjY3NTQ2MDc0LCJqdGkiOiJFaE8wZE1PM3RiTkxBUjBZIiwic3ViIjoiMjE4OSIsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.3hEauAIUjRjvLDg0Dxb75dikQODF9_2PMOoR6QzHqnc",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"url\": \"https://facebook.com\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/api/slides/2/update",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"slides",
+						"2",
+						"update"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[Carousel] Delete",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {
+					"accept": true
+				}
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDAvYXBpL2F1dGgvbG9naW4iLCJpYXQiOjE2NTk5MzU5MjAsImV4cCI6MTY4MTk2NzkyMCwibmJmIjoxNjU5OTM1OTIwLCJqdGkiOiJ2ejB2SFBURHp3cmhsOFBHIiwic3ViIjoiMjE4OSIsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.N8GbYXFIEo6EaJOgWwUFtbURfNpLnFzFDz9TB_jI7RY",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"url\": \"https://facebook\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/api/slides/2/delete",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"slides",
+						"2",
+						"delete"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[Topup] Topup",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {
+					"accept": true
+				}
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDAvYXBpL2F1dGgvbG9naW4iLCJpYXQiOjE2NTk5MzU5MjAsImV4cCI6MTY4MTk2NzkyMCwibmJmIjoxNjU5OTM1OTIwLCJqdGkiOiJ2ejB2SFBURHp3cmhsOFBHIiwic3ViIjoiMjE4OSIsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.N8GbYXFIEo6EaJOgWwUFtbURfNpLnFzFDz9TB_jI7RY",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"amount\": 100000,\r\n    \"payment_method\": \"bank_payment\",\r\n    \"payment_name\": \"shopeepay\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/api/topup/emoney",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"topup",
+						"emoney"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[Topup] Details",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true,
+				"disabledSystemHeaders": {
+					"accept": true
+				}
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDAvYXBpL2F1dGgvbG9naW4iLCJpYXQiOjE2NTk5MzU5MjAsImV4cCI6MTY4MTk2NzkyMCwibmJmIjoxNjU5OTM1OTIwLCJqdGkiOiJ2ejB2SFBURHp3cmhsOFBHIiwic3ViIjoiMjE4OSIsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.N8GbYXFIEo6EaJOgWwUFtbURfNpLnFzFDz9TB_jI7RY",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"amount\": 100000,\r\n    \"payment_method\": \"emoney\",\r\n    \"payment_name\": \"shopeepay\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/api/topup/53/details",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"topup",
+						"53",
+						"details"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[Campaign] Galangdana saya",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true,
+				"disabledSystemHeaders": {
+					"accept": true
+				}
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDAvYXBpL2F1dGgvbG9naW4iLCJpYXQiOjE2Njc1NDYwNzQsImV4cCI6MTY2NzU0OTY3NCwibmJmIjoxNjY3NTQ2MDc0LCJqdGkiOiJFaE8wZE1PM3RiTkxBUjBZIiwic3ViIjoiMjE4OSIsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.3hEauAIUjRjvLDg0Dxb75dikQODF9_2PMOoR6QzHqnc",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"amount\": 20000,\r\n    \"payment_method\": \"emoney\",\r\n    \"payment_name\": \"gopay\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/api/galangdanasaya",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"galangdanasaya"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[Midtrans] Callback Testing",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {
+					"accept": true
+				}
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDAvYXBpL2F1dGgvbG9naW4iLCJpYXQiOjE2NTk5MzU5MjAsImV4cCI6MTY4MTk2NzkyMCwibmJmIjoxNjU5OTM1OTIwLCJqdGkiOiJ2ejB2SFBURHp3cmhsOFBHIiwic3ViIjoiMjE4OSIsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.N8GbYXFIEo6EaJOgWwUFtbURfNpLnFzFDz9TB_jI7RY",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"va_numbers\": [\r\n        {\r\n            \"va_number\": \"9886726043331724\",\r\n            \"bank\": \"bni\"\r\n        }\r\n    ],\r\n    \"transaction_time\": \"2022-08-19 15:59:35\",\r\n    \"transaction_status\": \"settlement\",\r\n    \"transaction_id\": \"81556e28-8d57-4c30-a8b2-ad731eb9b009\",\r\n    \"status_message\": \"midtrans payment notification\",\r\n    \"status_code\": \"200\",\r\n    \"signature_key\": \"9417ff62728dec10fc367005f1c612fd502eb1b040ebe80615179377988ab7b9bba92b16f7231c309321c173ebb2f2576ab23cff49930fb98c21b6e1230200ab\",\r\n    \"settlement_time\": \"2022-08-19 15:59:49\",\r\n    \"payment_type\": \"bank_transfer\",\r\n    \"payment_amounts\": [\r\n        {\r\n            \"paid_at\": \"2022-08-19 15:59:49\",\r\n            \"amount\": \"10000.00\"\r\n        }\r\n    ],\r\n    \"order_id\": \"INVD16642507053742\",\r\n    \"merchant_id\": \"G214967260\",\r\n    \"gross_amount\": \"10000.00\",\r\n    \"fraud_status\": \"accept\",\r\n    \"currency\": \"IDR\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/api/payments/midtrans-notification",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"payments",
+						"midtrans-notification"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[Verifikasi] Pribadi",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {
+					"accept": true
+				}
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDAvYXBpL2F1dGgvbG9naW4iLCJpYXQiOjE2NTk5MzU5MjAsImV4cCI6MTY4MTk2NzkyMCwibmJmIjoxNjU5OTM1OTIwLCJqdGkiOiJ2ejB2SFBURHp3cmhsOFBHIiwic3ViIjoiMjE4OSIsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.N8GbYXFIEo6EaJOgWwUFtbURfNpLnFzFDz9TB_jI7RY",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "foto_ktp",
+							"type": "file",
+							"src": "/C:/Users/juanl/Pictures/Screenshots/Screenshot (4).png"
+						},
+						{
+							"key": "foto_diri_ktp",
+							"type": "file",
+							"src": "/C:/Users/juanl/Pictures/Screenshots/Screenshot (1).png"
+						},
+						{
+							"key": "telp_pj",
+							"value": "083111064486",
+							"type": "text"
+						},
+						{
+							"key": "foto_npwp",
+							"type": "file",
+							"src": "/C:/Users/juanl/Pictures/Screenshots/Screenshot (2).png"
+						},
+						{
+							"key": "foto_diri_npwp",
+							"type": "file",
+							"src": "/C:/Users/juanl/Pictures/Screenshots/Screenshot (3).png"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{base_url}}/api/verification/pribadi",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"verification",
+						"pribadi"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[Verifikasi] Verified",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {
+					"accept": true
+				}
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDAvYXBpL2F1dGgvbG9naW4iLCJpYXQiOjE2NTk5MzU5MjAsImV4cCI6MTY4MTk2NzkyMCwibmJmIjoxNjU5OTM1OTIwLCJqdGkiOiJ2ejB2SFBURHp3cmhsOFBHIiwic3ViIjoiMjE4OSIsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.N8GbYXFIEo6EaJOgWwUFtbURfNpLnFzFDz9TB_jI7RY",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "foto_ktp",
+							"type": "file",
+							"src": "/C:/Users/juanl/Downloads/WhatsApp Image 2022-08-22 at 14.33.58.jpeg"
+						},
+						{
+							"key": "foto_diri_ktp",
+							"type": "file",
+							"src": "/C:/Users/juanl/Downloads/FahWx4PVUAE4BS2.jpg"
+						},
+						{
+							"key": "telp_pj",
+							"value": "083111064486",
+							"type": "text"
+						},
+						{
+							"key": "foto_npwp",
+							"type": "file",
+							"src": "/C:/Users/juanl/Downloads/Google__G__Logo.svg.png"
+						},
+						{
+							"key": "foto_diri_npwp",
+							"type": "file",
+							"src": "/C:/Users/juanl/Downloads/utang-1.jpg"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{base_url}}/api/verification/2/verified",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"verification",
+						"2",
+						"verified"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[Verifikasi] Organisasi",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {
+					"accept": true
+				}
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDAvYXBpL2F1dGgvbG9naW4iLCJpYXQiOjE2NTk5MzU5MjAsImV4cCI6MTY4MTk2NzkyMCwibmJmIjoxNjU5OTM1OTIwLCJqdGkiOiJ2ejB2SFBURHp3cmhsOFBHIiwic3ViIjoiMjE4OSIsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.N8GbYXFIEo6EaJOgWwUFtbURfNpLnFzFDz9TB_jI7RY",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "foto_ktp",
+							"type": "file",
+							"src": "/C:/Users/juanl/Downloads/WhatsApp Image 2022-08-22 at 14.33.58.jpeg"
+						},
+						{
+							"key": "foto_diri_ktp",
+							"type": "file",
+							"src": "/C:/Users/juanl/Downloads/FahWx4PVUAE4BS2.jpg"
+						},
+						{
+							"key": "telp_pj",
+							"value": "083111064486",
+							"type": "text"
+						},
+						{
+							"key": "foto_npwp",
+							"type": "file",
+							"src": "/C:/Users/juanl/Downloads/Google__G__Logo.svg.png"
+						},
+						{
+							"key": "foto_diri_npwp",
+							"type": "file",
+							"src": "/C:/Users/juanl/Downloads/utang-1.jpg"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{base_url}}/api/verification/organisasi",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"verification",
+						"organisasi"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[Kode Referal] Get",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true,
+				"disabledSystemHeaders": {
+					"accept": true
+				}
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDAvYXBpL2F1dGgvbG9naW4iLCJpYXQiOjE2Njc1NDk5MjgsImV4cCI6MTY2NzU1MzUyOCwibmJmIjoxNjY3NTQ5OTI4LCJqdGkiOiI5MVR2bWJZVDVEVEhURlVVIiwic3ViIjoiMjE4OSIsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.s1gFB2fzTs-ldbuRQNJGxxvKl8Vw_7E0L2Lykvl-fcA",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": []
+				},
+				"url": {
+					"raw": "{{base_url}}/api/user/kode_referal",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"user",
+						"kode_referal"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[Feeds] Get",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true,
+				"disabledSystemHeaders": {
+					"accept": true
+				}
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2Rldi5wZWR1bHkuY29tL2FwaS9hdXRoL2xvZ2luIiwiaWF0IjoxNjYzMjIzODE1LCJleHAiOjE2NzE4NjM4MTUsIm5iZiI6MTY2MzIyMzgxNSwianRpIjoiQks5WHVXdHFuSE4zYTY0SyIsInN1YiI6IjIyMjIiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.6nIqViACvg5ixgT4gBSjFxGntCUrSAxu38-ee1LTf90",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": []
+				},
+				"url": {
+					"raw": "{{base_url}}/api/feeds",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"feeds"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[Ada Yang Baru] Get",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDAvYXBpL2F1dGgvbG9naW4iLCJpYXQiOjE2NjkwNzU0NjMsImV4cCI6MTY3NzcxNTQ2MywibmJmIjoxNjY5MDc1NDYzLCJqdGkiOiJpd2FEN05HQjBKNWYxWHdXIiwic3ViIjoiMjE4OSIsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.cW7kuwq_vi2ix98L_pPLtd888gjsAazOuNe0ek6e5fg",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/api/adayangbaru",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"adayangbaru"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[Ada Yang Baru] Create",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDAvYXBpL2F1dGgvbG9naW4iLCJpYXQiOjE2NjkwNzU0NjMsImV4cCI6MTY3NzcxNTQ2MywibmJmIjoxNjY5MDc1NDYzLCJqdGkiOiJpd2FEN05HQjBKNWYxWHdXIiwic3ViIjoiMjE4OSIsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.cW7kuwq_vi2ix98L_pPLtd888gjsAazOuNe0ek6e5fg",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "judul",
+							"value": "tes126",
+							"type": "text"
+						},
+						{
+							"key": "tanggal",
+							"value": "2022-11-10",
+							"type": "text"
+						},
+						{
+							"key": "deskripsi",
+							"value": "testestes4",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{base_url}}/api/adayangbaru/create",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"adayangbaru",
+						"create"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[Ada Yang Baru] Update",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDAvYXBpL2F1dGgvbG9naW4iLCJpYXQiOjE2NjkwNzU0NjMsImV4cCI6MTY3NzcxNTQ2MywibmJmIjoxNjY5MDc1NDYzLCJqdGkiOiJpd2FEN05HQjBKNWYxWHdXIiwic3ViIjoiMjE4OSIsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.cW7kuwq_vi2ix98L_pPLtd888gjsAazOuNe0ek6e5fg",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "_method",
+							"value": "PUT",
+							"type": "text"
+						},
+						{
+							"key": "judul",
+							"value": "tes127",
+							"type": "text"
+						},
+						{
+							"key": "tanggal",
+							"value": "2000-01-01",
+							"type": "text"
+						},
+						{
+							"key": "deskripsi",
+							"value": "testestes5",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{base_url}}/api/adayangbaru/1",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"adayangbaru",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[Ada Yang Baru] Delete",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDAvYXBpL2F1dGgvbG9naW4iLCJpYXQiOjE2NjkwNzU0NjMsImV4cCI6MTY3NzcxNTQ2MywibmJmIjoxNjY5MDc1NDYzLCJqdGkiOiJpd2FEN05HQjBKNWYxWHdXIiwic3ViIjoiMjE4OSIsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.cW7kuwq_vi2ix98L_pPLtd888gjsAazOuNe0ek6e5fg",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/api/adayangbaru/1",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"adayangbaru",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[Like Feed] Like",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDAvYXBpL2F1dGgvbG9naW4iLCJpYXQiOjE2Njg1NzU1MDksImV4cCI6MTY2ODU3OTEwOSwibmJmIjoxNjY4NTc1NTA5LCJqdGkiOiJ1UDN5cFhZZVlRblNrN1ZoIiwic3ViIjoiMjE4OSIsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.WCvPPMLglHyqzfiSBbnV0wWjrx9l3uyGRMkYzZzadkY",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/api/feeds/1/like",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"feeds",
+						"1",
+						"like"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[Company] get all",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDAvYXBpL2F1dGgvbG9naW4iLCJpYXQiOjE2NjgzOTk2MTIsImV4cCI6MTY2ODQwMzIxMiwibmJmIjoxNjY4Mzk5NjEyLCJqdGkiOiJwVDJwYXJsY2RHM2tQWWxNIiwic3ViIjoiMjE4OSIsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.8dUzrr_gZFKbrKnS5gdWtF-aAIXX1V8I0rTU2KZioX8",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"latitude\": -8.058108,\r\n    \"longitude\": 111.867153\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/api/companies",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"companies"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[Like Feed] Unlike",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDAvYXBpL2F1dGgvbG9naW4iLCJpYXQiOjE2Njg1NzU1MDksImV4cCI6MTY2ODU3OTEwOSwibmJmIjoxNjY4NTc1NTA5LCJqdGkiOiJ1UDN5cFhZZVlRblNrN1ZoIiwic3ViIjoiMjE4OSIsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.WCvPPMLglHyqzfiSBbnV0wWjrx9l3uyGRMkYzZzadkY",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/api/feeds/1/like",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"feeds",
+						"1",
+						"like"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[Google] login mobile",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDAvYXBpL2F1dGgvbG9naW4iLCJpYXQiOjE2Njg1NzU1MDksImV4cCI6MTY2ODU3OTEwOSwibmJmIjoxNjY4NTc1NTA5LCJqdGkiOiJ1UDN5cFhZZVlRblNrN1ZoIiwic3ViIjoiMjE4OSIsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.WCvPPMLglHyqzfiSBbnV0wWjrx9l3uyGRMkYzZzadkY",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\": \"juanangelaalma@gmail.com\",\r\n    \"key\":\"base64:0g3Xz8u+mzZJP7VXOtLtgkd+l3EMIhH9dpPwDU9Dqzc=\",\r\n    \"name\": \"juan angela alma\",\r\n    \"uid\": \"YeF7gWcoghS981qfZTbkyV2Lprt2\",\r\n    \"foto\":\"https://lh3.googleusercontent.com/a/ALm5wu1RVuTyk_h9XIfuxd0a_Rm8fNk-xx5Hs8Yej-g=s96-c\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/api/google/login",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"google",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[Kode Referal] Cek Kode Referal",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"referal\": \"PDLY14\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/api/donation/checkreferal",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"donation",
+						"checkreferal"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[Admin] get users",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2Rldi5wZWR1bHkuY29tL2FwaS9hdXRoL2xvZ2luIiwiaWF0IjoxNjY5Njk5MDk0LCJleHAiOjE2NzgzMzkwOTQsIm5iZiI6MTY2OTY5OTA5NCwianRpIjoiejBKZUM3VHRheVB1ZE5oMCIsInN1YiI6IjIyNDciLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.ateYFjLKiLMXy-dhAsAbDHYIEdHzu9pgvuNR-k9RKA4",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"referal\": \"PDLY14\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/api/admin/users",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"admin",
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[Campaign Report] Report",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDAvYXBpL2F1dGgvbG9naW4iLCJpYXQiOjE2Njk3OTIyMjIsImV4cCI6MTY2OTc5NTgyMiwibmJmIjoxNjY5NzkyMjIyLCJqdGkiOiJMY1FaVEZWd3BJdnpXNnR5Iiwic3ViIjoiMjE4OSIsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.0pJYIxKEbWvK-RKaGvr6kdw5KAkr4vSY55Pc59v2bgs",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/api/galangdana/1060/report",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"galangdana",
+						"1060",
+						"report"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[Campaign Report] Cancel Report",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDAvYXBpL2F1dGgvbG9naW4iLCJpYXQiOjE2Njk3OTIyMjIsImV4cCI6MTY2OTc5NTgyMiwibmJmIjoxNjY5NzkyMjIyLCJqdGkiOiJMY1FaVEZWd3BJdnpXNnR5Iiwic3ViIjoiMjE4OSIsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.0pJYIxKEbWvK-RKaGvr6kdw5KAkr4vSY55Pc59v2bgs",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/api/galangdana/1060/report",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"galangdana",
+						"1060",
+						"report"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[Admin] Galang Dana",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDAvYXBpL2F1dGgvbG9naW4iLCJpYXQiOjE2NzA4MTc3NDAsImV4cCI6MTY3OTQ1Nzc0MCwibmJmIjoxNjcwODE3NzQwLCJqdGkiOiIwVjQ0UWNlUzNLcVJ6QmcyIiwic3ViIjoiMjE4OSIsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.2vqXg7-cQpu2zsrKSihwi41Mr8I9Je3p59jC27pzwZo",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/api/admin/galangdana",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"admin",
+						"galangdana"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[Rencana Penggunaan Dana] Get",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDAvYXBpL2F1dGgvbG9naW4iLCJpYXQiOjE2NzAzODY2MTUsImV4cCI6MTY3MDM5MDIxNSwibmJmIjoxNjcwMzg2NjE1LCJqdGkiOiJ5emxGMWVLSUNOb2tUeFNIIiwic3ViIjoiMjE4OSIsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.mmBiNAgWJBtFE6Ux-YwUWK0SgM4hmePyQ9bx3g33PoY",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/api/galangdana/1143/rencana_penggunaan",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"galangdana",
+						"1143",
+						"rencana_penggunaan"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[Aktivitas] Create",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDAvYXBpL2F1dGgvbG9naW4iLCJpYXQiOjE2NzM1MjQyOTQsImV4cCI6MTY3MzUyNzg5NCwibmJmIjoxNjczNTI0Mjk0LCJqdGkiOiIxQ2NXSlMwUGI5d01ORlJNIiwic3ViIjoiMyIsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.ZAU75Cg2asx-EqqfU2S3TR8NtyB05Aj9xMUQfUOysJ8",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "status_publish",
+							"value": "published",
+							"type": "text"
+						},
+						{
+							"key": "category_id",
+							"value": "2",
+							"type": "text"
+						},
+						{
+							"key": "judul_activity",
+							"value": "Judul2",
+							"type": "text"
+						},
+						{
+							"key": "judul_slug",
+							"value": "tes_slug2",
+							"type": "text"
+						},
+						{
+							"key": "foto_activity",
+							"type": "file",
+							"src": "/W:/xampp/htdocs/Involuntir-Backend/public/images/images_carousel/1667547107.jpg"
+						},
+						{
+							"key": "detail_activity",
+							"value": "tesdetail2",
+							"type": "text"
+						},
+						{
+							"key": "batas_waktu",
+							"value": "14",
+							"type": "text"
+						},
+						{
+							"key": "waktu_activity",
+							"value": "2023-01-31",
+							"type": "text"
+						},
+						{
+							"key": "lokasi",
+							"value": "rumah",
+							"type": "text"
+						},
+						{
+							"key": "tipe_activity",
+							"value": "In-Person",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{base_url}}/api/aktivitas/create",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"aktivitas",
+						"create"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[Aktivitas] All",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/api/aktivitas",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"aktivitas"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[Aktivitas] Specific",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/api/aktivitas/7",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"aktivitas",
+						"7"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[Aktivitas] By Slug",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/api/aktivitas/byslug/tes_slug",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"aktivitas",
+						"byslug",
+						"tes_slug"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[Aktivitas] Publish",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDAvYXBpL2F1dGgvbG9naW4iLCJpYXQiOjE2NzM1MjQyOTQsImV4cCI6MTY3MzUyNzg5NCwibmJmIjoxNjczNTI0Mjk0LCJqdGkiOiIxQ2NXSlMwUGI5d01ORlJNIiwic3ViIjoiMyIsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.ZAU75Cg2asx-EqqfU2S3TR8NtyB05Aj9xMUQfUOysJ8",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "category_id",
+							"value": "1",
+							"type": "text"
+						},
+						{
+							"key": "judul_activity",
+							"value": "judulempat",
+							"type": "text"
+						},
+						{
+							"key": "foto_activity",
+							"type": "file",
+							"src": "/W:/xampp/htdocs/Involuntir-Backend/public/images/images_carousel/1667547107.jpg"
+						},
+						{
+							"key": "judul_slug",
+							"value": "slug-4-tes",
+							"type": "text"
+						},
+						{
+							"key": "detail_activity",
+							"value": "detailx4",
+							"type": "text"
+						},
+						{
+							"key": "batas_waktu",
+							"value": "30",
+							"type": "text"
+						},
+						{
+							"key": "waktu_activity",
+							"value": "2000-01-01",
+							"type": "text"
+						},
+						{
+							"key": "lokasi",
+							"value": "kantor",
+							"type": "text"
+						},
+						{
+							"key": "tipe_activity",
+							"value": "Virtual",
+							"type": "text"
+						},
+						{
+							"key": "tasks[]",
+							"value": "testask1",
+							"type": "text"
+						},
+						{
+							"key": "tasks[]",
+							"value": "testatsk2",
+							"type": "text"
+						},
+						{
+							"key": "criterias[]",
+							"value": "testcriterias333",
+							"type": "text"
+						},
+						{
+							"key": "status_publish",
+							"value": "",
+							"type": "text",
+							"disabled": true
+						}
+					]
+				},
+				"url": {
+					"raw": "{{base_url}}/api/aktivitas/create/publish",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"aktivitas",
+						"create",
+						"publish"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[Aktivitas] Draft",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDAvYXBpL2F1dGgvbG9naW4iLCJpYXQiOjE2NzM1MjQyOTQsImV4cCI6MTY3MzUyNzg5NCwibmJmIjoxNjczNTI0Mjk0LCJqdGkiOiIxQ2NXSlMwUGI5d01ORlJNIiwic3ViIjoiMyIsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.ZAU75Cg2asx-EqqfU2S3TR8NtyB05Aj9xMUQfUOysJ8",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "category_id",
+							"value": "1",
+							"type": "text"
+						},
+						{
+							"key": "judul_activity",
+							"value": "judul555",
+							"type": "text"
+						},
+						{
+							"key": "judul_slug",
+							"value": "slug5",
+							"type": "text"
+						},
+						{
+							"key": "detail_activity",
+							"value": "detaillima",
+							"type": "text"
+						},
+						{
+							"key": "batas_waktu",
+							"value": "1",
+							"type": "text"
+						},
+						{
+							"key": "waktu_activity",
+							"value": "2023-05-02",
+							"type": "text"
+						},
+						{
+							"key": "lokasi",
+							"value": "btul",
+							"type": "text"
+						},
+						{
+							"key": "tipe_activity",
+							"value": "In-Person",
+							"type": "text"
+						},
+						{
+							"key": "tasks[]",
+							"value": "testask99",
+							"type": "text"
+						},
+						{
+							"key": "tasks[]",
+							"value": "testask999",
+							"type": "text"
+						},
+						{
+							"key": "criterias[]",
+							"value": "testcriterias9",
+							"type": "text"
+						},
+						{
+							"key": "foto_activity",
+							"type": "file",
+							"src": "/W:/xampp/htdocs/Involuntir-Backend/public/images/images_carousel/1667547107.jpg"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{base_url}}/api/aktivitas/create/draft",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"aktivitas",
+						"create",
+						"draft"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[Aktivitas] Update",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDAvYXBpL2F1dGgvbG9naW4iLCJpYXQiOjE2NzM0NTY5NTIsImV4cCI6MTY3MzQ2MDU1MiwibmJmIjoxNjczNDU2OTUyLCJqdGkiOiI5VUoyTUZnUTQ2dU1KQk1GIiwic3ViIjoiMyIsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.j_vDQ0eOcdvAulGa5LvlFMiaFxRjFkGpAiqBzz2U5ag",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "status_publish",
+							"value": "published",
+							"type": "text"
+						},
+						{
+							"key": "judul_activity",
+							"value": "gantijudul",
+							"type": "text"
+						},
+						{
+							"key": "_method",
+							"value": "PUT",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{base_url}}/api/aktivitas/1/update",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"aktivitas",
+						"1",
+						"update"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[Aktivitas] Delete",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDAvYXBpL2F1dGgvbG9naW4iLCJpYXQiOjE2NzM1MjA2ODEsImV4cCI6MTY3MzUyNDI4MSwibmJmIjoxNjczNTIwNjgxLCJqdGkiOiJuMjJhOFU2Q0w4cWt1aDFYIiwic3ViIjoiMyIsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.0Kw94X4cM9IpwIVRZemKUNPk9-x6l4DxgKDB1GGgvnw",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/api/aktivitas/6/delete",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"aktivitas",
+						"6",
+						"delete"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[Aktivitas] Is Exist",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/api/aktivitas/isExist/slug-3-tes",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"aktivitas",
+						"isExist",
+						"slug-3-tes"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[Partisipasi] Submit",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDAvYXBpL2F1dGgvbG9naW4iLCJpYXQiOjE2NzMzNjk0ODAsImV4cCI6MTY3MzM3MzA4MCwibmJmIjoxNjczMzY5NDgwLCJqdGkiOiJXSXdGbUU1TlpvMmEyVklSIiwic3ViIjoiMyIsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.J8Z4jWbQRtkqLGSyMr0ewnU_uBxqH-QfNgzIYA0fSh0",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "activity_id",
+							"value": "2",
+							"type": "text"
+						},
+						{
+							"key": "nomor_hp",
+							"value": "081234567890",
+							"type": "text"
+						},
+						{
+							"key": "akun_linkedin",
+							"value": "nihil",
+							"type": "text"
+						},
+						{
+							"key": "pesan",
+							"value": "tes123",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{base_url}}/api/participation",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"participation"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[Partisipasi] Partisipan",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDAvYXBpL2F1dGgvbG9naW4iLCJpYXQiOjE2NzMzNjk0ODAsImV4cCI6MTY3MzM3MzA4MCwibmJmIjoxNjczMzY5NDgwLCJqdGkiOiJXSXdGbUU1TlpvMmEyVklSIiwic3ViIjoiMyIsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.J8Z4jWbQRtkqLGSyMr0ewnU_uBxqH-QfNgzIYA0fSh0",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/api/participation/2/participants",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"participation",
+						"2",
+						"participants"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "https://dev.peduly.com",
+			"disabled": true
+		},
+		{
+			"key": "base_url",
+			"value": "http://127.0.0.1:8000",
+			"type": "string"
+		},
+		{
+			"key": "base_url",
+			"value": "https://api.peduly.com",
+			"type": "string",
+			"disabled": true
+		},
+		{
+			"key": "Bearer Token",
+			"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDAvYXBpL2F1dGgvbG9naW4iLCJpYXQiOjE2NjcxOTc4NjEsImV4cCI6MTY2NzIwMTQ2MSwibmJmIjoxNjY3MTk3ODYxLCJqdGkiOiI1cGJOdU9kYnZVenZTajNoIiwic3ViIjoiMjE4OSIsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.WjYj2urAK-6PL2T3i9uY05gc4P-5O9uJsqT93VhFadM",
+			"disabled": true
+		}
+	]
+}
