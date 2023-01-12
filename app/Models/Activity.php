@@ -25,6 +25,7 @@ class Activity extends Model
         'batas_waktu',
         'waktu_activity',
         'lokasi',
+        'tipe_activity',
         'penyelenggaraan_activity',
         'status_publish',
         'status'

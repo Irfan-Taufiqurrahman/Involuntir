@@ -8,6 +8,8 @@ use App\Models\Activity;
 use App\Models\Category;
 use App\Models\Participation;
 use App\Models\KabarTerbaru;
+use App\Models\Task;
+use App\Models\Criteria;
 use Carbon\Carbon;
 use Error;
 use Illuminate\Http\JsonResponse;
@@ -50,11 +52,11 @@ class ActivityController extends Controller
     }
 
     private function getAllActivitiesWithoutFiltering() {
-        return Activity::join("participations", "participations.activity_id", "=", "activities.id")->groupBy("activities.id")->orderBy('activities.created_at', 'DESC')->where('status_publish', 'published')->orWhere('status_publish', NULL)->get(['activities.id', "judul_activity", "judul_slug", "foto_activity", "batas_waktu", "activities.created_at", DB::raw("COUNT(*) as total_volunteer")]);
+        return Activity::leftJoin("participations", "participations.activity_id", "=", "activities.id")->groupBy("activities.id")->orderBy('activities.created_at', 'DESC')->where('status_publish', 'published')->orWhere('status_publish', NULL)->get(['activities.id', "judul_activity", "judul_slug", "foto_activity", "batas_waktu", "activities.created_at", DB::raw("COUNT(participations.id) as total_volunteer")]);
     }
 
     private function getAllActivitiesWithoutFilteringWithLimit($limit) {
-        return Activity::join("participations", "participations.activity_id", "=", "activities.id")->groupBy("activities.id")->limit($limit)->orderBy('activities.created_at', 'DESC')->where('status_publish', 'published')->orWhere('status_publish', NULL)->get(['activities.id', "judul_activity", "judul_slug", "foto_activity", "batas_waktu", "activities.created_at", DB::raw("COUNT(*) as total_volunteer")]);
+        return Activity::leftJoin("participations", "participations.activity_id", "=", "activities.id")->groupBy("activities.id")->limit($limit)->orderBy('activities.created_at', 'DESC')->where('status_publish', 'published')->orWhere('status_publish', NULL)->get(['activities.id', "judul_activity", "judul_slug", "foto_activity", "batas_waktu", "activities.created_at", DB::raw("COUNT(participations.id) as total_volunteer")]);
     }
 
     public function index()
@@ -73,9 +75,9 @@ class ActivityController extends Controller
             }
 
             if(request()->limit) {
-                $this->data = $this->data ? $this->data->join("participations", "participations.activity_id", "=", "activities.id")->groupBy("activities.id")->limit(request()->limit)->orderBy('activities.created_at', 'DESC')->where('status_publish', 'published')->orWhere('status_publish', NULL)->get(['activities.id', "judul_activity", "judul_slug", "foto_activity", "batas_waktu", "activities.created_at", DB::raw("COUNT(*) as total_volunteer")]) : $this->getAllActivitiesWithoutFilteringWithLimit(request()->limit);
+                $this->data = $this->data ? $this->data->leftJoin("participations", "participations.activity_id", "=", "activities.id")->groupBy("activities.id")->limit(request()->limit)->orderBy('activities.created_at', 'DESC')->where('status_publish', 'published')->orWhere('status_publish', NULL)->get(['activities.id', "judul_activity", "judul_slug", "foto_activity", "batas_waktu", "activities.created_at", DB::raw("COUNT(participations.id) as total_volunteer")]) : $this->getAllActivitiesWithoutFilteringWithLimit(request()->limit);
             }else {
-                $this->data = $this->data ? $this->data->join("participations", "participations.activity_id", "=", "activities.id")->groupBy("activities.id")->orderBy('activities.created_at', 'DESC')->where('status_publish', 'published')->orWhere('status_publish', NULL)->get(['activities.id', "judul_activity", "judul_slug", "foto_activity", "batas_waktu", "activities.created_at", DB::raw("COUNT(*) as total_volunteer")]) : $this->getAllActivitiesWithoutFiltering();
+                $this->data = $this->data ? $this->data->leftJoin("participations", "participations.activity_id", "=", "activities.id")->groupBy("activities.id")->orderBy('activities.created_at', 'DESC')->where('status_publish', 'published')->orWhere('status_publish', NULL)->get(['activities.id', "judul_activity", "judul_slug", "foto_activity", "batas_waktu", "activities.created_at", DB::raw("COUNT(participations.id) as total_volunteer")]) : $this->getAllActivitiesWithoutFiltering();
             }
 
             return response()->json(["data" => $this->data ? $this->data : $this->getAllActivitiesWithoutFiltering()]);
@@ -103,13 +105,21 @@ class ActivityController extends Controller
 
 
         $total_volunteer = DB::table('participations')
-                           ->select(DB::raw('COUNT(*) as total_volunteer'))
+                           ->select(DB::raw('COUNT(participations.id) as total_volunteer'))
                            ->where('activity_id', '=', $id_activity)
                            ->get();
         
         $volunteer = Participation::join('users', 'user_id', '=', 'users.id')
                      ->where('activity_id', $id_activity)
                      ->get(['users.id', 'photo', 'name', 'nomor_hp', 'participations.created_at']);
+
+        $tasks = Task::join('activities', 'activity_id', '=', 'activities.id')
+                 ->where('activity_id', $id_activity)
+                 ->get();
+
+        $criterias = Criteria::join('activities', 'activity_id', '=', 'activities.id')
+                     ->where('activity_id', $id_activity)
+                     ->get();
 
         $user = auth('api')->user();
 
@@ -119,6 +129,8 @@ class ActivityController extends Controller
                 'user' => $activist,
                 'total_volunteer' => $total_volunteer,
                 'volunteer' => $volunteer,
+                'tugas' => $tasks,
+                'kriteria' => $criterias,
                 'is_mine' => $user ? ($user->id === $id_activist) : false
             ]
         ]);
@@ -129,16 +141,26 @@ class ActivityController extends Controller
         $id_activity = $activity->id;
 
         $total_volunteer = DB::table('participations')
-                           ->select(DB::raw('COUNT(*) as total_volunteer'))
+                           ->select(DB::raw('COUNT(participations.id) as total_volunteer'))
                            ->where('activity_id', '=', $id_activity)
                            ->get();
         
+        $tasks = Task::join('activities', 'activity_id', '=', 'activities.id')
+                 ->where('activity_id', $id_activity)
+                 ->get();
+          
+        $criterias = Criteria::join('activities', 'activity_id', '=', 'activities.id')
+                     ->where('activity_id', $id_activity)
+                     ->get();
+
         $user = $activity->user;
 
         return response()->json([
             'data' => [
                 'activity' => $activity,
-                'total_volunteer' => $total_volunteer
+                'total_volunteer' => $total_volunteer,
+                'tugas' => $tasks,
+                'kriteria' => $criterias
             ]
         ]);
     }
@@ -172,13 +194,13 @@ class ActivityController extends Controller
     // }
 
     public function publish(Request $request) {
-        $request->status_publish = 'published';
+        $request['status_publish'] = 'published';
         return $this->create($request);
     }
 
     public function draft(Request $request) {
-        $request->status_publish = 'drafted';
-        $this->create($request);
+        $request['status_publish'] = 'drafted';
+        return $this->create($request);
     }
 
     public function create(Request $request) {
@@ -188,7 +210,7 @@ class ActivityController extends Controller
         if($request->status_publish === 'published') {
             // dicek dulu lah
             $rules = [
-                'category_id'     => 'required',
+                'category_id'     => 'required|numeric',
                 'judul_activity'  => 'required|string|max:255',
                 'foto_activity'   => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
                 'detail_activity' => 'required|string',
@@ -242,7 +264,7 @@ class ActivityController extends Controller
         // );
 
         $activity = Activity::create([
-            'category_id'     => $request->category_id,
+            'category_id'     => $category->id,
             'user_id'         => $user->id,
             'judul_activity'  => $request->judul_activity,
             'judul_slug'      => $judul_slug,
@@ -257,6 +279,23 @@ class ActivityController extends Controller
             'updated_at'      => $request->status_publish === 'published' ? Carbon::now() : null
         ]);
 
+        foreach((array) $request->tasks as $task){
+            $task = Task::create([
+                'activity_id' => $activity->id,
+                'deskripsi' => $task
+            ]);
+        }
+
+        $activity->tasks = $request->tasks;
+
+        foreach((array) $request->criterias as $criteria){
+            Criteria::create([
+                'activity_id' => $activity->id,
+                'deskripsi' => $criteria
+            ]);
+        }
+
+        $activity->criterias = $request->criterias;
 
 //      send email after campaign created
         // if($request->status_publish === 'published') {
@@ -285,14 +324,14 @@ class ActivityController extends Controller
         if($request->status_publish === 'published') {
             // dicek dulu lah
             $rules = [
-                'category_id'     => 'required',
-                'judul_activity'  => 'required|string|max:255',
-                'foto_activity'   => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-                'detail_activity' => 'required|string',
-                'batas_waktu'     => 'required|numeric',
-                'waktu_activity'  => 'required|string',
-                'lokasi'          => 'required|string|max:255',
-                'tipe_activity'   => 'required|in:Virtual,In-Person,Hybrid'
+                'category_id'     => 'numeric',
+                'judul_activity'  => 'string|max:255',
+                'foto_activity'   => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+                'detail_activity' => 'string',
+                'batas_waktu'     => 'numeric',
+                'waktu_activity'  => 'string',
+                'lokasi'          => 'string|max:255',
+                'tipe_activity'   => 'in:Virtual,In-Person,Hybrid'
             ];
         }
 
@@ -303,12 +342,28 @@ class ActivityController extends Controller
         }
 
         // check category_id is exist
-        $category = Category::find($request->category_id);
-        if (!$category) {
+        $category_id = $request->category_id ? Category::find($request->category_id) : $activity->category_id;
+        if (!$category_id) {
             return response()->json(['message' => "category with id: $request->category not found!"]);
         }
 
-        $judul_slug = $request->judul_slug ? $request->judul_slug : SlugService::createSlug(Activity::class, 'judul_slug', request('judul_activity'));
+        $judul_activity = $request->judul_activity ? $request->judul_activity : $activity->judul_activity;
+
+        $judul_slug = $request->judul_slug ? $request->judul_slug : $activity->judul_slug;
+
+        $detail_activity = $request->detail_activity ? $request->detail_activity : $activity->detail_activity;
+
+        $batas_waktu = $request->batas_waktu ? $activity->created_at->addDays($request->batas_waktu) : $activity->batas_waktu;
+
+        if ($batas_waktu < Carbon::now()){
+            return response()->json(['message' => 'batas waktu sudah terlewati']);
+        }
+
+        $waktu_activity = $request->waktu_activity ? $request->waktu_activity : $activity->waktu_activity;
+
+        $lokasi = $request->lokasi ? $request->lokasi : $activity->lokasi;
+
+        $tipe_activity = $request->tipe_activity ? $request->tipe_activity : $activity->tipe_activity;
 
 
         $foto_activity = $activity->foto_activity;
@@ -336,17 +391,17 @@ class ActivityController extends Controller
         // );
 
         $activity->update([
-            'category_id'     => $request->category_id,
-            'judul_activity'  => $request->judul_activity,
+            'category_id'     => $category_id,
+            'judul_activity'  => $judul_activity,
             'judul_slug'      => $judul_slug,
             'foto_activity'   => $foto_activity,
             'detail_activity' => $detail_activity,
-            'batas_waktu'     => Carbon::now()->addDays($request->batas_waktu),
-            'waktu_activity'  => $request->waktu_activity,
-            'lokasi'          => $request->lokasi,
-            'tipe_activity'   => $request->tipe_activity,
+            'batas_waktu'     => $batas_waktu,
+            'waktu_activity'  => $waktu_activity,
+            'lokasi'          => $lokasi,
+            'tipe_activity'   => $tipe_activity,
             'status_publish'  => $request->status_publish,
-            'updated_at'      => $request->status_publish === 'published' ? Carbon::now() : null
+            'updated_at'      => $request->status_publish === 'published' ? Carbon::now() : $activity->updated_at
         ]);
 
 
@@ -363,69 +418,10 @@ class ActivityController extends Controller
         return response()->json(['data' => $activity], 201);
     }
 
-    // @deprecated
-    public function create_old(Request $request) {
-        $validator = Validator::make($request->all(), [
-            'kategori_campaign' => 'required|string',
-            'judul_campaign' => 'required|string',
-            'target_donasi' => 'required|numeric',
-            'batas_waktu_campaign' => 'required|date',
-            'lokasi' => 'required|string',
-            'alamat_lengkap' => 'required|string',
-            'tujuan' => 'required|string',
-            'penerima' => 'required|string',
-            'rincian' => 'required|string',
-            'judul_slug' => 'unique:campaigns',
-            'detail_campaign' => 'required',
-        ]);
-
-        if($validator->fails()) {
-            return response()->json(["message" => $validator->errors()], 400);
-        }
-
-        $judul_slug = $request->judul_slug ? $request->judul_slug : SlugService::createSlug(Campaign::class, 'judul_slug', request('judul_campaign'));
-
-        $foto_campaign = null;
-        if($request->foto_campaign) {
-            $image_64 = $request->foto_campaign; //your base64 encoded data
-            $extension = explode('/', explode(':', substr($image_64, 0, strpos($image_64, ';')))[1])[1];   // .jpg .png
-            $replace = substr($image_64, 0, strpos($image_64, ',')+1);
-            $image = str_replace($replace, '', $image_64);
-            $image = str_replace(' ', '+', $image);
-            $foto_campaign = $judul_slug . '.' . $extension;
-
-            Storage::disk('local')->put('images/images_campaign/'.$foto_campaign, base64_decode($image));
-        }
-
-        // if ($request->foto_campaign && $request->foto_campaign->isValid()) {
-        //     $foto_campaign     = $judul_slug . '.' . $request->foto_campaign->extension();
-        //     $request->foto_campaign->move(public_path('images/images_campaign'), $foto_campaign);
-        // }
-
-        $campaign = Campaign::create([
-            'kategori_campaign' => $request->kategori_campaign,
-            'judul_campaign' => $request->judul_campaign,
-            'nominal_campaign' => $request->target_donasi,
-            'batas_waktu_campaign' => date("Y-m-d", strtotime($request->batas_waktu_campaign)),
-            'regencies' => $request->lokasi,
-            'alamat_lengkap' => $request->alamat_lengkap,
-            'tujuan' => $request->tujuan,
-            'penerima' => $request->penerima,
-            'detail_campaign' => $request->detail_campaign,
-            "user_id" => Auth::user()->id,
-            'foto_campaign' => $foto_campaign,
-            'judul_slug' => $judul_slug,
-            'detail_campaign' => $request->detail_campaign,
-            'status' => 'Pending'
-        ]);
-
-        return response()->json(['message' => 'berhasil membuat campaign', 'data' => $campaign, 'error' => false]);
-    }
-
     private function getCategory(Category $category)
     {
         return Activity::orderBy('activities.created_at')
-            ->where('category_id', $category->id)->join("participations", "participations.activity_id", "=", "activities.id")->groupBy("activities.id")->get(['activities.id', "judul_activity", "judul_slug", "foto_activity", "batas_waktu", "activities.created_at", DB::raw("COUNT(*) as total_volunteer")]);
+            ->where('category_id', $category->id)->leftJoin("participations", "participations.activity_id", "=", "activities.id")->groupBy("activities.id")->get(['activities.id', "judul_activity", "judul_slug", "foto_activity", "batas_waktu", "activities.created_at", DB::raw("COUNT(participations.id) as total_volunteer")]);
     }
 
     public function isExist($slug) {
@@ -441,12 +437,12 @@ class ActivityController extends Controller
     public function myActivities() {
         $user = Auth::user();
 
-        $activities = Activity::where('activities.user_id', $user->id)->join("participations", "participations.activity_id", "=", "activities.id")
+        $activities = Activity::where('activities.user_id', $user->id)->leftJoin("participations", "participations.activity_id", "=", "activities.id")
                     ->groupBy("activities.id")->orderBy('activities.created_at', 'DESC')
                     ->get(['activities.id', "judul_activity", "judul_slug",
                             "foto_activity", "batas_waktu",
                             "activities.created_at",
-                            DB::raw("COUNT(*) as total_volunteer")]);
+                            DB::raw("COUNT(participations.id) as total_volunteer")]);
 
         return response()->json(["data" => $activities], 200);
     }
