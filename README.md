@@ -13,6 +13,18 @@
   * [Delete](#8-delete-aktivitas)
   * [Is Exist](#9-is-exist-aktivitas)
 
+* [Kriteria](#kriteria)
+  * [Create](#1-create-kriteria)
+  * [Tampilkan](#2-tampilkan-kriteria)
+  * [Update](#3-update-kriteria)
+  * [Delete](#4-delete-kriteria)
+
+* [Tugas](#tugas)
+  * [Create](#1-create-tugas)
+  * [Tampilkan](#2-tampilkan-tugas)
+  * [Update](#3-update-tugas)
+  * [Delete](#4-delete-tugas)
+
 * [Partisipasi](#partisipasi)
   * [Submit](#1-submit-partisipasi)
   * [Partisipan](#2-specific-partisipan)
@@ -680,6 +692,211 @@ URL: http://127.0.0.1:8000/api/aktivitas/isExist/{slug}
 ```js
 {
     "isExist": true
+}
+```
+
+***Status Code:*** 200
+
+## Kriteria
+
+### 1. Create Kriteria
+
+***Endpoint:***
+```bash
+Method: POST
+Type: 
+URL: http://127.0.0.1:8000/api/kriteria/{activity}
+```
+
+***Body:***
+| Key | Value | Description |
+| --- | ------|-------------|
+| deskripsi | tescreate |  |
+
+***Response:***
+```js
+{
+    "activity_id": 30,
+    "deskripsi": "tescreate",
+    "updated_at": "2023-01-17T05:03:19.000000Z",
+    "created_at": "2023-01-17T05:03:19.000000Z",
+    "id": 9
+}
+```
+
+***Status Code:*** 200
+
+### 2. Tampilkan Kriteria
+
+***Endpoint:***
+```bash
+Method: GET
+Type: 
+URL: http://127.0.0.1:8000/api/kriteria/{activity}
+```
+
+***Response:***
+```js
+[
+    {
+        "id": 6,
+        "activity_id": 34,
+        "deskripsi": "testcriterias333"
+    }
+]
+```
+
+***Status Code:*** 200
+
+### 3. Update Kriteria
+
+***Endpoint:***
+```bash
+Method: POST
+Type: 
+URL: http://127.0.0.1:8000/api/kriteria/{id}
+```
+
+***Body:***
+| Key | Value | Description |
+| --- | ------|-------------|
+| _method | PUT |  |
+| deskripsi | ppp |  |
+
+***Response:***
+```js
+{
+    "data": {
+        "id": 5,
+        "activity_id": 33,
+        "deskripsi": "ppp",
+        "created_at": "2023-01-17T04:12:35.000000Z",
+        "updated_at": "2023-01-17T04:34:02.000000Z"
+    }
+}
+```
+
+***Status Code:*** 200
+
+### 4. Delete Kriteria
+
+***Endpoint:***
+```bash
+Method: DELETE
+Type: 
+URL: http://127.0.0.1:8000/api/kriteria/{id}
+```
+
+***Response:***
+```js
+{
+    "message": "Berhasil menghapus data",
+    "id": "3",
+    "error": false
+}
+```
+
+***Status Code:*** 200
+
+## Tugas
+
+### 1. Create Tugas
+```bash
+Method: POST
+Type: 
+URL: http://127.0.0.1:8000/api/tugas/{activity}
+```
+
+***Body:***
+| Key | Value | Description |
+| --- | ------|-------------|
+| deskripsi | testcreate |  |
+
+***Response:***
+```js
+{
+    "activity_id": 30,
+    "deskripsi": "testcreate",
+    "updated_at": "2023-01-17T05:04:50.000000Z",
+    "created_at": "2023-01-17T05:04:50.000000Z",
+    "id": 13
+}
+```
+
+***Status Code:*** 200
+
+### 2. Tampilkan Tugas
+
+***Endpoint:***
+```bash
+Method: GET
+Type: 
+URL: http://127.0.0.1:8000/api/tugas/{activity}
+```
+
+***Response:***
+```js
+[
+    {
+        "id": 5,
+        "activity_id": 31,
+        "deskripsi": "oksip"
+    },
+    {
+        "id": 6,
+        "activity_id": 31,
+        "deskripsi": "testask999"
+    }
+]
+```
+
+***Status Code:*** 200
+
+### 3. Update Tugas
+
+***Endpoint:***
+```bash
+Method: POST
+Type: 
+URL: http://127.0.0.1:8000/api/tugas/{id}
+```
+
+***Body:***
+| Key | Value | Description |
+| --- | ------|-------------|
+| _method | PUT |  |
+| deskripsi | testcreate |  |
+
+***Response:***
+```js
+{
+    "data": {
+        "id": 5,
+        "activity_id": 31,
+        "deskripsi": "oksip",
+        "created_at": "2023-01-12T12:20:20.000000Z",
+        "updated_at": "2023-01-17T04:36:28.000000Z"
+    }
+}
+```
+
+***Status Code:*** 200
+
+### 4. Delete Tugas
+
+***Endpoint:***
+```bash
+Method: DELETE
+Type: 
+URL: http://127.0.0.1:8000/api/tugas/{id}
+```
+
+***Response:***
+```js
+{
+    "message": "Berhasil menghapus data",
+    "id": "13",
+    "error": false
 }
 ```
 
