@@ -2978,7 +2978,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDAvYXBpL2F1dGgvbG9naW4iLCJpYXQiOjE2NzM1MjQyOTQsImV4cCI6MTY3MzUyNzg5NCwibmJmIjoxNjczNTI0Mjk0LCJqdGkiOiIxQ2NXSlMwUGI5d01ORlJNIiwic3ViIjoiMyIsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.ZAU75Cg2asx-EqqfU2S3TR8NtyB05Aj9xMUQfUOysJ8",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDAvYXBpL2F1dGgvbG9naW4iLCJpYXQiOjE2NzM5Mjg2MzUsImV4cCI6MTY3MzkzMjIzNSwibmJmIjoxNjczOTI4NjM1LCJqdGkiOiJCOVdyWnZRR2lXZDB3ek9SIiwic3ViIjoiMyIsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.QIL7UdAYGOBc4TcMTCce4EAuLKTnV7PQYyfLLMCi7bs",
 							"type": "string"
 						}
 					]
@@ -3119,7 +3119,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDAvYXBpL2F1dGgvbG9naW4iLCJpYXQiOjE2NzM1MjQyOTQsImV4cCI6MTY3MzUyNzg5NCwibmJmIjoxNjczNTI0Mjk0LCJqdGkiOiIxQ2NXSlMwUGI5d01ORlJNIiwic3ViIjoiMyIsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.ZAU75Cg2asx-EqqfU2S3TR8NtyB05Aj9xMUQfUOysJ8",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDAvYXBpL2F1dGgvbG9naW4iLCJpYXQiOjE2NzM5Mjg2MzUsImV4cCI6MTY3MzkzMjIzNSwibmJmIjoxNjczOTI4NjM1LCJqdGkiOiJCOVdyWnZRR2lXZDB3ek9SIiwic3ViIjoiMyIsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.QIL7UdAYGOBc4TcMTCce4EAuLKTnV7PQYyfLLMCi7bs",
 							"type": "string"
 						}
 					]
@@ -3136,7 +3136,7 @@
 						},
 						{
 							"key": "judul_activity",
-							"value": "judulempat",
+							"value": "judul0",
 							"type": "text"
 						},
 						{
@@ -3146,12 +3146,12 @@
 						},
 						{
 							"key": "judul_slug",
-							"value": "slug-4-tes",
+							"value": "slug",
 							"type": "text"
 						},
 						{
 							"key": "detail_activity",
-							"value": "detailx4",
+							"value": "detail",
 							"type": "text"
 						},
 						{
@@ -3181,7 +3181,7 @@
 						},
 						{
 							"key": "tasks[]",
-							"value": "testatsk2",
+							"value": "testask0",
 							"type": "text"
 						},
 						{
@@ -3315,7 +3315,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDAvYXBpL2F1dGgvbG9naW4iLCJpYXQiOjE2NzM0NTY5NTIsImV4cCI6MTY3MzQ2MDU1MiwibmJmIjoxNjczNDU2OTUyLCJqdGkiOiI5VUoyTUZnUTQ2dU1KQk1GIiwic3ViIjoiMyIsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.j_vDQ0eOcdvAulGa5LvlFMiaFxRjFkGpAiqBzz2U5ag",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDAvYXBpL2F1dGgvbG9naW4iLCJpYXQiOjE2NzM1MjQyOTQsImV4cCI6MTY3MzUyNzg5NCwibmJmIjoxNjczNTI0Mjk0LCJqdGkiOiIxQ2NXSlMwUGI5d01ORlJNIiwic3ViIjoiMyIsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.ZAU75Cg2asx-EqqfU2S3TR8NtyB05Aj9xMUQfUOysJ8",
 							"type": "string"
 						}
 					]
@@ -3332,7 +3332,7 @@
 						},
 						{
 							"key": "judul_activity",
-							"value": "gantijudul",
+							"value": "gantilagi",
 							"type": "text"
 						},
 						{
@@ -3365,7 +3365,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDAvYXBpL2F1dGgvbG9naW4iLCJpYXQiOjE2NzM1MjA2ODEsImV4cCI6MTY3MzUyNDI4MSwibmJmIjoxNjczNTIwNjgxLCJqdGkiOiJuMjJhOFU2Q0w4cWt1aDFYIiwic3ViIjoiMyIsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.0Kw94X4cM9IpwIVRZemKUNPk9-x6l4DxgKDB1GGgvnw",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDAvYXBpL2F1dGgvbG9naW4iLCJpYXQiOjE2NzM1MjQyOTQsImV4cCI6MTY3MzUyNzg5NCwibmJmIjoxNjczNTI0Mjk0LCJqdGkiOiIxQ2NXSlMwUGI5d01ORlJNIiwic3ViIjoiMyIsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.ZAU75Cg2asx-EqqfU2S3TR8NtyB05Aj9xMUQfUOysJ8",
 							"type": "string"
 						}
 					]
@@ -3373,14 +3373,14 @@
 				"method": "DELETE",
 				"header": [],
 				"url": {
-					"raw": "{{base_url}}/api/aktivitas/6/delete",
+					"raw": "{{base_url}}/api/aktivitas/10/delete",
 					"host": [
 						"{{base_url}}"
 					],
 					"path": [
 						"api",
 						"aktivitas",
-						"6",
+						"10",
 						"delete"
 					]
 				}
@@ -3485,6 +3485,295 @@
 						"participation",
 						"2",
 						"participants"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[Kriteria] Create",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDAvYXBpL2F1dGgvbG9naW4iLCJpYXQiOjE2NzM5Mjg2MzUsImV4cCI6MTY3MzkzMjIzNSwibmJmIjoxNjczOTI4NjM1LCJqdGkiOiJCOVdyWnZRR2lXZDB3ek9SIiwic3ViIjoiMyIsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.QIL7UdAYGOBc4TcMTCce4EAuLKTnV7PQYyfLLMCi7bs",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "deskripsi",
+							"value": "tescreate",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{base_url}}/api/kriteria/30",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"kriteria",
+						"30"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[Kriteria] Show",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDAvYXBpL2F1dGgvbG9naW4iLCJpYXQiOjE2NzM5Mjg2MzUsImV4cCI6MTY3MzkzMjIzNSwibmJmIjoxNjczOTI4NjM1LCJqdGkiOiJCOVdyWnZRR2lXZDB3ek9SIiwic3ViIjoiMyIsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.QIL7UdAYGOBc4TcMTCce4EAuLKTnV7PQYyfLLMCi7bs",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/api/kriteria/34",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"kriteria",
+						"34"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[Kriteria] Update",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDAvYXBpL2F1dGgvbG9naW4iLCJpYXQiOjE2NzM5Mjg2MzUsImV4cCI6MTY3MzkzMjIzNSwibmJmIjoxNjczOTI4NjM1LCJqdGkiOiJCOVdyWnZRR2lXZDB3ek9SIiwic3ViIjoiMyIsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.QIL7UdAYGOBc4TcMTCce4EAuLKTnV7PQYyfLLMCi7bs",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "_method",
+							"value": "PUT",
+							"type": "text"
+						},
+						{
+							"key": "deskripsi",
+							"value": "ppp",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{base_url}}/api/kriteria/5",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"kriteria",
+						"5"
+					],
+					"query": [
+						{
+							"key": "",
+							"value": null,
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[Kriteria] Delete",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDAvYXBpL2F1dGgvbG9naW4iLCJpYXQiOjE2NzM5Mjg2MzUsImV4cCI6MTY3MzkzMjIzNSwibmJmIjoxNjczOTI4NjM1LCJqdGkiOiJCOVdyWnZRR2lXZDB3ek9SIiwic3ViIjoiMyIsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.QIL7UdAYGOBc4TcMTCce4EAuLKTnV7PQYyfLLMCi7bs",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/api/kriteria/3",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"kriteria",
+						"3"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[Tugas] Show",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDAvYXBpL2F1dGgvbG9naW4iLCJpYXQiOjE2NzM5Mjg2MzUsImV4cCI6MTY3MzkzMjIzNSwibmJmIjoxNjczOTI4NjM1LCJqdGkiOiJCOVdyWnZRR2lXZDB3ek9SIiwic3ViIjoiMyIsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.QIL7UdAYGOBc4TcMTCce4EAuLKTnV7PQYyfLLMCi7bs",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/api/tugas/31",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"tugas",
+						"31"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[Tugas] Update",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDAvYXBpL2F1dGgvbG9naW4iLCJpYXQiOjE2NzM5MzQ0OTcsImV4cCI6MTY3MzkzODA5NywibmJmIjoxNjczOTM0NDk3LCJqdGkiOiI0ckVwN0xkV0lndW5WZXpQIiwic3ViIjoiMyIsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.BGja9TqDSG58B7lpbCp0K0tdtG8BKFIS65l6O-zFFhg",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "_method",
+							"value": "PUT",
+							"type": "text"
+						},
+						{
+							"key": "deskripsi",
+							"value": "oksip",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{base_url}}/api/tugas/5",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"tugas",
+						"5"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[Tugas] Delete",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDAvYXBpL2F1dGgvbG9naW4iLCJpYXQiOjE2NzM5Mjg2MzUsImV4cCI6MTY3MzkzMjIzNSwibmJmIjoxNjczOTI4NjM1LCJqdGkiOiJCOVdyWnZRR2lXZDB3ek9SIiwic3ViIjoiMyIsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.QIL7UdAYGOBc4TcMTCce4EAuLKTnV7PQYyfLLMCi7bs",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/api/tugas/4",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"tugas",
+						"4"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[Tugas] Create",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDAvYXBpL2F1dGgvbG9naW4iLCJpYXQiOjE2NzM5Mjg2MzUsImV4cCI6MTY3MzkzMjIzNSwibmJmIjoxNjczOTI4NjM1LCJqdGkiOiJCOVdyWnZRR2lXZDB3ek9SIiwic3ViIjoiMyIsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.QIL7UdAYGOBc4TcMTCce4EAuLKTnV7PQYyfLLMCi7bs",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "deskripsi",
+							"value": "testcreate",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{base_url}}/api/tugas/30",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"tugas",
+						"30"
 					]
 				}
 			},

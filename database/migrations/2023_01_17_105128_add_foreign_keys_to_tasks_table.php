@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateIconRencanaPenggunaanDanasTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,8 @@ class CreateIconRencanaPenggunaanDanasTable extends Migration
      */
     public function up()
     {
-        Schema::create('icon_rencana_penggunaan_danas', function (Blueprint $table) {
-            $table->id();
-            $table->string('icon');
+        Schema::table('tasks', function (Blueprint $table) {
+            $table->foreign(['activity_id'])->references(['id'])->on('activities')->onUpdate('CASCADE')->onDelete('CASCADE');
         });
     }
 
@@ -26,6 +25,8 @@ class CreateIconRencanaPenggunaanDanasTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('icon_rencana_penggunaan_danas');
+        Schema::table('tasks', function (Blueprint $table) {
+            $table->dropForeign('tasks_activity_id_foreign');
+        });
     }
-}
+};

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddEmailSentAtInCampaignsTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,8 @@ class AddEmailSentAtInCampaignsTable extends Migration
      */
     public function up()
     {
-        Schema::table('campaigns', function (Blueprint $table) {
-            $table->timestamp('email_sent_at')->after('rincian')->nullable();
+        Schema::table('criterias', function (Blueprint $table) {
+            $table->foreign(['activity_id'])->references(['id'])->on('activities')->onUpdate('CASCADE')->onDelete('CASCADE');
         });
     }
 
@@ -25,8 +25,8 @@ class AddEmailSentAtInCampaignsTable extends Migration
      */
     public function down()
     {
-        Schema::table('campaigns', function (Blueprint $table) {
-            $table->dropColumn('email_sent_at');
+        Schema::table('criterias', function (Blueprint $table) {
+            $table->dropForeign('criterias_activity_id_foreign');
         });
     }
-}
+};

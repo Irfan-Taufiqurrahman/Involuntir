@@ -4,6 +4,8 @@ use App\Http\Controllers\Api\{AccountVerificationController,
     Admin\UserAdminController,
     Admin\CampaignAdminController,
     ActivityController,
+    CriteriaController,
+    TaskController,
     ParticipationController,
     CampaignController,
     CategoryController,
@@ -109,6 +111,20 @@ Route::prefix('aktivitas')->group(function () {
 });
 
 Route::get('/aktivitassaya', [ActivityController::class, 'myActivities'])->middleware('jwt.verify');
+
+Route::prefix('kriteria')->group(function () {
+    Route::post('/{activity}', [CriteriaController::class, 'create'])->middleware('jwt.verify');
+    Route::get('/{activity}', [CriteriaController::class, 'show']);
+    Route::put('/{id}', [CriteriaController::class, 'update'])->middleware('jwt.verify');
+    Route::delete('/{id}', [CriteriaController::class, 'delete'])->middleware('jwt.verify');
+});
+
+Route::prefix('tugas')->group(function () {
+    Route::post('/{activity}', [TaskController::class, 'create'])->middleware('jwt.verify');
+    Route::get('/{activity}', [TaskController::class, 'show']);
+    Route::put('/{id}', [TaskController::class, 'update'])->middleware('jwt.verify');
+    Route::delete('/{id}', [TaskController::class, 'delete'])->middleware('jwt.verify');
+});
 
 Route::prefix('kabar_terbaru')->middleware('jwt.verify')->group(function() {
     Route::post('upload', [KabarTerbaruController::class, 'upload']);

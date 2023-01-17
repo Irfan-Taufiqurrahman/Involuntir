@@ -217,7 +217,11 @@ class ActivityController extends Controller
                 'batas_waktu'     => 'required|numeric',
                 'waktu_activity'  => 'required|string',
                 'lokasi'          => 'required|string|max:255',
-                'tipe_activity'   => 'required|in:Virtual,In-Person,Hybrid'
+                'tipe_activity'   => 'required|in:Virtual,In-Person,Hybrid',
+                'criterias'       => 'array',
+                'criterias.*'     => 'string|distinct',
+                'tasks'           => 'array',
+                'tasks.*'         => 'string|distinct'
             ];
         }
 
