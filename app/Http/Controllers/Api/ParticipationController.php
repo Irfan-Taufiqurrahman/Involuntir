@@ -40,7 +40,7 @@ class ParticipationController extends Controller
             'akun_linkedin' => 'string|max:255',
             'pesan' => 'string',
         ]);
-
+        
         if($validator->fails()) {
             return response()->json(["message" => $validator->errors()], 400);
         }
@@ -51,7 +51,17 @@ class ParticipationController extends Controller
         $akun_linkedin = $request->input('akun_linkedin');
         $pesan = $request->input('pesan');
 
+        $hasParticipate = Participation::where('user_id', $user_id);
+
+        if($hasParticipate) {
+            return response()->json(['message' => 'anda sudah berpartisipasi pada aktivitas ini'], 409);
+        }
+
         $activity = Activity::where('id', $activity_id)->first();
+
+        if(!$activity) {
+            return response()->json(['message' => 'campaign tidak ditemukan'], 400);
+        }
 
         $participation = Participation::create([
             'activity_id' => $activity_id,
