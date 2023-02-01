@@ -20,6 +20,7 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use Cviebrock\EloquentSluggable\Services\SlugService;
+use Illuminate\Http\Client\HttpClientException;
 use Illuminate\Support\Facades\Storage;
 use phpDocumentor\Reflection\Types\Boolean;
 use Symfony\Component\HttpFoundation\Test\Constraint\ResponseIsRedirected;
@@ -42,13 +43,22 @@ class ActivityController extends Controller
         } else if ($order === "terbaru") {
             $this->data = $this->data ? $this->data->orderBy('activities.created_at', 'DESC') : Activity::orderBy('activities.created_at', 'DESC');
         }else {
-            return new Error("order salah");
+            throw new HttpClientException("invalid order key", 400);
         }
     }
 
     private function byFiltering($filter)
     {
-        $this->data = $this->data ? $this->data->join('users', 'users.id', "=", 'activities.user_id')->where('users.tipe', $filter) : Activity::join('users', 'users.id', "=", 'activities.user_id')->where('users.tipe', $filter);
+        $roles = [
+            'peduly' => 'users.tipe = "Fundraiser" OR users.tipe = "Volunteer"',
+            'organisasi' => 'users.tipe = "organisasi"',
+            'pribadi' => 'users.tipe = "pribadi" OR users.tipe = "individu"'
+        ];
+
+        if(!array_key_exists($filter, $roles)) {
+            throw new HttpClientException("invalid filter key", 400);
+        }
+        $this->data = $this->data ? $this->data->join('users', 'users.id', "=", 'activities.user_id')->where(DB::raw($roles[$filter])) : Activity::join('users', 'users.id', "=", 'activities.user_id')->where(DB::raw($roles[$filter]));
     }
 
     private function getAllActivitiesWithoutFiltering() {
@@ -75,14 +85,21 @@ class ActivityController extends Controller
             }
 
             if(request()->limit) {
-                $this->data = $this->data ? $this->data->leftJoin("participations", "participations.activity_id", "=", "activities.id")->groupBy("activities.id")->limit(request()->limit)->orderBy('activities.created_at', 'DESC')->where('status_publish', 'published')->orWhere('status_publish', NULL)->get(['activities.id', "judul_activity", "judul_slug", "foto_activity", "batas_waktu", "activities.created_at", DB::raw("COUNT(participations.id) as total_volunteer")]) : $this->getAllActivitiesWithoutFilteringWithLimit(request()->limit);
-            }else {
-                $this->data = $this->data ? $this->data->leftJoin("participations", "participations.activity_id", "=", "activities.id")->groupBy("activities.id")->orderBy('activities.created_at', 'DESC')->where('status_publish', 'published')->orWhere('status_publish', NULL)->get(['activities.id', "judul_activity", "judul_slug", "foto_activity", "batas_waktu", "activities.created_at", DB::raw("COUNT(participations.id) as total_volunteer")]) : $this->getAllActivitiesWithoutFiltering();
+                $this->data = $this->data ? $this->data
+                ->leftJoin("participations", "participations.activity_id", "=", "activities.id")
+                ->groupBy("activities.id")
+                ->limit(request()->limit)
+                ->orderBy('activities.created_at', 'DESC')
+                ->where('status_publish', 'published')
+                ->orWhere('status_publish', NULL)
+                ->get(['activities.id', "judul_activity", "judul_slug", "foto_activity", "batas_waktu", "activities.created_at",
+                    DB::raw("COUNT(participations.id) as total_volunteer")])
+                : $this->getAllActivitiesWithoutFilteringWithLimit(request()->limit);
             }
 
             return response()->json(["data" => $this->data ? $this->data : $this->getAllActivitiesWithoutFiltering()]);
-        }catch(Error $err) {
-            return response()->json(["message" => $err->getMessage()], 401);
+        }catch(HttpClientException $err) {
+            return response()->json(["message" => $err->getMessage()], $err->getCode());
         }
     }
 
@@ -174,8 +191,9 @@ class ActivityController extends Controller
 
     private function uploadImage(Request $request, $file, $judul_slug) {
         $fileName     = $judul_slug . '.' . $request->file($file)->extension();
-        $request->file($file)->move(public_path('images/images_activity'), $fileName);
-        return $fileName;
+        $path = 'images/images_activity';
+        $request->file($file)->move(public_path($path), $fileName);
+        return env('APP_URL') . "/$path/$fileName";
     }
 
     // private function detailToHTML($cerita_tentang_pembuat_campaign, $cerita_tentang_penerima_manfaat, $cerita_tentang_masalah_dan_usaha,  $berapa_biaya_yang_dibutuhkan, $kenapa_galangdana_dibutuhkan, $foto_tentang_campaign, $foto_tentang_campaign_2, $foto_tentang_campaign_3)
@@ -234,11 +252,22 @@ class ActivityController extends Controller
         // check category_id is exist
         $category = Category::find($request->category_id);
         if (!$category) {
-            return response()->json(['message' => "category with id: $request->category not found!"]);
+            return response()->json(['message' => "category with id: $request->category_id not found!"]);
         }
-
-        $judul_slug = $request->judul_slug ? $request->judul_slug : SlugService::createSlug(Activity::class, 'judul_slug', request('judul_activity'));
-
+        
+        $judul_slug = "";
+        // dicek apakah ada custom slug
+        if($request->judul_slug) {
+            // cek apakah slug sudah digunakan
+            if(Activity::where('judul_slug', $request->judul_slug)->first()) {
+                return response()->json(['message' => 'judul slug sudah digunakan'], 400);
+            } else {
+                $judul_slug = $request->judul_slug;
+            }
+        } else {
+            // kalo gaada custom maka dibikinin
+            $judul_slug = SlugService::createSlug(Activity::class, 'judul_slug', request('judul_activity'));
+        }
 
         $foto_activity = NULL;
 
@@ -255,17 +284,6 @@ class ActivityController extends Controller
         if(!$user) {
             return response()->json(['message' => 'user not found!'], 404);
         }
-
-        // $detail_campaign = $this->detailToHTML(
-        //     $request->cerita_tentang_pembuat_campaign,
-        //     $request->cerita_tentang_penerima_manfaat,
-        //     $request->cerita_tentang_masalah_dan_usaha,
-        //     $request->berapa_biaya_yang_dibutuhkan,
-        //     $request->kenapa_galangdana_dibutuhkan,
-        //     $foto_tentang_campaign,
-        //     $foto_tentang_campaign_2,
-        //     $foto_tentang_campaign_3
-        // );
 
         $activity = Activity::create([
             'category_id'     => $category->id,
@@ -301,16 +319,7 @@ class ActivityController extends Controller
 
         $activity->criterias = $request->criterias;
 
-//      send email after campaign created
-        // if($request->status_publish === 'published') {
-        //     Mail::to($user->email)->send(new CampaignCreated($campaign));
-        //     $campaign->update([
-        //         'email_sent_at' => Carbon::now()
-        //     ]);
-        // }
-
-        $activity->user = $user;
-
+        // TODO: Cek semua data apakah sudah bener
         return response()->json(['data' => $activity], 201);
     }
 
