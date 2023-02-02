@@ -51,7 +51,7 @@ class ParticipationController extends Controller
         $akun_linkedin = $request->input('akun_linkedin');
         $pesan = $request->input('pesan');
 
-        $hasParticipate = Participation::where('user_id', $user_id);
+        $hasParticipate = Participation::where('user_id', $user_id)->where('activity_id', $activity_id)->first();
 
         if($hasParticipate) {
             return response()->json(['message' => 'anda sudah berpartisipasi pada aktivitas ini'], 409);
