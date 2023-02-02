@@ -37,8 +37,8 @@ class ParticipationController extends Controller
         $validator = Validator::make($request->all(), [
             'activity_id' => 'required|numeric',
             'nomor_hp' => 'required|numeric|digits_between:10,255',
-            'akun_linkedin' => 'string|max:255',
-            'pesan' => 'string',
+            'akun_linkedin' => 'nullable|string|max:255',
+            'pesan' => 'nullable|string',
         ]);
         
         if($validator->fails()) {
