@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Activity;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -19,8 +20,23 @@ class SearchController extends Controller
             return response()->json(["message" => $validator->errors()], 400);
         }
 
-        $galangdana = DB::table("campaigns")->leftJoin("donations", "donations.campaign_id", "=", "campaigns.id")->groupBy("campaigns.id")->where("judul_campaign", "like", "%" . $request->keyword . "%")->get(['campaigns.id', "judul_campaign", "campaigns.judul_slug", "foto_campaign", "nominal_campaign", "batas_waktu_campaign", DB::raw('sum(donasi) as total_donasi')]);
+        $activities = Activity::leftJoin("participations", "participations.activity_id", "=", "activities.id")
+        ->groupBy("activities.id")
+        ->orderBy('created_at', 'DESC')
+        ->where('status_publish', 'published')
+        ->where('judul_activity', 'like', '%'.$request->keyword.'%')
+        ->orWhere('status_publish', NULL)
+        ->get([
+            'activities.id', 
+            "judul_activity", 
+            "judul_slug", 
+            "foto_activity", 
+            "batas_waktu", 
+            "activities.created_at", 
+            DB::raw("CONCAT(DATEDIFF(batas_waktu, CURRENT_DATE), ' hari') as sisa_waktu"),
+            DB::raw("COUNT(participations.id) as total_volunteer")
+        ]);
         $users = User::where("name", "like", "%" . $request->keyword . "%")->get(["id", "name", "status_akun", "created_at"]);
-        return response()->json(["error" => false, "data" => ["users" => $users, "galangdana" => $galangdana]], 200);
+        return response()->json(["error" => false, "data" => ["users" => $users, "galangdana" => $activities]], 200);
     }
 }
