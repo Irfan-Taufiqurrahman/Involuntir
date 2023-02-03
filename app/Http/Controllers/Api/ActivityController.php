@@ -31,15 +31,15 @@ class ActivityController extends Controller
 {
     private $data = NULL;
 
-    private function categoryFiltering(Category $kategori)
+    private function categoryFiltering($id)
     {
-        $this->data = Activity::where("category_id", $kategori->id);
+        $this->data = Activity::where("category_id", $id);
     }
 
     private function orderByFiltering($order)
     {
         if ($order === "mendesak") {
-            $this->data = $this->data ? $this->data->orderBy('activities.batas_waktu', 'ASC') : Activity::orderBy('activities.batas_waktu', 'ASC');
+            $this->data = $this->data ? $this->data->orderBy("activities.batas_waktu", 'ASC') : Activity::orderBy("activities.batas_waktu", 'ASC');
         } else if ($order === "populer") {
             $this->data = $this->data ? $this->data->orderBy(DB::raw('total_volunteer'), 'DESC') : Activity::orderBy(DB::raw('total_volunteer'), 'DESC');
         } else if ($order === "terbaru") {
@@ -54,21 +54,25 @@ class ActivityController extends Controller
         $roles = [
             'peduly' => 'users.tipe = "Fundraiser" OR users.tipe = "Volunteer"',
             'organisasi' => 'users.tipe = "organisasi"',
-            'pribadi' => 'users.tipe = "pribadi" OR users.tipe = "individu"'
+            'pribadi' => 'users.tipe = "pribadi" OR users.tipe = "Individu"'
         ];
 
         if(!array_key_exists($filter, $roles)) {
             throw new HttpClientException("invalid filter key", 400);
         }
-        $this->data = $this->data ? $this->data->join('users', 'users.id', "=", 'activities.user_id')->where(DB::raw($roles[$filter])) : Activity::join('users', 'users.id', "=", 'activities.user_id')->where(DB::raw($roles[$filter]));
+
+        $this->data = $this->data ? $this->data->
+                                    join('users', 'users.id', "=", 'activities.user_id')
+                                    ->whereRaw($roles[$filter]) 
+                                    : Activity::join('users', 'users.id', "=", 'activities.user_id')->whereRaw($roles[$filter]);
     }
 
     private function getAllActivitiesWithoutFiltering() {
-        return Activity::leftJoin("participations", "participations.activity_id", "=", "activities.id")->groupBy("activities.id")->orderBy('activities.created_at', 'DESC')->where('status_publish', 'published')->orWhere('status_publish', NULL)->get(['activities.id', "judul_activity", "judul_slug", "foto_activity", "batas_waktu", "activities.created_at", DB::raw("COUNT(participations.id) as total_volunteer")]);
+        return Activity::orderBy('created_at', 'DESC');
     }
 
     private function getAllActivitiesWithoutFilteringWithLimit($limit) {
-        return Activity::leftJoin("participations", "participations.activity_id", "=", "activities.id")->groupBy("activities.id")->limit($limit)->orderBy('activities.created_at', 'DESC')->where('status_publish', 'published')->orWhere('status_publish', NULL)->get(['activities.id', "judul_activity", "judul_slug", "foto_activity", "batas_waktu", "activities.created_at", DB::raw("COUNT(participations.id) as total_volunteer")]);
+        return Activity::limit($limit);
     }
 
     public function index()
@@ -88,18 +92,28 @@ class ActivityController extends Controller
 
             if(request()->limit) {
                 $this->data = $this->data ? $this->data
-                ->leftJoin("participations", "participations.activity_id", "=", "activities.id")
-                ->groupBy("activities.id")
                 ->limit(request()->limit)
-                ->orderBy('activities.created_at', 'DESC')
-                ->where('status_publish', 'published')
-                ->orWhere('status_publish', NULL)
-                ->get(['activities.id', "judul_activity", "judul_slug", "foto_activity", "batas_waktu", "activities.created_at",
-                    DB::raw("COUNT(participations.id) as total_volunteer")])
                 : $this->getAllActivitiesWithoutFilteringWithLimit(request()->limit);
             }
 
-            return response()->json(["data" => $this->data ? $this->data : $this->getAllActivitiesWithoutFiltering()]);
+            $activities = $this->data ? $this->data : $this->getAllActivitiesWithoutFiltering();
+
+            $joinWithRelatedTables = $activities->leftJoin("participations", "participations.activity_id", "=", "activities.id")
+                                                ->groupBy("activities.id")
+                                                ->where('status_publish', 'published')
+                                                ->orWhere('status_publish', NULL)
+                                                ->get([
+                                                    'activities.id', 
+                                                    "judul_activity", 
+                                                    "judul_slug", 
+                                                    "foto_activity", 
+                                                    "batas_waktu", 
+                                                    "activities.created_at", 
+                                                    DB::raw("CONCAT(DATEDIFF(batas_waktu, CURRENT_DATE), ' hari') as sisa_waktu"),
+                                                    DB::raw("COUNT(participations.id) as total_volunteer")
+                                                ]);
+
+            return response()->json(["data" => $joinWithRelatedTables]);
         }catch(HttpClientException $err) {
             return response()->json(["message" => $err->getMessage()], $err->getCode());
         }
