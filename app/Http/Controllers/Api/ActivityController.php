@@ -21,6 +21,8 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use Cviebrock\EloquentSluggable\Services\SlugService;
 use Illuminate\Http\Client\HttpClientException;
+use Illuminate\Log\Logger;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use phpDocumentor\Reflection\Types\Boolean;
 use Symfony\Component\HttpFoundation\Test\Constraint\ResponseIsRedirected;
@@ -132,13 +134,18 @@ class ActivityController extends Controller
 
         $tasks = Task::join('activities', 'activity_id', '=', 'activities.id')
                  ->where('activity_id', $id_activity)
-                 ->get();
+                 ->get(DB::raw('tasks.id, tasks.deskripsi, tasks.created_at'));
 
         $criterias = Criteria::join('activities', 'activity_id', '=', 'activities.id')
                      ->where('activity_id', $id_activity)
-                     ->get();
+                     ->get(DB::raw('criterias.id, criterias.deskripsi, criterias.created_at'));
 
         $user = auth('api')->user();
+
+        $now = Carbon::createFromFormat('Y-m-d H:s:i', Carbon::now());
+        $batas_waktu = Carbon::createFromFormat('Y-m-d H:s:i', $data_activity[0]->batas_waktu);
+
+        $data_activity[0]->sisa_hari = $batas_waktu->diffInDays($now);
 
         return response()->json([
             'data' => [
@@ -196,21 +203,6 @@ class ActivityController extends Controller
         return env('APP_URL') . "/$path/$fileName";
     }
 
-    // private function detailToHTML($cerita_tentang_pembuat_campaign, $cerita_tentang_penerima_manfaat, $cerita_tentang_masalah_dan_usaha,  $berapa_biaya_yang_dibutuhkan, $kenapa_galangdana_dibutuhkan, $foto_tentang_campaign, $foto_tentang_campaign_2, $foto_tentang_campaign_3)
-    // {
-    //     $base_url = env('APP_URL');
-    //     $pembuat_campaign = "<p>$cerita_tentang_pembuat_campaign<br><br>";
-    //     $penerima_manfaat = "$cerita_tentang_penerima_manfaat<br><br>";
-    //     $masalah_dan_usaha = "$cerita_tentang_masalah_dan_usaha<br><br>";
-    //     $biaya_yang_dibutuhkan = "$berapa_biaya_yang_dibutuhkan<br><br>";
-    //     $alasan = "$kenapa_galangdana_dibutuhkan<br><br></p>";
-    //     $foto_tentang_campaign = $foto_tentang_campaign ? "<img width='100%' src='$base_url/images/images_campaign/$foto_tentang_campaign' ><br><br>" : "";
-    //     $foto_tentang_campaign_2 = $foto_tentang_campaign_2 ? "<img width='100%' src='$base_url/images/images_campaign/$foto_tentang_campaign_2' ><br><br>" : "";
-    //     $foto_tentang_campaign_3 = $foto_tentang_campaign_3 ? "<img width='100%' src='$base_url/images/images_campaign/$foto_tentang_campaign_3' ><br><br>" : "";
-
-    //     return $pembuat_campaign . $penerima_manfaat . $foto_tentang_campaign . $masalah_dan_usaha . $foto_tentang_campaign_2 . $biaya_yang_dibutuhkan . $foto_tentang_campaign_3 . $alasan;
-    // }
-
     public function publish(Request $request) {
         $request['status_publish'] = 'published';
         return $this->create($request);
@@ -236,10 +228,7 @@ class ActivityController extends Controller
                 'waktu_activity'  => 'required|string',
                 'lokasi'          => 'required|string|max:255',
                 'tipe_activity'   => 'required|in:Virtual,In-Person,Hybrid',
-                'criterias'       => 'array',
-                'criterias.*'     => 'string|distinct',
-                'tasks'           => 'array',
-                'tasks.*'         => 'string|distinct'
+                'kuota'           => 'required|numeric'
             ];
         }
 
@@ -298,28 +287,30 @@ class ActivityController extends Controller
             'tipe_activity'   => $request->tipe_activity,
             'status_publish'  => $request->status_publish,
             'status'          => 'Pending',
+            'kuota'           => $request->kuota ? $request->kuota : 0,
             'updated_at'      => $request->status_publish === 'published' ? Carbon::now() : null
         ]);
 
-        foreach((array) $request->tasks as $task){
+        $tasks = $request->tasks ? json_decode($request->tasks) : [];
+        foreach($tasks as $task){
             $task = Task::create([
                 'activity_id' => $activity->id,
                 'deskripsi' => $task
             ]);
         }
 
-        $activity->tasks = $request->tasks;
+        $activity->tasks = $tasks;
 
-        foreach((array) $request->criterias as $criteria){
+        $criterias = $request->criterias ? json_decode($request->criterias) : [];
+        foreach($criterias as $criteria){
             Criteria::create([
                 'activity_id' => $activity->id,
                 'deskripsi' => $criteria
             ]);
         }
 
-        $activity->criterias = $request->criterias;
+        $activity->criterias = $criterias;
 
-        // TODO: Cek semua data apakah sudah bener
         return response()->json(['data' => $activity], 201);
     }
 
