@@ -158,7 +158,7 @@ URL: http://127.0.0.1:8000/api/aktivitas/create
 
 | Key | Value | Description |
 | --- | ------|-------------|
-| status_publish | published |  |
+| status_publish | published, drafted |  |
 | category_id | 2 |  |
 | judul_activity | Judul2 |  |
 | judul_slug | tes_slug2 |  |
@@ -167,7 +167,9 @@ URL: http://127.0.0.1:8000/api/aktivitas/create
 | batas_waktu | 21 |  |
 | waktu_activity | 2023-12-31 |  |
 | lokasi | rumah |  |
-| tipe_activity | In-Person |  |
+| tipe_activity | In-Person, Virtual, Hybrid |  |
+| criterias | [blabla, blabla, blabla] | array |
+| tasks | [blabla, blabla, blabla] | array |
 
 ***Response:***
 ```js

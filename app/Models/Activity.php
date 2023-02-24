@@ -28,8 +28,11 @@ class Activity extends Model
         'tipe_activity',
         'penyelenggaraan_activity',
         'status_publish',
-        'status'
+        'status',
+        'kuota'
     ];
+
+    protected $casts = ['kuota' => 'integer'];
 
     protected $dates = ['deleted_at'];
 
