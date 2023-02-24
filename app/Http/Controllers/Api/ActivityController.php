@@ -72,18 +72,18 @@ class ActivityController extends Controller
     }
 
     private function getAllActivitiesWithoutFilteringWithLimit($limit) {
-        return Activity::limit($limit);
+        $this->data = $this->data ? $this->data->limit($limit) : Activity::limit($limit);
     }
 
     public function index()
     {
         try {
-            if (request()->urutan) {
-                $this->orderByFiltering(request()->urutan);
-            }
-
             if (request()->kategori) {
                 $this->categoryFiltering(request()->kategori);
+            }
+
+            if (request()->urutan) {
+                $this->orderByFiltering(request()->urutan);
             }
 
             if (request()->filter) {
@@ -91,9 +91,7 @@ class ActivityController extends Controller
             }
 
             if(request()->limit) {
-                $this->data = $this->data ? $this->data
-                ->limit(request()->limit)
-                : $this->getAllActivitiesWithoutFilteringWithLimit(request()->limit);
+                $this->getAllActivitiesWithoutFilteringWithLimit(request()->limit);
             }
 
             $activities = $this->data ? $this->data : $this->getAllActivitiesWithoutFiltering();
@@ -108,7 +106,7 @@ class ActivityController extends Controller
                                                     "judul_slug", 
                                                     "foto_activity", 
                                                     "batas_waktu", 
-                                                    "activities.created_at", 
+                                                    "activities.created_at",
                                                     DB::raw("CONCAT(DATEDIFF(batas_waktu, CURRENT_DATE), ' hari') as sisa_waktu"),
                                                     DB::raw("COUNT(participations.id) as total_volunteer")
                                                 ]);

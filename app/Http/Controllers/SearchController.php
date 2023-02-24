@@ -36,7 +36,7 @@ class SearchController extends Controller
             DB::raw("CONCAT(DATEDIFF(batas_waktu, CURRENT_DATE), ' hari') as sisa_waktu"),
             DB::raw("COUNT(participations.id) as total_volunteer")
         ]);
-        $users = User::where("name", "like", "%" . $request->keyword . "%")->get(["id", "name", "status_akun", "created_at"]);
+        $users = User::where("name", "like", "%" . $request->keyword . "%")->get(["id", "name", "status_akun", 'photo', "created_at"]);
         return response()->json(["error" => false, "data" => ["users" => $users, "galangdana" => $activities]], 200);
     }
 }
