@@ -164,12 +164,16 @@ URL: http://127.0.0.1:8000/api/aktivitas/create
 | judul_slug | tes_slug2 |  |
 | foto_activity | Image Object |  |
 | detail_activity | tesdetail2 |  |
+| tugas_relawan | test relawan |  |
+| kriteria_relawan | test kriteria |  |
 | batas_waktu | 21 |  |
 | waktu_activity | 2023-12-31 |  |
 | lokasi | rumah |  |
 | tipe_activity | In-Person, Virtual, Hybrid |  |
 | criterias | [blabla, blabla, blabla] | array |
 | tasks | [blabla, blabla, blabla] | array |
+| kuota | 100 |  |
+| tautan | involuntir |  |
 
 ***Response:***
 ```js
@@ -181,12 +185,16 @@ URL: http://127.0.0.1:8000/api/aktivitas/create
         "judul_slug": "tes_slug2",
         "foto_activity": "tes_slug2.png",
         "detail_activity": "tesdetail2",
+        "tugas_relawan": "test relawan",
+        "kriteria_relawan": "test kriteria",
         "batas_waktu": "2023-01-24T16:52:00.787353Z",
         "waktu_activity": "2023-01-31",
         "lokasi": "rumah",
         "tipe_activity": "In-Person",
         "status_publish": "published",
         "status": "Pending",
+        "kuota": 100,
+        "tautan": "involuntir",
         "updated_at": "2023-01-10T16:52:00.000000Z",
         "created_at": "2023-01-10T16:52:00.000000Z",
         "id": 2,

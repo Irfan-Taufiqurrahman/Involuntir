@@ -236,11 +236,14 @@ class ActivityController extends Controller
                 'judul_activity'  => 'required|string|max:255',
                 'foto_activity'   => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
                 'detail_activity' => 'required|string',
+                'tugas_relawan'   => 'required|string',
+                'kriteria_relawan'=> 'required|string',
                 'batas_waktu'     => 'required|numeric',
                 'waktu_activity'  => 'required|string',
                 'lokasi'          => 'required|string|max:255',
                 'tipe_activity'   => 'required|in:Virtual,In-Person,Hybrid',
-                'kuota'           => 'required|numeric'
+                'kuota'           => 'required|numeric',
+                'tautan'          => 'required|string'
             ];
         }
 
@@ -293,6 +296,8 @@ class ActivityController extends Controller
             'judul_slug'      => $judul_slug,
             'foto_activity'   => $foto_activity,
             'detail_activity' => $request->detail_activity,
+            'tugas_relawan'   => $request->tugas_relawan,
+            'kriteria_relawan'=> $request->kriteria_relawan,
             'batas_waktu'     => Carbon::now()->addDays($request->batas_waktu),
             'waktu_activity'  => $request->waktu_activity,
             'lokasi'          => $request->lokasi,
@@ -300,6 +305,7 @@ class ActivityController extends Controller
             'status_publish'  => $request->status_publish,
             'status'          => 'Pending',
             'kuota'           => $request->kuota ? $request->kuota : 0,
+            'tautan'          => $request->tautan ? $request->tautan : 'involuntir',
             'updated_at'      => $request->status_publish === 'published' ? Carbon::now() : null
         ]);
 
