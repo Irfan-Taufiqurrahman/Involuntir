@@ -22,6 +22,8 @@ class Activity extends Model
         'judul_slug',
         'foto_activity',
         'detail_activity',
+        'tugas_relawan',
+        'kriteria_relawan',
         'batas_waktu',
         'waktu_activity',
         'lokasi',
@@ -29,7 +31,8 @@ class Activity extends Model
         'penyelenggaraan_activity',
         'status_publish',
         'status',
-        'kuota'
+        'kuota',
+        'tautan'
     ];
 
     protected $casts = ['kuota' => 'integer'];
