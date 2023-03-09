@@ -14,8 +14,6 @@ class AddTugasRelawanKriteriaRelawanTautanColumnToActivitiesTable extends Migrat
     public function up()
     {
         Schema::table('activities', function (Blueprint $table) {
-            $table->string('tugas_relawan')->after('detail_activity');
-            $table->string('kriteria_relawan')->after('tugas_relawan');
             $table->string('tautan')->after('tipe_activity');
         });
     }
