@@ -22,8 +22,6 @@ class Activity extends Model
         'judul_slug',
         'foto_activity',
         'detail_activity',
-        'tugas_relawan',
-        'kriteria_relawan',
         'batas_waktu',
         'waktu_activity',
         'lokasi',
