@@ -107,6 +107,7 @@ class ActivityController extends Controller
                                                     "foto_activity", 
                                                     "batas_waktu", 
                                                     "activities.created_at",
+                                                    "tipe_activity",
                                                     DB::raw("CONCAT(DATEDIFF(batas_waktu, CURRENT_DATE), ' hari') as sisa_waktu"),
                                                     DB::raw("COUNT(participations.id) as total_volunteer")
                                                 ]);
