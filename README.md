@@ -250,6 +250,7 @@ URL: http://127.0.0.1:8000/api/aktivitas
             "judul_slug": "tes_slug2",
             "foto_activity": "tes_slug2.jpg",
             "batas_waktu": "2023-01-26 18:15:47",
+            "tipe_activity": "In-Person",
             "created_at": "2023-01-12T11:15:48.000000Z",
             "total_volunteer": 0
         },
@@ -259,6 +260,7 @@ URL: http://127.0.0.1:8000/api/aktivitas
             "judul_slug": "slug-3-tes",
             "foto_activity": "slug-3-tes.jpg",
             "batas_waktu": "2023-02-11 00:11:45",
+            "tipe_activity": "In-Person",
             "created_at": "2023-01-11T17:11:45.000000Z",
             "total_volunteer": 0
         },
@@ -268,6 +270,7 @@ URL: http://127.0.0.1:8000/api/aktivitas
             "judul_slug": "tes_slug",
             "foto_activity": "tes_slug.jpg",
             "batas_waktu": "2023-01-20 13:35:12",
+            "tipe_activity": "In-Person",
             "created_at": "2023-01-06T06:35:12.000000Z",
             "total_volunteer": 1
         }
