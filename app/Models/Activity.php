@@ -54,4 +54,11 @@ class Activity extends Model
     public function category() {
         return $this->belongsTo(Category::class);
     }
+
+    public function getTipeActivityAttribute($value) {
+        if($value === 'In-Person') {
+            return 'Tatap Muka';
+        }
+        return $value;
+    }
 }
