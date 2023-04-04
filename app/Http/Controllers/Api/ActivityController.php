@@ -133,7 +133,7 @@ class ActivityController extends Controller
 
         $activist = DB::table('users')
             ->where('id', $id_activist)
-            ->get(['users.id', 'photo', 'name', 'status_akun', 'role', 'jenis_organisasi']);
+            ->get(['users.id', 'photo', 'name', 'status_akun', 'role', 'tipe', 'jenis_organisasi']);
 
 
         $total_volunteer = DB::table('participations')
