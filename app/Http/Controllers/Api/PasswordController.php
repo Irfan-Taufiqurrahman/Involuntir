@@ -97,7 +97,7 @@ class PasswordController extends Controller
         }
 
         $email = $request->input('email');
-        $otp = rand(100000, 999999);
+        $otp = rand(1000, 9999);
         $expiryTime = now()->addMinutes(10);
 
         $user = User::where('email', $email)->first();
@@ -114,7 +114,6 @@ class PasswordController extends Controller
         });
 
         return response()->json([
-            'otp' => $otp,
             'message' => 'OTP sent successfully'
         ]);
     }
@@ -139,7 +138,7 @@ class PasswordController extends Controller
             // Jika OTP valid, berikan token atau lanjutkan proses reset password di sini
             $token = Password::createToken(User::where('email', $email)->first());
 
-            return response()->json(['message' => 'OTP verified successfully']);
+            return response()->json(['message' => 'OTP verified successfully', "token" => $token]);
         } else {
             return response()->json(['error' => 'Invalid OTP'], 422);
         }

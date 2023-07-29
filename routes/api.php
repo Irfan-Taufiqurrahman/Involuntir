@@ -90,7 +90,7 @@ Route::prefix('galangdana')->group(function () {
     //    Route::post('/draft', [CampaignController::class, 'draft'])->middleware('jwt.verify');
     Route::delete('/{campaign:id}/delete', [CampaignController::class, 'destroy'])->middleware('jwt.verify');
 
-    Route::get('isExist/{slug}', [CampaignController::class, 'isExist']);
+    Route::get('isExist/{slug}', [ActivityController::class, 'isExist']);
 
     Route::post('/{campaign}/report', [CampaignReportController::class, 'report'])->middleware('jwt.verify');
     Route::delete('/{campaign}/report', [CampaignReportController::class, 'cancelReport'])->middleware('jwt.verify');
