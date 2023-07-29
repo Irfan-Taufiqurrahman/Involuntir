@@ -1,6 +1,7 @@
 <?php
 
-use App\Http\Controllers\Api\{AccountVerificationController,
+use App\Http\Controllers\Api\{
+    AccountVerificationController,
     Admin\UserAdminController,
     Admin\CampaignAdminController,
     ActivityController,
@@ -28,7 +29,8 @@ use App\Http\Controllers\Api\{AccountVerificationController,
     PaymentController,
     SliderController,
     UserController,
-    WishlistController};
+    WishlistController
+};
 use App\Http\Controllers\BalanceController;
 use App\Http\Controllers\KabarTerbaruController;
 use App\Http\Controllers\PaymentCallbackController;
@@ -38,7 +40,7 @@ use App\Http\Controllers\TransaksiController;
 use App\Http\Controllers\UrgentCampaignsController;
 use Illuminate\Support\Facades\Route;
 
-Route::prefix('auth')->middleware('api')->group(function() {
+Route::prefix('auth')->middleware('api')->group(function () {
     // login akun google
     Route::get('/google/callback', [AuthController::class, 'handleAuthCallbackGoogle']);
 
@@ -80,12 +82,12 @@ Route::prefix('galangdana')->group(function () {
 
     // set campaign as urgent
     Route::post('/{campaign}/asurgent', [UrgentCampaignsController::class, 'add'])->middleware('jwt.verify');
-     Route::post('/create', [CampaignController::class, 'create'])->middleware('jwt.verify');
-     Route::post('/create/publish', [CampaignController::class, 'publish'])->middleware('jwt.verify');
-     Route::post('/create/draft', [CampaignController::class, 'draft'])->middleware('jwt.verify');
-     Route::put('/{id}/update', [CampaignController::class, 'update'])->middleware('jwt.verify');
-//    Route::post('/publish', [CampaignController::class, 'publish'])->middleware('jwt.verify');
-//    Route::post('/draft', [CampaignController::class, 'draft'])->middleware('jwt.verify');
+    Route::post('/create', [CampaignController::class, 'create'])->middleware('jwt.verify');
+    Route::post('/create/publish', [CampaignController::class, 'publish'])->middleware('jwt.verify');
+    Route::post('/create/draft', [CampaignController::class, 'draft'])->middleware('jwt.verify');
+    Route::put('/{id}/update', [CampaignController::class, 'update'])->middleware('jwt.verify');
+    //    Route::post('/publish', [CampaignController::class, 'publish'])->middleware('jwt.verify');
+    //    Route::post('/draft', [CampaignController::class, 'draft'])->middleware('jwt.verify');
     Route::delete('/{campaign:id}/delete', [CampaignController::class, 'destroy'])->middleware('jwt.verify');
 
     Route::get('isExist/{slug}', [CampaignController::class, 'isExist']);
@@ -126,16 +128,16 @@ Route::prefix('tugas')->group(function () {
     Route::delete('/{id}', [TaskController::class, 'delete'])->middleware('jwt.verify');
 });
 
-Route::prefix('kabar_terbaru')->middleware('jwt.verify')->group(function() {
+Route::prefix('kabar_terbaru')->middleware('jwt.verify')->group(function () {
     Route::post('upload', [KabarTerbaruController::class, 'upload']);
     Route::post('store', [KabarTerbaruController::class, 'store']);
 });
 
-Route::prefix('urgent')->group(function() {
+Route::prefix('urgent')->group(function () {
     Route::get('/', [UrgentCampaignsController::class, 'index']);
 });
 
-Route::prefix('fundraiser')->middleware(['jwt.verify', 'fundraiser'])->group(function(){
+Route::prefix('fundraiser')->middleware(['jwt.verify', 'fundraiser'])->group(function () {
     Route::get('/getdonatur', [FundraiserController::class, 'getdonatur']);
     Route::get('/donations', [FundraiserController::class, 'getDonaturByReferral']);
     Route::get('/approve', [FundraiserController::class, 'approve']);
@@ -180,16 +182,20 @@ Route::post('/payments/midtrans-notification', [PaymentCallbackController::class
 
 Route::prefix('password')->group(function () {
     Route::get('/resetemail', [PasswordController::class, 'resetEmail']);
-    Route::get('/resetpassword', [PasswordController::class, 'resetPassword']);
+
+    Route::get('/reset', [PasswordController::class, 'resetPassword']);
+    Route::post('/request-otp', [PasswordController::class, 'requestOtp']);
+    Route::post('/verify-otp', [PasswordController::class, 'verifyOtp']);
 });
 
-Route::group(['middleware'=>['web']], function(){
-    Route::prefix('token')->group(function(){
-        Route::get('/csrf', [TokenController::class,'csrfToken']);
+
+Route::group(['middleware' => ['web']], function () {
+    Route::prefix('token')->group(function () {
+        Route::get('/csrf', [TokenController::class, 'csrfToken']);
     });
 });
 
-Route::prefix('wishlists')->middleware('jwt.verify')->group(function() {
+Route::prefix('wishlists')->middleware('jwt.verify')->group(function () {
     Route::get('/', [WishlistController::class, 'index']);
     Route::post('/create', [WishlistController::class, 'add']);
     Route::delete('/{campaign_id}/delete', [WishlistController::class, 'delete']);
@@ -198,37 +204,37 @@ Route::prefix('wishlists')->middleware('jwt.verify')->group(function() {
 // belum termasuk rating user
 Route::get('search', [SearchController::class, 'index']);
 
-Route::prefix('slides')->group(function() {
+Route::prefix('slides')->group(function () {
     Route::get('/', [SliderController::class, 'index']);
     Route::post('/create', [SliderController::class, 'create']);
     Route::put('/{id}/update', [SliderController::class, 'update']);
     Route::delete('/{id}/delete', [SliderController::class, 'delete']);
 });
 
-Route::prefix('topup')->middleware('jwt.verify')->group(function() {
+Route::prefix('topup')->middleware('jwt.verify')->group(function () {
     Route::get('{transaction:id}/details', [TransactionController::class, 'details']);
     Route::post('/bank_transfer', [TransactionController::class, 'bank_payment']);
     Route::post('/emoney', [TransactionController::class, 'emoney']);
 });
 
-Route::prefix('verification')->middleware('jwt.verify')->group(function() {
+Route::prefix('verification')->middleware('jwt.verify')->group(function () {
     Route::get('/', [AccountVerificationController::class, 'index']);
     Route::post('/pribadi', [AccountVerificationController::class, 'pribadi']);
     Route::post('/organisasi', [AccountVerificationController::class, 'organisasi']);
     Route::post('/{account_verification:id}/verified', [AccountVerificationController::class, 'verified']);
 });
 
-Route::prefix('feeds')->group(function() {
+Route::prefix('feeds')->group(function () {
     Route::get('/', [FeedController::class, 'index']);
     Route::post('/{feed}/like', [LikeController::class, 'like'])->middleware('jwt.verify');
     Route::delete('/{feed}/like', [LikeController::class, 'unlike'])->middleware('jwt.verify');
 });
 
-Route::prefix('/categories')->group(function() {
+Route::prefix('/categories')->group(function () {
     Route::get('/', [CategoryController::class, 'index']);
 });
 
-Route::prefix('adayangbaru')->group(function() {
+Route::prefix('adayangbaru')->group(function () {
     Route::get('/', [AdaYangBaruController::class, 'index']);
     Route::post('/create', [AdaYangBaruController::class, 'create'])->middleware('jwt.verify');
     Route::put('/{id}', [AdaYangBaruController::class, 'update'])->middleware('jwt.verify');

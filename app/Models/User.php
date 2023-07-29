@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Contracts\Auth\CanResetPassword;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -10,9 +11,10 @@ use Laravel\Sanctum\HasApiTokens;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class User extends Authenticatable implements JWTSubject, MustVerifyEmail
+class User extends Authenticatable implements JWTSubject, MustVerifyEmail, CanResetPassword
 {
-    use HasApiTokens, HasFactory;
+    use HasApiTokens;
+    use HasFactory;
     use SoftDeletes;
     use Notifiable;
     /**
@@ -94,38 +96,46 @@ class User extends Authenticatable implements JWTSubject, MustVerifyEmail
         return [];
     }
 
-    public function kabar_terbaru() {
+    public function kabar_terbaru()
+    {
         return $this->hasMany(KabarTerbaru::class);
     }
 
-    public function kode_referal() {
+    public function kode_referal()
+    {
         return $this->hasOne(KodeReferal::class, 'id_user');
     }
 
-    public function wishlists() {
+    public function wishlists()
+    {
         return $this->hasMany(Wishlist::class)->orderBy('created_at', 'desc');
     }
 
-    public function transactions() {
+    public function transactions()
+    {
         return $this->hasMany(Transaction::class);
     }
 
-    public function balance() {
+    public function balance()
+    {
         return $this->hasOne(Balance::class);
     }
 
-    public function feeds() {
+    public function feeds()
+    {
         return $this->hasMany(Feed::class);
     }
 
-    public function company() {
-        if($this->tipe !== 'organisasi') {
+    public function company()
+    {
+        if ($this->tipe !== 'organisasi') {
             return null;
         }
         return $this->hasOne(Company::class);
     }
 
-    public function isAdmin() {
+    public function isAdmin()
+    {
         return $this->role === 'Admin';
     }
 }
