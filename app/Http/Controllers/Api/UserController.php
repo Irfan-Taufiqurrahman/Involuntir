@@ -50,14 +50,14 @@ class UserController extends Controller
 
     public function editProfil(Request $request): JsonResponse
     {
-        $user     = User::find(Auth::user()->id);
+        $user = User::find(Auth::user()->id);
 
-        if($request->has('email')) {
+        if ($request->has('email')) {
             $validator = Validator::make(request()->only('email'), [
                 'email' => 'email|unique:users'
             ]);
 
-            if($validator->fails()) {
+            if ($validator->fails()) {
                 return response()->json(['error' => $validator->errors()], 403);
             }
         }
@@ -83,11 +83,18 @@ class UserController extends Controller
             $user->kabupaten          = $request->input('kabupaten') ? $request->input('kabupaten') : $user->kabupaten;
             $user->kecamatan          = $request->input('kecamatan') ? $request->input('kecamatan') : $user->kecamatan;
             $user->alamat             = $request->input('alamat') ? $request->input('alamat') : $user->alamat;
+            $user->description        = $request->input('description') ? $request->input('description') : $user->description;
 
             if ($request->file('photo') && $request->file('photo')->isValid()) {
                 $photo     = time() . '.' . $request->file('photo')->extension();
                 $request->file('photo')->move(public_path('images/images_profile'), $photo);
                 $user->photo           = "/images/images_profile/$photo";
+            }
+
+            if ($request->file('banner') && $request->file('banner')->isValid()) {
+                $banner     = time() . '.' . $request->file('banner')->extension();
+                $request->file('banner')->move(public_path('images/banner'), $banner);
+                $user->banner = "/images/banner/$banner";
             }
 
             $user->update();
@@ -128,7 +135,8 @@ class UserController extends Controller
         }
     }
 
-    public function kodeReferal() {
+    public function kodeReferal()
+    {
         $user = Auth::user();
 
         $kode = KodeReferal::where('id_user', $user->id)->first();
