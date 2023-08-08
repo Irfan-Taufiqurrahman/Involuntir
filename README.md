@@ -1,179 +1,184 @@
-
 # Involuntir
 
-* [Aktivitas](#aktivitas)
+-   [Aktivitas](#aktivitas)
 
-  * [Create](#1-create-aktivitas)
-  * [All](#2-all-aktivitas)
-  * [Specific](#3-specific-aktivitas)
-  * [By Slug](#4-by-slug-aktivitas)
-  * [Publish](#5-publish-aktivitas)
-  * [Draft](#6-draft-aktivitas)
-  * [Update](#7-update-aktivitas)
-  * [Delete](#8-delete-aktivitas)
-  * [Is Exist](#9-is-exist-aktivitas)
+    -   [Create](#1-create-aktivitas)
+    -   [All](#2-all-aktivitas)
+    -   [Specific](#3-specific-aktivitas)
+    -   [By Slug](#4-by-slug-aktivitas)
+    -   [Publish](#5-publish-aktivitas)
+    -   [Draft](#6-draft-aktivitas)
+    -   [Update](#7-update-aktivitas)
+    -   [Delete](#8-delete-aktivitas)
+    -   [Is Exist](#9-is-exist-aktivitas)
 
-* [Kriteria](#kriteria)
-  * [Create](#1-create-kriteria)
-  * [Tampilkan](#2-tampilkan-kriteria)
-  * [Update](#3-update-kriteria)
-  * [Delete](#4-delete-kriteria)
+-   [Kriteria](#kriteria)
 
-* [Tugas](#tugas)
-  * [Create](#1-create-tugas)
-  * [Tampilkan](#2-tampilkan-tugas)
-  * [Update](#3-update-tugas)
-  * [Delete](#4-delete-tugas)
+    -   [Create](#1-create-kriteria)
+    -   [Tampilkan](#2-tampilkan-kriteria)
+    -   [Update](#3-update-kriteria)
+    -   [Delete](#4-delete-kriteria)
 
-* [Partisipasi](#partisipasi)
-  * [Submit](#1-submit-partisipasi)
-  * [Partisipan](#2-specific-partisipan)
+-   [Tugas](#tugas)
+
+    -   [Create](#1-create-tugas)
+    -   [Tampilkan](#2-tampilkan-tugas)
+    -   [Update](#3-update-tugas)
+    -   [Delete](#4-delete-tugas)
+
+-   [Partisipasi](#partisipasi)
+    -   [Submit](#1-submit-partisipasi)
+    -   [Partisipan](#2-specific-partisipan)
 
 ## Indices
 
+-   [Auth](#auth)
 
+    -   [Login](#1-login)
+    -   [Register](#2-register)
+    -   [Logout](#3-logout)
+    -   [Check email verif](#4-checkemailverif)
+    -   [Send email verif](#-sendemailverif)
 
-* [Auth](#auth)
+-   [Doa](#doa)
 
-  * [Login](#1-login)
-  * [Register](#2-register)
-  * [Logout](#3-logout)
-  * [Check email verif](#4-checkemailverif)
-  * [Send email verif](#-sendemailverif) 
+    -   [All Doa](#1-all-doa)
+    -   [Specific Doa](#2-specific-doa)
 
-* [Doa](#doa)
+-   [Donation](#donation)
 
-  * [All Doa](#1-all-doa)
-  * [Specific Doa](#2-specific-doa)
+    -   [All Donation](#1-all-donation)
+    -   [Check Referal](#2-check-referal)
+    -   [Submit donation](#3-submit-donation)
+    -   [Donation Bank](#4-donation-bank)
+    -   [Donation Emoney](#5-donation-emoney)
+    -   [Donation Balance](#6-donation-balance)
+    -   [Detail Transaksi Donasi](#7-detail-transaksi-donasi)
 
-* [Donation](#donation)
+-   [Fundraiser](#fundraiser)
 
-  * [All Donation](#1-all-donation)
-  * [Check Referal](#2-check-referal)
-  * [Submit donation](#3-submit-donation)
-  * [Donation Bank](#4-donation-bank)
-  * [Donation Emoney](#5-donation-emoney)
-  * [Donation Balance](#6-donation-balance)
-  * [Detail Transaksi Donasi](#7-detail-transaksi-donasi)
+    -   [Change To Approve](#1-change-to-approve)
+    -   [Change To Ditolak](#2-change-to-ditolak)
+    -   [Data Donatur](#3-data-donatur)
+    -   [Donation By Referal](#4-donation-by-referal)
+    -   [Ringkasan harian](#5-ringkasan-harian)
+    -   [Ringkasan User](#6-ringkasan-user)
+    -   [Detail Donasi](#7-detail-donasi)
 
-* [Fundraiser](#fundraiser)
+-   [Galang Dana](#galang-dana)
 
-  * [Change To Approve](#1-change-to-approve)
-  * [Change To Ditolak](#2-change-to-ditolak)
-  * [Data Donatur](#3-data-donatur)
-  * [Donation By Referal](#4-donation-by-referal)
-  * [Ringkasan harian](#5-ringkasan-harian)
-  * [Ringkasan User](#6-ringkasan-user)
-  * [Detail Donasi](#7-detail-donasi)
+    -   [All](#1-all)
+    -   [Specific](#2-specific)
+    -   [Specific By Slug](#3-specific-by-slug)
+    -   [Buat Galangdana](#4-buat-galangdana)
+    -   [Buat Campaign sebagai Urgent](#5-buat-campaign-sebagai-urgent)
+    -   [Campaign Milik User](#6-campaign-milik-user)
+    -   [Laporkan Galang Dana](#7-laporkan-galang-dana)
+    -   [Batalkan Laporan Galang Dana](#8-batalkan-laporan-galang-dana)
 
-* [Galang Dana](#galang-dana)
+-   [Password](#password)
 
-  * [All](#1-all)
-  * [Specific](#2-specific)
-  * [Specific By Slug](#3-specific-by-slug)
-  * [Buat Galangdana](#4-buat-galangdana)
-  * [Buat Campaign sebagai Urgent](#5-buat-campaign-sebagai-urgent)
-  * [Campaign Milik User](#6-campaign-milik-user)
-  * [Laporkan Galang Dana](#7-laporkan-galang-dana)
-  * [Batalkan Laporan Galang Dana](#8-batalkan-laporan-galang-dana)
+    -   [Reset Password](#1-reset-password)
+    -   [Send Reset Email](#2-send-reset-email)
 
-* [Password](#password)
+-   [Token](#token)
 
-  * [Reset Password](#1-reset-password)
-  * [Send Reset Email](#2-send-reset-email)
+    -   [Get CSRF Token](#1-get-csrf-token)
 
-* [Token](#token)
+-   [User](#user)
 
-  * [Get CSRF Token](#1-get-csrf-token)
+    -   [All Pekerjaan](#1-all-pekerjaan)
+    -   [All Organisasi](#2-all-organisasi)
+    -   [Provinsi](#3-provinsi)
+    -   [Kabupaten](#4-kabupaten)
+    -   [Kecamatan](#5-kecamatan)
+    -   [Edit Profil](#6-edit-profil)
+    -   [Detail User](#7-detail-user)
+    -   [Ganti Password](#8-ganti-password)
+    -   [Kode Referal User](#9-kode-referal-user)
 
-* [User](#user)
+-   [Search](#search)
 
-  * [All Pekerjaan](#1-all-pekerjaan)
-  * [All Organisasi](#2-all-organisasi)
-  * [Provinsi](#3-provinsi)
-  * [Kabupaten](#4-kabupaten)
-  * [Kecamatan](#5-kecamatan)
-  * [Edit Profil](#6-edit-profil)
-  * [Detail User](#7-detail-user)
-  * [Ganti Password](#8-ganti-password)
-  * [Kode Referal User](#9-kode-referal-user)
+-   [Bantuan Mendesak](#bantuan-mendesak)
 
-* [Search](#search)
+-   [Riwayat Donasi](#riwayat-donasi)
 
-* [Bantuan Mendesak](#bantuan-mendesak)
+    -   [Details Riwayat](#1-details-riwayat)
 
-* [Riwayat Donasi](#riwayat-donasi)
+-   [Kabar Terbaru](#kabar-terbaru)
 
-  * [Details Riwayat](#1-details-riwayat)
+    -   [Upload](#1-upload)
+    -   [Store](#2-store)
 
-* [Kabar Terbaru](#kabar-terbaru)
+-   [Wishlist](#wishlist)
 
-  * [Upload](#1-upload)
-  * [Store](#2-store)
+    -   [Get Wishlist](#1-get-wishlist)
+    -   [Buat Wishlist](#2-buat-wishlist)
+    -   [Hapus Wishlist](#3-hapus-wishlist)
 
-* [Wishlist](#wishlist)
-  * [Get Wishlist](#1-get-wishlist)
-  * [Buat Wishlist](#2-buat-wishlist)
-  * [Hapus Wishlist](#3-hapus-wishlist)
+-   [Slider](#slider)
 
-* [Slider](#slider)
-  * [Buat Slider](#1-buat-slider)
-  * [All Slider](#2-all-slider)
-  * [Ubah Slider](#3-ubah-slider)
-  * [Hapus Slider](#4-hapus-slider)
+    -   [Buat Slider](#1-buat-slider)
+    -   [All Slider](#2-all-slider)
+    -   [Ubah Slider](#3-ubah-slider)
+    -   [Hapus Slider](#4-hapus-slider)
 
-* [Topup](#topup)
-  * [Topup Emoney](#1-topup-emoney)
-  * [Detail Topup](#2-detail-topup)
+-   [Topup](#topup)
 
-* [Feeds](#feeds)
-  * [All Feeds](#1-all-feeds)
-  * [Menyukai Feed](#2-menyukai-feed)
-  * [Batalkan Menyukai Feed](#3-batalkan-menyukai-feed)
+    -   [Topup Emoney](#1-topup-emoney)
+    -   [Detail Topup](#2-detail-topup)
 
-* [Ada Yang Baru](#ada-yang-baru)
-  * [All Ada Yang Baru](#1-all-ada-yang-baru)
-  * [Buat Ada Yang Baru](#2-buat-ada-yang-baru)
-  * [Ubah Ada Yang Baru](#3-ubah-ada-yang-baru)
-  * [Hapus Ada Yang Baru](#4-hapus-ada-yang-baru)
+-   [Feeds](#feeds)
 
---------
+    -   [All Feeds](#1-all-feeds)
+    -   [Menyukai Feed](#2-menyukai-feed)
+    -   [Batalkan Menyukai Feed](#3-batalkan-menyukai-feed)
 
-* [ADMIN](#admin)
-    * [Get Users](#1-admin-get-users)
-    * [Galang Dana](#2-admin-galang-dana)
+-   [Ada Yang Baru](#ada-yang-baru)
+    -   [All Ada Yang Baru](#1-all-ada-yang-baru)
+    -   [Buat Ada Yang Baru](#2-buat-ada-yang-baru)
+    -   [Ubah Ada Yang Baru](#3-ubah-ada-yang-baru)
+    -   [Hapus Ada Yang Baru](#4-hapus-ada-yang-baru)
+
+---
+
+-   [ADMIN](#admin)
+    -   [Get Users](#1-admin-get-users)
+    -   [Galang Dana](#2-admin-galang-dana)
 
 ## Aktivitas
 
 ### 1. Create Aktivitas
 
-***Endpoint:***
+**_Endpoint:_**
+
 ```bash
 Method: POST
-Type: 
+Type:
 URL: http://127.0.0.1:8000/api/aktivitas/create
 ```
 
-***Body:***
+**_Body:_**
 
-| Key | Value | Description |
-| --- | ------|-------------|
-| status_publish | published, drafted |  |
-| category_id | 2 |  |
-| judul_activity | Judul2 |  |
-| judul_slug | tes_slug2 |  |
-| foto_activity | Image Object |  |
-| detail_activity | tesdetail2 |  |
-| batas_waktu | 21 |  |
-| waktu_activity | 2023-12-31 |  |
-| lokasi | rumah |  |
-| tipe_activity | In-Person, Virtual, Hybrid |  |
-| criterias | [blabla, blabla, blabla] | array |
-| tasks | [blabla, blabla, blabla] | array |
-| kuota | 100 |  |
-| tautan | involuntir |  |
+| Key             | Value                      | Description |
+| --------------- | -------------------------- | ----------- |
+| status_publish  | published, drafted         |             |
+| category_id     | 2                          |             |
+| judul_activity  | Judul2                     |             |
+| judul_slug      | tes_slug2                  |             |
+| foto_activity   | Image Object               |             |
+| detail_activity | tesdetail2                 |             |
+| batas_waktu     | 21                         |             |
+| waktu_activity  | 2023-12-31                 |             |
+| lokasi          | rumah                      |             |
+| tipe_activity   | In-Person, Virtual, Hybrid |             |
+| criterias       | [blabla, blabla, blabla]   | array       |
+| tasks           | [blabla, blabla, blabla]   | array       |
+| kuota           | 100                        |             |
+| tautan          | involuntir                 |             |
 
-***Response:***
+**_Response:_**
+
 ```js
 {
     "data": {
@@ -229,18 +234,20 @@ URL: http://127.0.0.1:8000/api/aktivitas/create
 }
 ```
 
-***Status Code:*** 200
+**_Status Code:_** 200
 
 ### 2. All Aktivitas
 
-***Endpoint:***
+**_Endpoint:_**
+
 ```bash
 Method: GET
-Type: 
+Type:
 URL: http://127.0.0.1:8000/api/aktivitas
 ```
 
-***Response:***
+**_Response:_**
+
 ```js
 {
     "data": [
@@ -278,18 +285,20 @@ URL: http://127.0.0.1:8000/api/aktivitas
 }
 ```
 
-***Status Code:*** 200
+**_Status Code:_** 200
 
 ### 3. Specific Aktivitas
 
-***Endpoint:***
+**_Endpoint:_**
+
 ```bash
 Method: GET
-Type: 
+Type:
 URL: http://127.0.0.1:8000/api/aktivitas/{id}
 ```
 
-***Response:***
+**_Response:_**
+
 ```js
 {
     "data": {
@@ -351,18 +360,20 @@ URL: http://127.0.0.1:8000/api/aktivitas/{id}
 }
 ```
 
-***Status Code:*** 200
+**_Status Code:_** 200
 
 ### 4. By Slug Aktivitas
 
-***Endpoint:***
+**_Endpoint:_**
+
 ```bash
 Method: GET
-Type: 
+Type:
 URL: http://127.0.0.1:8000/api/aktivitas/byslug/{slug}
 ```
 
-***Response:***
+**_Response:_**
+
 ```js
 {
     "data": {
@@ -417,35 +428,37 @@ URL: http://127.0.0.1:8000/api/aktivitas/byslug/{slug}
 }
 ```
 
-***Status Code:*** 200
+**_Status Code:_** 200
 
 ### 5. Publish Aktivitas
 
-***Endpoint:***
+**_Endpoint:_**
+
 ```bash
 Method: POST
-Type: 
+Type:
 URL: http://127.0.0.1:8000/api/aktivitas/create/publish
 ```
 
-***Body:***
+**_Body:_**
 
-| Key | Value | Description |
-| --- | ------|-------------|
-| category_id | 1 |  |
-| judul_activity | judulempat |  |
-| foto_activity | Image Object |  |
-| judul_slug | slug-4-tes |  |
-| detail_activity | detailx4 |  |
-| batas_waktu | 30 |  |
-| waktu_activity | 2000-01-01 |  |
-| lokasi | kantor |  |
-| tipe_activity | Virtual |  |
-| tasks[] | testask1 |  |
-| tasks[] | testatsk2 |  |
-| criterias[] | testcriterias333 |  |
+| Key             | Value            | Description |
+| --------------- | ---------------- | ----------- |
+| category_id     | 1                |             |
+| judul_activity  | judulempat       |             |
+| foto_activity   | Image Object     |             |
+| judul_slug      | slug-4-tes       |             |
+| detail_activity | detailx4         |             |
+| batas_waktu     | 30               |             |
+| waktu_activity  | 2000-01-01       |             |
+| lokasi          | kantor           |             |
+| tipe_activity   | Virtual          |             |
+| tasks[]         | testask1         |             |
+| tasks[]         | testatsk2        |             |
+| criterias[]     | testcriterias333 |             |
 
-***Response:***
+**_Response:_**
+
 ```js
 {
     "data": {
@@ -506,35 +519,37 @@ URL: http://127.0.0.1:8000/api/aktivitas/create/publish
 }
 ```
 
-***Status Code:*** 201
+**_Status Code:_** 201
 
 ### 6. Draft Aktivitas
 
-***Endpoint:***
+**_Endpoint:_**
+
 ```bash
 Method: POST
-Type: 
+Type:
 URL: http://127.0.0.1:8000/api/aktivitas/create/draft
 ```
 
-***Body:***
+**_Body:_**
 
-| Key | Value | Description |
-| --- | ------|-------------|
-| category_id | 1 |  |
-| judul_activity | judul555 |  |
-| foto_activity | Image Object |  |
-| judul_slug | slug5 |  |
-| detail_activity | detaillima |  |
-| batas_waktu | 1 |  |
-| waktu_activity | 2023-05-02 |  |
-| lokasi | btul |  |
-| tipe_activity | In-Person |  |
-| tasks[] | testask99 |  |
-| tasks[] | testatsk999 |  |
-| criterias[] | testcriterias9 |  |
+| Key             | Value          | Description |
+| --------------- | -------------- | ----------- |
+| category_id     | 1              |             |
+| judul_activity  | judul555       |             |
+| foto_activity   | Image Object   |             |
+| judul_slug      | slug5          |             |
+| detail_activity | detaillima     |             |
+| batas_waktu     | 1              |             |
+| waktu_activity  | 2023-05-02     |             |
+| lokasi          | btul           |             |
+| tipe_activity   | In-Person      |             |
+| tasks[]         | testask99      |             |
+| tasks[]         | testatsk999    |             |
+| criterias[]     | testcriterias9 |             |
 
-***Response:***
+**_Response:_**
+
 ```js
 {
     "data": {
@@ -595,25 +610,27 @@ URL: http://127.0.0.1:8000/api/aktivitas/create/draft
 }
 ```
 
-***Status Code:*** 201
+**_Status Code:_** 201
 
 ### 7. Update Aktivitas
 
-***Endpoint:***
+**_Endpoint:_**
+
 ```bash
 Method: POST
-Type: 
+Type:
 URL: http://127.0.0.1:8000/api/aktivitas/{id}/update
 ```
 
-***Body:***
+**_Body:_**
 | Key | Value | Description |
 | --- | ------|-------------|
-| _method | PUT |  |
-| status_publish | published |  |
-| judul | gantilagi |  |
+| \_method | PUT | |
+| status_publish | published | |
+| judul | gantilagi | |
 
-***Response:***
+**_Response:_**
+
 ```js
 {
     "data": {
@@ -668,61 +685,67 @@ URL: http://127.0.0.1:8000/api/aktivitas/{id}/update
 }
 ```
 
-***Status Code:*** 201
+**_Status Code:_** 201
 
 ### 8. Delete Aktivitas
 
-***Endpoint:***
+**_Endpoint:_**
+
 ```bash
 Method: DELETE
-Type: 
+Type:
 URL: http://127.0.0.1:8000/api/aktivitas/{id}/delete
 ```
 
-***Response:***
+**_Response:_**
+
 ```js
 {
     "message": "berhasil menghapus activity"
 }
 ```
 
-***Status Code:*** 200
+**_Status Code:_** 200
 
 ### 9. Is Exist Aktivitas
 
-***Endpoint:***
+**_Endpoint:_**
+
 ```bash
 Method: GET
-Type: 
+Type:
 URL: http://127.0.0.1:8000/api/aktivitas/isExist/{slug}
 ```
 
-***Response:***
+**_Response:_**
+
 ```js
 {
     "isExist": true
 }
 ```
 
-***Status Code:*** 200
+**_Status Code:_** 200
 
 ## Kriteria
 
 ### 1. Create Kriteria
 
-***Endpoint:***
+**_Endpoint:_**
+
 ```bash
 Method: POST
-Type: 
+Type:
 URL: http://127.0.0.1:8000/api/kriteria/{activity}
 ```
 
-***Body:***
+**_Body:_**
 | Key | Value | Description |
 | --- | ------|-------------|
-| deskripsi | tescreate |  |
+| deskripsi | tescreate | |
 
-***Response:***
+**_Response:_**
+
 ```js
 {
     "activity_id": 30,
@@ -733,46 +756,50 @@ URL: http://127.0.0.1:8000/api/kriteria/{activity}
 }
 ```
 
-***Status Code:*** 200
+**_Status Code:_** 200
 
 ### 2. Tampilkan Kriteria
 
-***Endpoint:***
+**_Endpoint:_**
+
 ```bash
 Method: GET
-Type: 
+Type:
 URL: http://127.0.0.1:8000/api/kriteria/{activity}
 ```
 
-***Response:***
+**_Response:_**
+
 ```js
 [
     {
-        "id": 6,
-        "activity_id": 34,
-        "deskripsi": "testcriterias333"
-    }
-]
+        id: 6,
+        activity_id: 34,
+        deskripsi: "testcriterias333",
+    },
+];
 ```
 
-***Status Code:*** 200
+**_Status Code:_** 200
 
 ### 3. Update Kriteria
 
-***Endpoint:***
+**_Endpoint:_**
+
 ```bash
 Method: POST
-Type: 
+Type:
 URL: http://127.0.0.1:8000/api/kriteria/{id}
 ```
 
-***Body:***
+**_Body:_**
 | Key | Value | Description |
 | --- | ------|-------------|
-| _method | PUT |  |
-| deskripsi | ppp |  |
+| \_method | PUT | |
+| deskripsi | ppp | |
 
-***Response:***
+**_Response:_**
+
 ```js
 {
     "data": {
@@ -785,18 +812,20 @@ URL: http://127.0.0.1:8000/api/kriteria/{id}
 }
 ```
 
-***Status Code:*** 200
+**_Status Code:_** 200
 
 ### 4. Delete Kriteria
 
-***Endpoint:***
+**_Endpoint:_**
+
 ```bash
 Method: DELETE
-Type: 
+Type:
 URL: http://127.0.0.1:8000/api/kriteria/{id}
 ```
 
-***Response:***
+**_Response:_**
+
 ```js
 {
     "message": "Berhasil menghapus data",
@@ -805,23 +834,25 @@ URL: http://127.0.0.1:8000/api/kriteria/{id}
 }
 ```
 
-***Status Code:*** 200
+**_Status Code:_** 200
 
 ## Tugas
 
 ### 1. Create Tugas
+
 ```bash
 Method: POST
-Type: 
+Type:
 URL: http://127.0.0.1:8000/api/tugas/{activity}
 ```
 
-***Body:***
+**_Body:_**
 | Key | Value | Description |
 | --- | ------|-------------|
-| deskripsi | testcreate |  |
+| deskripsi | testcreate | |
 
-***Response:***
+**_Response:_**
+
 ```js
 {
     "activity_id": 30,
@@ -832,51 +863,55 @@ URL: http://127.0.0.1:8000/api/tugas/{activity}
 }
 ```
 
-***Status Code:*** 200
+**_Status Code:_** 200
 
 ### 2. Tampilkan Tugas
 
-***Endpoint:***
+**_Endpoint:_**
+
 ```bash
 Method: GET
-Type: 
+Type:
 URL: http://127.0.0.1:8000/api/tugas/{activity}
 ```
 
-***Response:***
+**_Response:_**
+
 ```js
 [
     {
-        "id": 5,
-        "activity_id": 31,
-        "deskripsi": "oksip"
+        id: 5,
+        activity_id: 31,
+        deskripsi: "oksip",
     },
     {
-        "id": 6,
-        "activity_id": 31,
-        "deskripsi": "testask999"
-    }
-]
+        id: 6,
+        activity_id: 31,
+        deskripsi: "testask999",
+    },
+];
 ```
 
-***Status Code:*** 200
+**_Status Code:_** 200
 
 ### 3. Update Tugas
 
-***Endpoint:***
+**_Endpoint:_**
+
 ```bash
 Method: POST
-Type: 
+Type:
 URL: http://127.0.0.1:8000/api/tugas/{id}
 ```
 
-***Body:***
+**_Body:_**
 | Key | Value | Description |
 | --- | ------|-------------|
-| _method | PUT |  |
-| deskripsi | testcreate |  |
+| \_method | PUT | |
+| deskripsi | testcreate | |
 
-***Response:***
+**_Response:_**
+
 ```js
 {
     "data": {
@@ -889,18 +924,20 @@ URL: http://127.0.0.1:8000/api/tugas/{id}
 }
 ```
 
-***Status Code:*** 200
+**_Status Code:_** 200
 
 ### 4. Delete Tugas
 
-***Endpoint:***
+**_Endpoint:_**
+
 ```bash
 Method: DELETE
-Type: 
+Type:
 URL: http://127.0.0.1:8000/api/tugas/{id}
 ```
 
-***Response:***
+**_Response:_**
+
 ```js
 {
     "message": "Berhasil menghapus data",
@@ -909,28 +946,30 @@ URL: http://127.0.0.1:8000/api/tugas/{id}
 }
 ```
 
-***Status Code:*** 200
+**_Status Code:_** 200
 
 ## Partisipasi
 
 ### 1. Submit Partisipasi
 
-***Endpoint:***
+**_Endpoint:_**
+
 ```bash
 Method: POST
-Type: 
+Type:
 URL: http://127.0.0.1:8000/api/participation
 ```
 
-***Body:***
+**_Body:_**
 | Key | Value | Description |
 | --- | ------|-------------|
-| activity_id | 2 |  |
-| nomor_hp | 081234567890 |  |
-| akun_linkedin | nihil |  |
-| pesan | tes123 |  |
+| activity_id | 2 | |
+| nomor_hp | 081234567890 | |
+| akun_linkedin | nihil | |
+| pesan | tes123 | |
 
-***Response:***
+**_Response:_**
+
 ```js
 {
     "data": {
@@ -946,18 +985,20 @@ URL: http://127.0.0.1:8000/api/participation
 }
 ```
 
-***Status Code:*** 200
+**_Status Code:_** 200
 
 ### 2. Specific Partisipan
 
-***Endpoint:***
+**_Endpoint:_**
+
 ```bash
 Method: GET
-Type: 
+Type:
 URL: http://127.0.0.1:8000/api/participation/{id}/participants
 ```
 
-***Response:***
+**_Response:_**
+
 ```js
 {
     "data": [
@@ -998,84 +1039,65 @@ URL: http://127.0.0.1:8000/api/participation/{id}/participants
 }
 ```
 
-***Status Code:*** 200
+**_Status Code:_** 200
 
-----------
+---
 
 ## Auth
 
-
-
 ### 1. Login
 
-
-
-***Endpoint:***
+**_Endpoint:_**
 
 ```bash
 Method: POST
-Type: 
+Type:
 URL: http://127.0.0.1:8000/api/auth/login
 ```
 
+**_Query body:_**
 
+| Key      | Value         | Description |
+| -------- | ------------- | ----------- |
+| email    | lazu@mail.com |             |
+| password | Password123   |             |
 
-***Query body:***
-
-| Key | Value | Description |
-| --- | ------|-------------|
-| email | lazu@mail.com |  |
-| password | Password123 |  |
-
-
-
-***More example Requests/Responses:***
-
-
+**_More example Requests/Responses:_**
 
 ##### I. Example Response: Login
+
 ```js
 {
     "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC8xMjcuMC4wLjE6ODAwMFwvYXBpXC9hdXRoXC9sb2dpbiIsImlhdCI6MTYzODg2ODM5MSwiZXhwIjoxNjM4ODcxOTkxLCJuYmYiOjE2Mzg4NjgzOTEsImp0aSI6IjByS1AwSFVncVpudHBjaEMiLCJzdWIiOjIxMTEsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.KYUHlQ0fUEwQp6jjKQp3XqhFfMpR8H5lFJWuV_ZsTXM"
 }
 ```
 
-
-
-***Status Code:*** 200
+**_Status Code:_** 200
 
 <br>
 
-
-
 ### 2. Register
 
-
-
-***Endpoint:***
+**_Endpoint:_**
 
 ```bash
 Method: POST
-Type: 
+Type:
 URL: http://127.0.0.1:8000/api/auth/register
 ```
 
+**_Query body:_**
 
+| Key      | Value         | Description |
+| -------- | ------------- | ----------- |
+| name     | lazu          |             |
+| email    | lazu@mail.com |             |
+| password | Password123   |             |
 
-***Query body:***
-
-| Key | Value | Description |
-| --- | ------|-------------|
-| name | lazu |  |
-| email | lazu@mail.com |  |
-| password | Password123 |  |
-
-
-
-***More example Requests/Responses:***
-
+**_More example Requests/Responses:_**
 
 ##### I. Example Response: Register
+
 ```js
 {
     "user": {
@@ -1089,40 +1111,30 @@ URL: http://127.0.0.1:8000/api/auth/register
 }
 ```
 
-
-
-***Status Code:*** 201
+**_Status Code:_** 201
 
 <br>
 
-
 ### 3. Logout
 
-
-
-***Endpoint:***
+**_Endpoint:_**
 
 ```bash
 Method: POST
-Type: 
+Type:
 URL: http://127.0.0.1:8000/api/auth/logout
 ```
 
+**_Headers:_**
 
+| Key           | Value                                                                                                                                                                                                                                                                                                                                              | Description |
+| ------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------- |
+| Authorization | Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC8xMjcuMC4wLjE6ODAwMFwvYXBpXC9hdXRoXC9sb2dpbiIsImlhdCI6MTYzODg2ODM5MSwiZXhwIjoxNjM4ODcxOTkxLCJuYmYiOjE2Mzg4NjgzOTEsImp0aSI6IjByS1AwSFVncVpudHBjaEMiLCJzdWIiOjIxMTEsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.KYUHlQ0fUEwQp6jjKQp3XqhFfMpR8H5lFJWuV_ZsTXM |             |
 
-***Headers:***
-
-| Key | Value | Description |
-| --- | ------|-------------|
-| Authorization | Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC8xMjcuMC4wLjE6ODAwMFwvYXBpXC9hdXRoXC9sb2dpbiIsImlhdCI6MTYzODg2ODM5MSwiZXhwIjoxNjM4ODcxOTkxLCJuYmYiOjE2Mzg4NjgzOTEsImp0aSI6IjByS1AwSFVncVpudHBjaEMiLCJzdWIiOjIxMTEsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.KYUHlQ0fUEwQp6jjKQp3XqhFfMpR8H5lFJWuV_ZsTXM |  |
-
-
-
-***More example Requests/Responses:***
-
-
+**_More example Requests/Responses:_**
 
 ##### I. Example Response: Logout
+
 ```js
 {
     "error": false,
@@ -1130,88 +1142,67 @@ URL: http://127.0.0.1:8000/api/auth/logout
 }
 ```
 
-
-
-***Status Code:*** 200
+**_Status Code:_** 200
 
 <br>
-
-
 
 ## Doa
 
-
-
 ### 1. All Doa
 
-
-
-***Endpoint:***
+**_Endpoint:_**
 
 ```bash
 Method: GET
-Type: 
+Type:
 URL: http://127.0.0.1:8000/api/doa
 ```
 
-
-
-***More example Requests/Responses:***
-
+**_More example Requests/Responses:_**
 
 ##### I. Example Request: All Doa
 
-
-
 ##### I. Example Response: All Doa
+
 ```js
 [
     {
-        "id": 1,
-        "user_id": 24,
-        "body": "Semoga donasi saya bisa bermanfaat buat korban bencana. Saya ikut sedih mendengar kabar ini.",
-        "created_at": "2021-08-12T13:47:43.000000Z",
-        "updated_at": "2021-08-12T13:47:43.000000Z"
+        id: 1,
+        user_id: 24,
+        body: "Semoga donasi saya bisa bermanfaat buat korban bencana. Saya ikut sedih mendengar kabar ini.",
+        created_at: "2021-08-12T13:47:43.000000Z",
+        updated_at: "2021-08-12T13:47:43.000000Z",
     },
     {
-        "id": 2,
-        "user_id": 24,
-        "body": "Semoga berkat selalu ada untuk kita di hari ini. Amin.",
-        "created_at": "2021-08-12T15:06:29.000000Z",
-        "updated_at": "2021-08-12T15:06:29.000000Z"
-    }
-]
+        id: 2,
+        user_id: 24,
+        body: "Semoga berkat selalu ada untuk kita di hari ini. Amin.",
+        created_at: "2021-08-12T15:06:29.000000Z",
+        updated_at: "2021-08-12T15:06:29.000000Z",
+    },
+];
 ```
 
-
-***Status Code:*** 200
+**_Status Code:_** 200
 
 <br>
 
-
-
 ### 2. Specific Doa
 
-
-
-***Endpoint:***
+**_Endpoint:_**
 
 ```bash
 Method: GET
-Type: 
+Type:
 URL: http://127.0.0.1:8000/api/doa/1
 ```
 
-
-
-***More example Requests/Responses:***
-
+**_More example Requests/Responses:_**
 
 ##### I. Example Request: Specific Doa
 
-
-
 ##### I. Example Response: Specific Doa
+
 ```js
 {
     "data": {
@@ -1278,116 +1269,96 @@ URL: http://127.0.0.1:8000/api/doa/1
 }
 ```
 
-
-***Status Code:*** 200
+**_Status Code:_** 200
 
 <br>
-
-
 
 ## Donation
 
 ### 1. All Donation
 
-
-
-***Endpoint:***
+**_Endpoint:_**
 
 ```bash
 Method: GET
-Type: 
+Type:
 URL: http://127.0.0.1:8000/api/donation/all
 ```
 
-
-
-***More example Requests/Responses:***
-
+**_More example Requests/Responses:_**
 
 ##### I. Example Request: All Donation
 
-
-
 ##### I. Example Response: All Donation
+
 ```js
 [
     {
-        "id": 256,
-        "user_id": 562,
-        "nama": "kevin",
-        "campaign_id": 30,
-        "judul_slug": "bangun-rumah-singgah-surabaya",
-        "biaya_persen": 15,
-        "donasi": "20000",
-        "kode_donasi": "0",
-        "prantara_donasi": "Fundriser",
-        "metode_pembayaran": null,
-        "nomor_va": null,
-        "email": "dauliacitra@gmail.com",
-        "nomor_telp": null,
-        "status_donasi": "Approved",
-        "status_pembayaran": null,
-        "snap_token": null,
-        "payment_url": null,
-        "status_pemberian_pertama": null,
-        "foto_pertama": null,
-        "status_pemberian_kedua": null,
-        "foto_kedua": null,
-        "status_pemberian_ketiga": null,
-        "foto_ketiga": null,
-        "status_terbaru": null,
-        "komentar": null,
-        "tanggal_donasi": null,
-        "deadline": null,
-        "created_at": "2021-04-19T06:47:45.000000Z",
-        "updated_at": "2021-04-19T06:47:45.000000Z"
+        id: 256,
+        user_id: 562,
+        nama: "kevin",
+        campaign_id: 30,
+        judul_slug: "bangun-rumah-singgah-surabaya",
+        biaya_persen: 15,
+        donasi: "20000",
+        kode_donasi: "0",
+        prantara_donasi: "Fundriser",
+        metode_pembayaran: null,
+        nomor_va: null,
+        email: "dauliacitra@gmail.com",
+        nomor_telp: null,
+        status_donasi: "Approved",
+        status_pembayaran: null,
+        snap_token: null,
+        payment_url: null,
+        status_pemberian_pertama: null,
+        foto_pertama: null,
+        status_pemberian_kedua: null,
+        foto_kedua: null,
+        status_pemberian_ketiga: null,
+        foto_ketiga: null,
+        status_terbaru: null,
+        komentar: null,
+        tanggal_donasi: null,
+        deadline: null,
+        created_at: "2021-04-19T06:47:45.000000Z",
+        updated_at: "2021-04-19T06:47:45.000000Z",
     },
-]
+];
 ```
 
-
-***Status Code:*** 200
+**_Status Code:_** 200
 
 <br>
 
 ### 2. Check Referal
 
-
-
-***Endpoint:***
+**_Endpoint:_**
 
 ```bash
 Method: GET
-Type: 
+Type:
 URL: http://127.0.0.1:8000/api/donation/checkreferal
 ```
 
+**_Query params:_**
 
+| Key     | Value   | Description |
+| ------- | ------- | ----------- |
+| referal | PDL1234 |             |
 
-***Query params:***
-
-| Key | Value | Description |
-| --- | ------|-------------|
-| referal | PDL1234 |  |
-
-
-
-***More example Requests/Responses:***
-
+**_More example Requests/Responses:_**
 
 ##### I. Example Request: Check Referal
 
+**_Query:_**
 
-
-***Query:***
-
-| Key | Value | Description |
-| --- | ------|-------------|
-| referal | PDL1234 |  |
-
-
+| Key     | Value   | Description |
+| ------- | ------- | ----------- |
+| referal | PDL1234 |             |
 
 ##### I. Example Response: Check Referal
+
 ```js
 {
     "msg": "kode referal ada",
@@ -1400,46 +1371,38 @@ URL: http://127.0.0.1:8000/api/donation/checkreferal
 }
 ```
 
-
-***Status Code:*** 200
+**_Status Code:_** 200
 
 <br>
 
-
-
 ### 3. Submit donation
 
-
-
-***Endpoint:***
+**_Endpoint:_**
 
 ```bash
 Method: POST
-Type: 
+Type:
 URL: http://127.0.0.1:8000/api/donation
 ```
 
+**_Query params:_**
 
+| Key            | Value                     | Description |
+| -------------- | ------------------------- | ----------- |
+| nominal        | 20000                     |             |
+| metode         | cod                       |             |
+| nama_lengkap   | lazu                      |             |
+| alamat_email   | lazuardi.akhmad@gmail.com |             |
+| nomor_ponsel   | 0812312312                |             |
+| kode_referensi | 321                       |             |
+| pesan_baik     | Semoga lekas sembuh       |             |
+| user_id        | 1                         |             |
+| campaign_id    | 1                         |             |
 
-***Query params:***
-
-| Key | Value | Description |
-| --- | ------|-------------|
-| nominal | 20000 |  |
-| metode | cod |  |
-| nama_lengkap | lazu |  |
-| alamat_email | lazuardi.akhmad@gmail.com |  |
-| nomor_ponsel | 0812312312 |  |
-| kode_referensi | 321 |  |
-| pesan_baik | Semoga lekas sembuh |  |
-| user_id | 1 |  |
-| campaign_id | 1 |  |
-
-
-
-***More example Requests/Responses:***
+**_More example Requests/Responses:_**
 
 ##### I. Example Response: Submit donation
+
 ```js
 {
     "status": 201,
@@ -1447,61 +1410,57 @@ URL: http://127.0.0.1:8000/api/donation
 }
 ```
 
-
-***Status Code:*** 200
+**_Status Code:_** 200
 
 <br>
 
-
 ### 4. Donation Bank
 
-***Endpoint:***
+**_Endpoint:_**
 
 ```bash
 Method: POST
-Type: 
+Type:
 URL: http://127.0.0.1:8000/api/donation/bank_transfer
 ```
 
-***Query params:***
+**_Query params:_**
 
-| Key | Value | Description |
-| --- | ------|-------------|
-| nominal | 20000 |  |
-| metode | bank_transfer |  |
-| nama_lengkap | lazu |  |
-| alamat_email | lazuardi.akhmad@gmail.com |  |
-| nomor_ponsel | 0812312312 |  |
-| kode_referensi | 321 |  |
-| pesan_baik | Semoga lekas sembuh |  |
-| user_id | 1 |  |
-| campaign_id | 1 |  |
-| bank_name | bni/permata/mandiri |  |
+| Key            | Value                     | Description |
+| -------------- | ------------------------- | ----------- |
+| nominal        | 20000                     |             |
+| metode         | bank_transfer             |             |
+| nama_lengkap   | lazu                      |             |
+| alamat_email   | lazuardi.akhmad@gmail.com |             |
+| nomor_ponsel   | 0812312312                |             |
+| kode_referensi | 321                       |             |
+| pesan_baik     | Semoga lekas sembuh       |             |
+| user_id        | 1                         |             |
+| campaign_id    | 1                         |             |
+| bank_name      | bni/permata/mandiri       |             |
 
-
-***More example Requests/Responses:***
+**_More example Requests/Responses:_**
 
 ##### I. Example Request: Donation Bank
 
-***Query:***
+**_Query:_**
 | Key | Value | Description |
 | --- | ------|-------------|
-| nominal | 20000 |  |
-| metode | bank_transfer |  |
-| nama_lengkap | lazu |  |
-| alamat_email | lazuardi.akhmad@gmail.com |  |
-| nomor_ponsel | 0812312312 |  |
-| kode_referensi | 321 |  |
-| pesan_baik | Semoga lekas sembuh |  |
-| user_id | 1 |  |
-| campaign_id | 1 |  |
-| bank_name | bni/permata/mandiri |  |
-
-
+| nominal | 20000 | |
+| metode | bank_transfer | |
+| nama_lengkap | lazu | |
+| alamat_email | lazuardi.akhmad@gmail.com | |
+| nomor_ponsel | 0812312312 | |
+| kode_referensi | 321 | |
+| pesan_baik | Semoga lekas sembuh | |
+| user_id | 1 | |
+| campaign_id | 1 | |
+| bank_name | bni/permata/mandiri | |
 
 ##### I. Example Response: Donation Bank
+
 ```js
-{   
+{
     "data": {
         "id": 1977,
         "user_id": 1,
@@ -1573,53 +1532,54 @@ URL: http://127.0.0.1:8000/api/donation/bank_transfer
     "msg": "success"
 }
 ```
-***Status Code:*** 201
+
+**_Status Code:_** 201
 
 ### 5. Donation Emoney
 
-***Endpoint:***
+**_Endpoint:_**
 
 ```bash
 Method: POST
-Type: 
+Type:
 URL: http://127.0.0.1:8000/api/donation/emoney
 ```
 
-***Query params:***
+**_Query params:_**
 
-| Key | Value | Description |
-| --- | ------|-------------|
-| nominal | 20000 |  |
-| metode | emoney |  |
-| nama_lengkap | lazu |  |
-| alamat_email | lazuardi.akhmad@gmail.com |  |
-| nomor_ponsel | 0812312312 |  |
-| kode_referensi | 321 |  |
-| pesan_baik | Semoga lekas sembuh |  |
-| user_id | 1 |  |
-| campaign_id | 1 |  |
-| emoney_name | gopay |  |
+| Key            | Value                     | Description |
+| -------------- | ------------------------- | ----------- |
+| nominal        | 20000                     |             |
+| metode         | emoney                    |             |
+| nama_lengkap   | lazu                      |             |
+| alamat_email   | lazuardi.akhmad@gmail.com |             |
+| nomor_ponsel   | 0812312312                |             |
+| kode_referensi | 321                       |             |
+| pesan_baik     | Semoga lekas sembuh       |             |
+| user_id        | 1                         |             |
+| campaign_id    | 1                         |             |
+| emoney_name    | gopay                     |             |
 
-
-***More example Requests/Responses:***
+**_More example Requests/Responses:_**
 
 ##### I. Example Request: Donation Emoney
 
-***Query:***
+**_Query:_**
 | Key | Value | Description |
 | --- | ------|-------------|
-| nominal | 20000 |  |
-| metode | emoney |  |
-| nama_lengkap | lazu |  |
-| alamat_email | lazuardi.akhmad@gmail.com |  |
-| nomor_ponsel | 0812312312 |  |
-| kode_referensi | 321 |  |
-| pesan_baik | Semoga lekas sembuh |  |
-| user_id | 1 |  |
-| campaign_id | 1 |  |
-| emoney_name | gopay |  |
+| nominal | 20000 | |
+| metode | emoney | |
+| nama_lengkap | lazu | |
+| alamat_email | lazuardi.akhmad@gmail.com | |
+| nomor_ponsel | 0812312312 | |
+| kode_referensi | 321 | |
+| pesan_baik | Semoga lekas sembuh | |
+| user_id | 1 | |
+| campaign_id | 1 | |
+| emoney_name | gopay | |
 
 ##### I. Example Response: Donation Emoney
+
 ```js
 {
     "data": {
@@ -1709,34 +1669,35 @@ URL: http://127.0.0.1:8000/api/donation/emoney
     "msg": "success"
 }
 ```
-***Status Code:*** 201
+
+**_Status Code:_** 201
 
 ### 6. Donation Balance
 
-***Endpoint:***
+**_Endpoint:_**
 
 ```bash
 Method: POST
-Type: 
+Type:
 URL: http://127.0.0.1:8000/api/donation/balance
 ```
 
-***Query params:***
+**_Query params:_**
 
-| Key | Value | Description |
-| --- | ------|-------------|
-| nominal | 10000 |  |
-| metode | balance |  |
-| nama_lengkap | Juan%20Angela%20Alma |  |
-| alamat_email | juan@gmail.com |  |
-| nomor_ponsel | 83111064482 |  |
-| kode_referensi | FR05 |  |
-| pesan_baik |  |  |
-| user_id | 1 |  |
-| campaign_id | 1059 |  |
-| bank_name | bni |  |
+| Key            | Value                | Description |
+| -------------- | -------------------- | ----------- |
+| nominal        | 10000                |             |
+| metode         | balance              |             |
+| nama_lengkap   | Juan%20Angela%20Alma |             |
+| alamat_email   | juan@gmail.com       |             |
+| nomor_ponsel   | 83111064482          |             |
+| kode_referensi | FR05                 |             |
+| pesan_baik     |                      |             |
+| user_id        | 1                    |             |
+| campaign_id    | 1059                 |             |
+| bank_name      | bni                  |             |
 
-***Response:***
+**_Response:_**
 
 ```json
 {
@@ -1803,18 +1764,20 @@ URL: http://127.0.0.1:8000/api/donation/balance
 }
 ```
 
-***Status Code:*** 200
+**_Status Code:_** 200
 
 ### 7. Detail Transaksi Donasi
 
-***Endpoint:***
+**_Endpoint:_**
+
 ```bash
 Method: GET
-Type: 
+Type:
 URL: http://127.0.0.1:8000/api/donation/transaction/INVD16632279336825
 ```
 
-***Response:***
+**_Response:_**
+
 ```json
 {
     "data": {
@@ -1838,52 +1801,40 @@ URL: http://127.0.0.1:8000/api/donation/transaction/INVD16632279336825
 }
 ```
 
-***Status Code:*** 200
+**_Status Code:_** 200
 
 <br>
 
 ## Fundraiser
 
-
-
 ### 1. Change To Approve
 
-
-
-***Endpoint:***
+**_Endpoint:_**
 
 ```bash
 Method: GET
-Type: 
+Type:
 URL: http://127.0.0.1:8000/api/fundraiser/approve
 ```
 
+**_Query params:_**
 
+| Key       | Value | Description |
+| --------- | ----- | ----------- |
+| id_donasi | 1451  |             |
 
-***Query params:***
-
-| Key | Value | Description |
-| --- | ------|-------------|
-| id_donasi | 1451 |  |
-
-
-
-***More example Requests/Responses:***
-
+**_More example Requests/Responses:_**
 
 ##### I. Example Request: Change To Approve
 
+**_Query:_**
 
-
-***Query:***
-
-| Key | Value | Description |
-| --- | ------|-------------|
-| id_donasi | 1451 |  |
-
-
+| Key       | Value | Description |
+| --------- | ----- | ----------- |
+| id_donasi | 1451  |             |
 
 ##### I. Example Response: Change To Approve
+
 ```js
 {
     "status": 201,
@@ -1891,199 +1842,169 @@ URL: http://127.0.0.1:8000/api/fundraiser/approve
 }
 ```
 
-
-***Status Code:*** 200
+**_Status Code:_** 200
 
 <br>
 
-
-
 ### 2. Change To Ditolak
 
-
-
-***Endpoint:***
+**_Endpoint:_**
 
 ```bash
 Method: GET
-Type: 
+Type:
 URL: http://127.0.0.1:8000/api/fundraiser/ditolak
 ```
 
+**_Query params:_**
 
-
-***Query params:***
-
-| Key | Value | Description |
-| --- | ------|-------------|
-| id_donasi | 1451 |  |
-
-
+| Key       | Value | Description |
+| --------- | ----- | ----------- |
+| id_donasi | 1451  |             |
 
 ### 3. Data Donatur
 
-
-
-***Endpoint:***
+**_Endpoint:_**
 
 ```bash
 Method: GET
-Type: 
+Type:
 URL: http://127.0.0.1:8000/api/fundraiser/getdonatur
 ```
 
-
-
 ### 4. Donation By Referal
 
-
-
-***Endpoint:***
+**_Endpoint:_**
 
 ```bash
 Method: GET
-Type: 
+Type:
 URL: http://127.0.0.1:8000/api/fundraiser/donaturreferal
 ```
 
+**_Query params:_**
 
+| Key           | Value | Description |
+| ------------- | ----- | ----------- |
+| id_fundraiser | 1914  |             |
 
-***Query params:***
-
-| Key | Value | Description |
-| --- | ------|-------------|
-| id_fundraiser | 1914 |  |
-
-
-
-***More example Requests/Responses:***
-
+**_More example Requests/Responses:_**
 
 ##### I. Example Request: Donation By Fundraiser
 
+**_Query:_**
 
-
-***Query:***
-
-| Key | Value | Description |
-| --- | ------|-------------|
-| id_fundraiser | 1914 |  |
-
-
+| Key           | Value | Description |
+| ------------- | ----- | ----------- |
+| id_fundraiser | 1914  |             |
 
 ##### I. Example Response: Donation By Fundraiser
+
 ```js
 [
     [
         {
-            "id_user": 1914,
-            "kode_referal": "PDL1234",
-            "id_donasi": 1452,
-            "nama": "lazu",
-            "email": "lazu@mail.com",
-            "no_hp": "0812312312",
-            "id": 1452,
-            "user_id": 1,
-            "campaign_id": 1,
-            "judul_slug": null,
-            "biaya_persen": 15,
-            "donasi": "10000",
-            "kode_donasi": null,
-            "prantara_donasi": null,
-            "metode_pembayaran": "cod",
-            "nomor_va": null,
-            "nomor_telp": "0812312312",
-            "status_donasi": "Pending",
-            "status_pembayaran": null,
-            "snap_token": null,
-            "payment_url": null,
-            "status_pemberian_pertama": null,
-            "foto_pertama": null,
-            "status_pemberian_kedua": null,
-            "foto_kedua": null,
-            "status_pemberian_ketiga": null,
-            "foto_ketiga": null,
-            "status_terbaru": null,
-            "komentar": "Semoga lekas sembuh",
-            "created_at": null,
-            "updated_at": null
+            id_user: 1914,
+            kode_referal: "PDL1234",
+            id_donasi: 1452,
+            nama: "lazu",
+            email: "lazu@mail.com",
+            no_hp: "0812312312",
+            id: 1452,
+            user_id: 1,
+            campaign_id: 1,
+            judul_slug: null,
+            biaya_persen: 15,
+            donasi: "10000",
+            kode_donasi: null,
+            prantara_donasi: null,
+            metode_pembayaran: "cod",
+            nomor_va: null,
+            nomor_telp: "0812312312",
+            status_donasi: "Pending",
+            status_pembayaran: null,
+            snap_token: null,
+            payment_url: null,
+            status_pemberian_pertama: null,
+            foto_pertama: null,
+            status_pemberian_kedua: null,
+            foto_kedua: null,
+            status_pemberian_ketiga: null,
+            foto_ketiga: null,
+            status_terbaru: null,
+            komentar: "Semoga lekas sembuh",
+            created_at: null,
+            updated_at: null,
         },
         {
-            "id_user": 1914,
-            "kode_referal": "PDL1234",
-            "id_donasi": 1451,
-            "nama": "lazu",
-            "email": "lazu@mail.com",
-            "no_hp": "0812312312",
-            "id": 1451,
-            "user_id": 1,
-            "campaign_id": 1,
-            "judul_slug": null,
-            "biaya_persen": 15,
-            "donasi": "10000",
-            "kode_donasi": null,
-            "prantara_donasi": null,
-            "metode_pembayaran": "cod",
-            "nomor_va": null,
-            "nomor_telp": "0812312312",
-            "status_donasi": "Ditolak",
-            "status_pembayaran": null,
-            "snap_token": null,
-            "payment_url": null,
-            "status_pemberian_pertama": null,
-            "foto_pertama": null,
-            "status_pemberian_kedua": null,
-            "foto_kedua": null,
-            "status_pemberian_ketiga": null,
-            "foto_ketiga": null,
-            "status_terbaru": null,
-            "komentar": "Semoga lekas sembuh",
-            "created_at": null,
-            "updated_at": null
-        }
-    ]
-]
+            id_user: 1914,
+            kode_referal: "PDL1234",
+            id_donasi: 1451,
+            nama: "lazu",
+            email: "lazu@mail.com",
+            no_hp: "0812312312",
+            id: 1451,
+            user_id: 1,
+            campaign_id: 1,
+            judul_slug: null,
+            biaya_persen: 15,
+            donasi: "10000",
+            kode_donasi: null,
+            prantara_donasi: null,
+            metode_pembayaran: "cod",
+            nomor_va: null,
+            nomor_telp: "0812312312",
+            status_donasi: "Ditolak",
+            status_pembayaran: null,
+            snap_token: null,
+            payment_url: null,
+            status_pemberian_pertama: null,
+            foto_pertama: null,
+            status_pemberian_kedua: null,
+            foto_kedua: null,
+            status_pemberian_ketiga: null,
+            foto_ketiga: null,
+            status_terbaru: null,
+            komentar: "Semoga lekas sembuh",
+            created_at: null,
+            updated_at: null,
+        },
+    ],
+];
 ```
 
-
-***Status Code:*** 200
+**_Status Code:_** 200
 
 <br>
 
-
-
 ### 5. Ringkasan harian
 
-
-
-***Endpoint:***
+**_Endpoint:_**
 
 ```bash
 Method: GET
-Type: 
+Type:
 URL: http://127.0.0.1:8000/api/fundraiser/ringkasanharian
 ```
 
+**_Query params:_**
 
-
-***Query params:***
-
-| Key | Value | Description |
-| --- | ------|-------------|
-| id_fundraiser | 1914 |  |
-| date | 2021-10-07 |  |
+| Key           | Value      | Description |
+| ------------- | ---------- | ----------- |
+| id_fundraiser | 1914       |             |
+| date          | 2021-10-07 |             |
 
 ### 6. Ringkasan User
 
-***Endpoint:***
+**_Endpoint:_**
 
 ```bash
 Method: GET
-Type: 
+Type:
 URL: http://127.0.0.1:8000/api/fundraiser/ringkasan
 ```
 
-***Response:***
+**_Response:_**
 
 ```json
 {
@@ -2097,18 +2018,19 @@ URL: http://127.0.0.1:8000/api/fundraiser/ringkasan
 }
 ```
 
-***Status Code:*** 200
+**_Status Code:_** 200
 
 ### 7. Detail Donasi
 
-***Endpoint:***
+**_Endpoint:_**
+
 ```bash
 Method: GET
-Type: 
+Type:
 URL: http://127.0.0.1:8000/api/fundraiser/donations/1931/details
 ```
 
-***Response:***
+**_Response:_**
 
 ```json
 {
@@ -2130,34 +2052,26 @@ URL: http://127.0.0.1:8000/api/fundraiser/donations/1931/details
 }
 ```
 
-***Status Code:*** 200
+**_Status Code:_** 200
 
 ## Galang Dana
 
-
-
 ### 1. All
 
-
-
-***Endpoint:***
+**_Endpoint:_**
 
 ```bash
 Method: GET
-Type: 
+Type:
 URL: http://127.0.0.1:8000/api/galangdana
 ```
 
-
-
-***More example Requests/Responses:***
-
+**_More example Requests/Responses:_**
 
 ##### I. Example Request: All
 
-
-
 ##### I. Example Response: All
+
 ```js
 {
     "data": [
@@ -2209,35 +2123,26 @@ URL: http://127.0.0.1:8000/api/galangdana
 }
 ```
 
-
-***Status Code:*** 200
+**_Status Code:_** 200
 
 <br>
 
-
-
 ### 2. Specific
 
-
-
-***Endpoint:***
+**_Endpoint:_**
 
 ```bash
 Method: GET
-Type: 
+Type:
 URL: http://127.0.0.1:8000/api/galangdana/1005
 ```
 
-
-
-***More example Requests/Responses:***
-
+**_More example Requests/Responses:_**
 
 ##### I. Example Request: Specific
 
-
-
 ##### I. Example Response: Specific
+
 ```js
 {
     "data": {
@@ -2314,27 +2219,23 @@ URL: http://127.0.0.1:8000/api/galangdana/1005
 }
 ```
 
-
-***Status Code:*** 200
+**_Status Code:_** 200
 
 <br>
 
-
-
 ### 3. Specific By Slug
 
-
-
-***Endpoint:***
+**_Endpoint:_**
 
 ```bash
 Method: GET
-Type: 
+Type:
 URL: http://127.0.0.1:8000/api/galangdana/byslug/donasi-untuk-semua
 ```
-***Response:***
 
-``` json
+**_Response:_**
+
+```json
 {
     "data": {
         "campaign": [
@@ -2465,25 +2366,22 @@ URL: http://127.0.0.1:8000/api/galangdana/byslug/donasi-untuk-semua
 
 ### 4. Buat Galangdana
 
-
-
-***Endpoint:***
+**_Endpoint:_**
 
 ```bash
 Method: POST
-Type: 
+Type:
 URL: http://127.0.0.1:8000/api/galangdana/create
 ```
 
-***Headers:***
+**_Headers:_**
 
-| Key | Value | Description |
-| --- | ------|-------------|
-| Accept | application/json |  |
-| Authorization | Bearer <YOUR_TOKEN> |  |
+| Key           | Value               | Description |
+| ------------- | ------------------- | ----------- |
+| Accept        | application/json    |             |
+| Authorization | Bearer <YOUR_TOKEN> |             |
 
-
-***Body:***
+**_Body:_**
 
 ```json
 {
@@ -2502,13 +2400,12 @@ URL: http://127.0.0.1:8000/api/galangdana/create
 }
 ```
 
-***More example Requests/Responses:***
-
+**_More example Requests/Responses:_**
 
 ##### 3. Buat Galang dana
 
-
 ##### 1. Example Response: Buat Galang dana
+
 ```json
 {
     "message": "berhasil membuat campaign",
@@ -2532,26 +2429,25 @@ URL: http://127.0.0.1:8000/api/galangdana/create
 }
 ```
 
-
-***Status Code:*** 201
+**_Status Code:_** 201
 
 ### 5. Buat Campaign sebagai Urgent
 
-***Endpoint:***
+**_Endpoint:_**
 
 ```bash
 Method: POST
-Type: 
+Type:
 URL: http://127.0.0.1:8000/api/galangdana/1059/asurgent
 ```
 
-***Headers:***
+**_Headers:_**
 
-| Key | Value | Description |
-| --- | ------|-------------|
-| Accept | application/json |  |
+| Key    | Value            | Description |
+| ------ | ---------------- | ----------- |
+| Accept | application/json |             |
 
-***Response:***
+**_Response:_**
 
 ```json
 {
@@ -2566,18 +2462,20 @@ URL: http://127.0.0.1:8000/api/galangdana/1059/asurgent
 }
 ```
 
-***Status Code:*** 200
+**_Status Code:_** 200
 
 ### 6. Campaign Milik User
 
-***Endpoint:***
+**_Endpoint:_**
+
 ```bash
 Method: GET
-Type: 
+Type:
 URL: http://127.0.0.1:8000/api/galangdanasaya
 ```
 
-***Response:***
+**_Response:_**
+
 ```json
 {
     "data": [
@@ -2629,18 +2527,20 @@ URL: http://127.0.0.1:8000/api/galangdanasaya
 }
 ```
 
-***Status Code:*** 200
+**_Status Code:_** 200
 
 ### 7. Laporkan Galang Dana
 
-***Endpoint:***
+**_Endpoint:_**
+
 ```bash
 Method: POST
-Type: 
+Type:
 URL: http://127.0.0.1:8000/api/galangdana/{campaign}/report
 ```
 
-***Expected Response:***
+**_Expected Response:_**
+
 ```json
 {
     "message": "Berhasil melaporkan galang dana",
@@ -2650,18 +2550,20 @@ URL: http://127.0.0.1:8000/api/galangdana/{campaign}/report
 }
 ```
 
-***Status Code:*** 200
+**_Status Code:_** 200
 
 ### 8. Batalkan Laporan Galang Dana
 
-***Endpoint:***
+**_Endpoint:_**
+
 ```bash
 Method: DELETE
-Type: 
+Type:
 URL: http://127.0.0.1:8000/api/galangdana/{campaign}/report
 ```
 
-***Expected Response:***
+**_Expected Response:_**
+
 ```json
 {
     "message": "Berhasil batalkan laporan galang dana",
@@ -2671,130 +2573,96 @@ URL: http://127.0.0.1:8000/api/galangdana/{campaign}/report
 }
 ```
 
-***Status Code:*** 200
+**_Status Code:_** 200
 
 <br>
 
 ## Password
 
-
-
 ### 1. Reset Password
 
-
-
-***Endpoint:***
+**_Endpoint:_**
 
 ```bash
 Method: GET
-Type: 
+Type:
 URL: http://127.0.0.1:8000/api/password/resetpassword
 ```
 
+**_Query params:_**
 
-
-***Query params:***
-
-| Key | Value | Description |
-| --- | ------|-------------|
-| email | lazuardi.akhmad@gmail.com |  |
-| token | aMBcg3PFSDv1Cvl9TeWu8eDlLqcphnDXUvJvHQzpVqnOMRcey4cb4jdCZMWF |  |
-| new_pass | Baru123! |  |
-
-
+| Key      | Value                                                        | Description |
+| -------- | ------------------------------------------------------------ | ----------- |
+| email    | lazuardi.akhmad@gmail.com                                    |             |
+| token    | aMBcg3PFSDv1Cvl9TeWu8eDlLqcphnDXUvJvHQzpVqnOMRcey4cb4jdCZMWF |             |
+| new_pass | Baru123!                                                     |             |
 
 ### 2. Send Reset Email
 
-
-
-***Endpoint:***
+**_Endpoint:_**
 
 ```bash
 Method: GET
-Type: 
+Type:
 URL: http://127.0.0.1:8000/api/password/resetemail
 ```
 
+**_Query params:_**
 
-
-***Query params:***
-
-| Key | Value | Description |
-| --- | ------|-------------|
-| email | lazuardi.akhmad@gmail.com |  |
-
-
+| Key   | Value                     | Description |
+| ----- | ------------------------- | ----------- |
+| email | lazuardi.akhmad@gmail.com |             |
 
 ## Token
 
-
-
 ### 1. Get CSRF Token
 
-
-
-***Endpoint:***
+**_Endpoint:_**
 
 ```bash
 Method: GET
-Type: 
+Type:
 URL: http://127.0.0.1:8000/api/token/csrf
 ```
 
-
-
-***More example Requests/Responses:***
-
+**_More example Requests/Responses:_**
 
 ##### I. Example Request: Get CSRF Token
 
-
-
 ##### I. Example Response: Get CSRF Token
+
 ```js
 {
     "token": "x5OKF26wlnNG5DTacMRZS9DXxz7ZJ15b8rlQMEor"
 }
 ```
 
-
-***Status Code:*** 200
+**_Status Code:_** 200
 
 <br>
 
+**_Available Variables:_**
 
-
-***Available Variables:***
-
-| Key | Value | Type |
-| --- | ------|-------------|
-| api | http://127.0.0.1:8000/api/ |  |
-
-
+| Key | Value                      | Type |
+| --- | -------------------------- | ---- |
+| api | http://127.0.0.1:8000/api/ |      |
 
 ## User
 
-
-
 ### 1. All Pekerjaan
 
-
-
-***Endpoint:***
+**_Endpoint:_**
 
 ```bash
 Method: GET
-Type: 
+Type:
 URL: http://127.0.0.1:8000/api/pekerjaan
 ```
 
-
-
-***More example Requests/Responses:***
-
-
+**_More example Requests/Responses:_**
 
 ##### I. Example Response: All Pekerjaan
+
 ```js
     {
         "id": 1,
@@ -2806,30 +2674,22 @@ URL: http://127.0.0.1:8000/api/pekerjaan
     },
 ```
 
-
-***Status Code:*** 200
-
-
+**_Status Code:_** 200
 
 ### 2. All Organisasi
 
-
-
-***Endpoint:***
+**_Endpoint:_**
 
 ```bash
 Method: GET
-Type: 
+Type:
 URL: http://127.0.0.1:8000/api/organisasi
 ```
 
-
-
-***More example Requests/Responses:***
-
-
+**_More example Requests/Responses:_**
 
 ##### I. Example Response: All Organisasi
+
 ```js
     {
         "id": 1,
@@ -2841,30 +2701,22 @@ URL: http://127.0.0.1:8000/api/organisasi
     },
 ```
 
-
-***Status Code:*** 200
-
-
+**_Status Code:_** 200
 
 ### 3. Provinsi
 
-
-
-***Endpoint:***
+**_Endpoint:_**
 
 ```bash
 Method: GET
-Type: 
+Type:
 URL: http://127.0.0.1:8000/api/prov
 ```
 
-
-
-***More example Requests/Responses:***
-
-
+**_More example Requests/Responses:_**
 
 ##### I. Example Response: Provinsi
+
 ```js
     {
         "id": "11",
@@ -2876,98 +2728,79 @@ URL: http://127.0.0.1:8000/api/prov
     },
 ```
 
-
-***Status Code:*** 200
-
-
+**_Status Code:_** 200
 
 ### 4. Kabupaten
 
-
-
-***Endpoint:***
+**_Endpoint:_**
 
 ```bash
 Method: GET
-Type: 
+Type:
 URL: http://127.0.0.1:8000/api/kab
 ```
 
+**_Query params:_**
 
-
-***Query params:***
-
-| Key | Value | Description |
-| --- | ------|-------------|
-| provinceId | 11 |  |
-
-
+| Key        | Value | Description |
+| ---------- | ----- | ----------- |
+| provinceId | 11    |             |
 
 ### 5. Kecamatan
 
-
-
-***Endpoint:***
+**_Endpoint:_**
 
 ```bash
 Method: GET
-Type: 
+Type:
 URL: http://127.0.0.1:8000/api/kec
 ```
 
+**_Query params:_**
 
-
-***Query params:***
-
-| Key | Value | Description |
-| --- | ------|-------------|
-| regencyId | 1901 |  |
-
+| Key       | Value | Description |
+| --------- | ----- | ----------- |
+| regencyId | 1901  |             |
 
 ### 6. Edit Profil
 
-
-
-***Endpoint:***
+**_Endpoint:_**
 
 ```bash
 Method: POST
-Type: 
+Type:
 URL: http://127.0.0.1:8000/api/user
 ```
 
-
-***More example Requests/Responses:***
-
+**_More example Requests/Responses:_**
 
 ##### I. Example Request: Edit Profil
 
-***Headers:***
+**_Headers:_**
 
-| Key | Value | Description |
-| --- | ------|-------------|
-| Accept | application/json |  |
-| Authorization | Bearer <YOUR_TOKEN> |  |
+| Key           | Value               | Description |
+| ------------- | ------------------- | ----------- |
+| Accept        | application/json    |             |
+| Authorization | Bearer <YOUR_TOKEN> |             |
 
+**_Query:_**
 
-***Query:***
-
-| Key | Value | Description |
-| --- | ------|-------------|
-| nama | Albert |  |
-| username | albert123 |  |
-| tipe | Individu |  |
-| pekerjaan | Programmer |  |
-| jenis_organisasi |  |  |
-| tanggal_lahir | 2000-05-27 |  |
-| jenis_kelamin | Laki - laki |  |
-| no_telp | 089786787655 |  |
-| provinsi | Jawa Timur |  |
-| kabupaten | Tuban |  |
-| kecamatan | Jatirogo |  |
-
+| Key              | Value        | Description |
+| ---------------- | ------------ | ----------- |
+| nama             | Albert       |             |
+| username         | albert123    |             |
+| tipe             | Individu     |             |
+| pekerjaan        | Programmer   |             |
+| jenis_organisasi |              |             |
+| tanggal_lahir    | 2000-05-27   |             |
+| jenis_kelamin    | Laki - laki  |             |
+| no_telp          | 089786787655 |             |
+| provinsi         | Jawa Timur   |             |
+| kabupaten        | Tuban        |             |
+| kecamatan        | Jatirogo     |             |
 
 ##### I. Example Response: Edit Profil
+
 ```js
 {
     "status": true,
@@ -3005,19 +2838,19 @@ URL: http://127.0.0.1:8000/api/user
 }
 ```
 
-
-***Status Code:*** 200
+**_Status Code:_** 200
 
 ### 7. Detail User
 
-***Endpoint:***
+**_Endpoint:_**
+
 ```bash
 Method: GET
-Type: 
+Type:
 URL: http://127.0.0.1:8000/api/user
 ```
 
-***Response:***
+**_Response:_**
 
 ```json
 {
@@ -3063,18 +2896,20 @@ URL: http://127.0.0.1:8000/api/user
 }
 ```
 
-***Status Code:*** 200
+**_Status Code:_** 200
 
 ### 8. Ganti Password
 
-***Endpoint:***
+**_Endpoint:_**
+
 ```bash
 Method: PUT
-Type: 
+Type:
 URL: http://127.0.0.1:8000/api/user/change_password
 ```
 
-***Body:***
+**_Body:_**
+
 ```json
 {
     "old_password": "cpktnwt1234",
@@ -3082,25 +2917,28 @@ URL: http://127.0.0.1:8000/api/user/change_password
 }
 ```
 
-***Response:***
+**_Response:_**
+
 ```json
 {
     "message": "Password updated successfully."
 }
 ```
 
-***Status Code:*** 200
+**_Status Code:_** 200
 
 ### 9. Kode Referal User
 
-***Endpoint:***
+**_Endpoint:_**
+
 ```bash
 Method: GET
-Type: 
+Type:
 URL: http://127.0.0.1:8000/api/user/kode_referal
 ```
 
-***Response:***
+**_Response:_**
+
 ```json
 {
     "data": {
@@ -3109,35 +2947,32 @@ URL: http://127.0.0.1:8000/api/user/kode_referal
 }
 ```
 
-***Status Code:*** 200
+**_Status Code:_** 200
 
 <br>
 
-
 ## Search
 
-
-***Endpoint:***
+**_Endpoint:_**
 
 ```bash
 Method: GET
-Type: 
+Type:
 URL: http://127.0.0.1:8000/api/search?keyword=<your keyword>
 ```
 
 ### examples request
 
-***Headers:***
+**_Headers:_**
 
-| Key | Value | Description |
-| --- | ------|-------------|
-| Accept | application/json |  |
+| Key    | Value            | Description |
+| ------ | ---------------- | ----------- |
+| Accept | application/json |             |
 
+**_Query:_**
 
-***Query:***
-
-| Key | Value | Description |
-| --- | ------|-------------|
+| Key     | Value    | Description        |
+| ------- | -------- | ------------------ |
 | keyword | Campaign | user atau campaign |
 
 ```js
@@ -3176,29 +3011,27 @@ URL: http://127.0.0.1:8000/api/search?keyword=<your keyword>
 }
 ```
 
-
-***Status Code:*** 200
+**_Status Code:_** 200
 
 <br>
 
 ## Bantuan Mendesak
 
-***Endpoint:***
+**_Endpoint:_**
 
 ```bash
 Method: GET
-Type: 
+Type:
 URL: http://127.0.0.1:8000/api/urgent
 ```
 
 ### examples request
 
-***Headers:***
+**_Headers:_**
 
-| Key | Value | Description |
-| --- | ------|-------------|
-| Accept | application/json |  |
-
+| Key    | Value            | Description |
+| ------ | ---------------- | ----------- |
+| Accept | application/json |             |
 
 ```js
 {
@@ -3231,133 +3064,127 @@ URL: http://127.0.0.1:8000/api/urgent
 }
 ```
 
-
-***Status Code:*** 200
+**_Status Code:_** 200
 
 <br>
 
-
 ## Riwayat Donasi
 
-
-***Endpoint:***
+**_Endpoint:_**
 
 ```bash
 Method: GET
-Type: 
+Type:
 URL: http://127.0.0.1:8000/api/donation/histories
 ```
 
 ### examples request
 
-***Headers:***
+**_Headers:_**
 
-
-| Key | Value | Description |
-| --- | ------|-------------|
-| Accept | application/json |  |
-| Authorization | Bearer <YOUR_TOKEN> |  |
-
+| Key           | Value               | Description |
+| ------------- | ------------------- | ----------- |
+| Accept        | application/json    |             |
+| Authorization | Bearer <YOUR_TOKEN> |             |
 
 ```js
 [
     {
-        "id": 64,
-        "month_year": "05-2022",
-        "total_donasi": 0,
-        "jumlah_donasi": 0,
-        "donasi": [
+        id: 64,
+        month_year: "05-2022",
+        total_donasi: 0,
+        jumlah_donasi: 0,
+        donasi: [
             {
-                "id": 64,
-                "judul_campaign": "Wisata Bersama Yatim dan Dhuafa",
-                "foto_campaign": "664126223.jpg",
-                "user_id": 2221,
-                "judul_slug": "wisata-bersama-yatim-dan-dhuafa",
-                "donasi": "200000",
-                "status_donasi": "Pending",
-                "campaign_id": 12,
-                "created_at": "2022-05-28T07:51:39.000000Z"
-            }
-        ]
+                id: 64,
+                judul_campaign: "Wisata Bersama Yatim dan Dhuafa",
+                foto_campaign: "664126223.jpg",
+                user_id: 2221,
+                judul_slug: "wisata-bersama-yatim-dan-dhuafa",
+                donasi: "200000",
+                status_donasi: "Pending",
+                campaign_id: 12,
+                created_at: "2022-05-28T07:51:39.000000Z",
+            },
+        ],
     },
     {
-        "id": 62,
-        "month_year": "06-2022",
-        "total_donasi": "220000",
-        "jumlah_donasi": 2,
-        "donasi": [
+        id: 62,
+        month_year: "06-2022",
+        total_donasi: "220000",
+        jumlah_donasi: 2,
+        donasi: [
             {
-                "id": 62,
-                "judul_campaign": "Wisata Bersama Yatim dan Dhuafa",
-                "foto_campaign": "664126223.jpg",
-                "user_id": 2221,
-                "judul_slug": "wisata-bersama-yatim-dan-dhuafa",
-                "donasi": "20000",
-                "status_donasi": "Approved",
-                "campaign_id": 12,
-                "created_at": "2022-06-28T07:23:22.000000Z"
+                id: 62,
+                judul_campaign: "Wisata Bersama Yatim dan Dhuafa",
+                foto_campaign: "664126223.jpg",
+                user_id: 2221,
+                judul_slug: "wisata-bersama-yatim-dan-dhuafa",
+                donasi: "20000",
+                status_donasi: "Approved",
+                campaign_id: 12,
+                created_at: "2022-06-28T07:23:22.000000Z",
             },
             {
-                "id": 63,
-                "judul_campaign": "Wisata Bersama Yatim dan Dhuafa",
-                "foto_campaign": "664126223.jpg",
-                "user_id": 2221,
-                "judul_slug": "wisata-bersama-yatim-dan-dhuafa",
-                "donasi": "200000",
-                "status_donasi": "Approved",
-                "campaign_id": 12,
-                "created_at": "2022-06-28T07:51:39.000000Z"
+                id: 63,
+                judul_campaign: "Wisata Bersama Yatim dan Dhuafa",
+                foto_campaign: "664126223.jpg",
+                user_id: 2221,
+                judul_slug: "wisata-bersama-yatim-dan-dhuafa",
+                donasi: "200000",
+                status_donasi: "Approved",
+                campaign_id: 12,
+                created_at: "2022-06-28T07:51:39.000000Z",
             },
             {
-                "id": 1683,
-                "judul_campaign": "Campaign 2",
-                "foto_campaign": "3232.jpg",
-                "user_id": 1,
-                "judul_slug": "",
-                "donasi": "20000",
-                "status_donasi": "Pending",
-                "campaign_id": 13,
-                "created_at": "2022-06-30T04:18:50.000000Z"
+                id: 1683,
+                judul_campaign: "Campaign 2",
+                foto_campaign: "3232.jpg",
+                user_id: 1,
+                judul_slug: "",
+                donasi: "20000",
+                status_donasi: "Pending",
+                campaign_id: 13,
+                created_at: "2022-06-30T04:18:50.000000Z",
             },
             {
-                "id": 1684,
-                "judul_campaign": "Campaign 2",
-                "foto_campaign": "3232.jpg",
-                "user_id": 1,
-                "judul_slug": null,
-                "donasi": "20000",
-                "status_donasi": "Pending",
-                "campaign_id": 13,
-                "created_at": "2022-06-30T04:24:01.000000Z"
-            }
-        ]
-    }
-]
+                id: 1684,
+                judul_campaign: "Campaign 2",
+                foto_campaign: "3232.jpg",
+                user_id: 1,
+                judul_slug: null,
+                donasi: "20000",
+                status_donasi: "Pending",
+                campaign_id: 13,
+                created_at: "2022-06-30T04:24:01.000000Z",
+            },
+        ],
+    },
+];
 ```
-***Status Code:*** 200
+
+**_Status Code:_** 200
 
 <br>
 
 ### 1. Details Riwayat
 
-***Endpoint:***
+**_Endpoint:_**
 
 ```bash
 Method: GET
-Type: 
+Type:
 URL: http://127.0.0.1:8000/api/donation/histories/{riwayat_id}/details
 ```
 
 ### examples request
 
-***Headers:***
+**_Headers:_**
 
-
-| Key | Value | Description |
-| --- | ------|-------------|
-| Accept | application/json |  |
-| Authorization | Bearer <YOUR_TOKEN> |  |
-
+| Key           | Value               | Description |
+| ------------- | ------------------- | ----------- |
+| Accept        | application/json    |             |
+| Authorization | Bearer <YOUR_TOKEN> |             |
 
 ```js
 {
@@ -3379,7 +3206,7 @@ URL: http://127.0.0.1:8000/api/donation/histories/{riwayat_id}/details
 
 ```
 
-***Status Code:*** 200
+**_Status Code:_** 200
 
 <br>
 
@@ -3387,22 +3214,21 @@ URL: http://127.0.0.1:8000/api/donation/histories/{riwayat_id}/details
 
 ### 1. Upload
 
-***Endpoint:***
+**_Endpoint:_**
 
 ```bash
 Method: POST
-Type: 
+Type:
 URL: http://127.0.0.1:8000/api/kabar_terbaru/upload
 ```
 
-***Body:***
+**_Body:_**
 
+| Key  | Value        | Description |
+| ---- | ------------ | ----------- |
+| file | Image Object |             |
 
-| Key | Value | Description |
-| --- | ------|-------------|
-| file | Image Object |  |
-
-***Response:***
+**_Response:_**
 
 ```json
 {
@@ -3410,19 +3236,20 @@ URL: http://127.0.0.1:8000/api/kabar_terbaru/upload
 }
 ```
 
-***Status Code:*** 200
+**_Status Code:_** 200
 
 ### 2. Store
 
-***Endpoint:***
+**_Endpoint:_**
 
 ```bash
 Method: POST
-Type: 
+Type:
 URL: http://127.0.0.1:8000/api/kabar_terbaru/store
 ```
 
-***Body:***
+**_Body:_**
+
 ```json
 {
     "judul": "Ini adalah judul",
@@ -3431,7 +3258,7 @@ URL: http://127.0.0.1:8000/api/kabar_terbaru/store
 }
 ```
 
-***Response:***
+**_Response:_**
 
 ```json
 {
@@ -3448,24 +3275,26 @@ URL: http://127.0.0.1:8000/api/kabar_terbaru/store
 }
 ```
 
-***Status Code:*** 201
+**_Status Code:_** 201
 
 <br>
 
- ## Wishlist
- 
- ### 1. Get Wishlist
- 
- ***Endpoint:***
- ```bash
- Method: GET
- Type: 
- URL: http://127.0.0.1:8000/api/wishlists
- ```
- 
- ***Responses***
- ```json
- {
+## Wishlist
+
+### 1. Get Wishlist
+
+**_Endpoint:_**
+
+```bash
+Method: GET
+Type:
+URL: http://127.0.0.1:8000/api/wishlists
+```
+
+**_Responses_**
+
+```json
+{
     "data": [
         {
             "id": 3,
@@ -3478,25 +3307,28 @@ URL: http://127.0.0.1:8000/api/kabar_terbaru/store
 }
 ```
 
-***Status Code:*** 200
+**_Status Code:_** 200
 
 ### 2. Buat Wishlist
 
-***Endpoint:***
+**_Endpoint:_**
+
 ```bash
 Method: POST
-Type: 
+Type:
 URL: http://127.0.0.1:8000/api/wishlists/create
 ```
 
-***Body:***
+**_Body:_**
+
 ```json
 {
     "campaign_id": 1055
 }
 ```
 
-***Response:***
+**_Response:_**
+
 ```json
 {
     "message": "successfully created wishlist",
@@ -3510,25 +3342,27 @@ URL: http://127.0.0.1:8000/api/wishlists/create
 }
 ```
 
-***Status Code:*** 201
+**_Status Code:_** 201
 
 ### 3. Hapus Wishlist
 
-***Endpoint:***
+**_Endpoint:_**
+
 ```bash
 Method: DELETE
-Type: 
+Type:
 URL: http://127.0.0.1:8000/api/wishlists/5/delete
 ```
 
-***Response:***
+**_Response:_**
+
 ```json
 {
     "message": "successfully deleted wishlist"
 }
 ```
 
-***Status Code:*** 200
+**_Status Code:_** 200
 
 <br>
 
@@ -3536,57 +3370,62 @@ URL: http://127.0.0.1:8000/api/wishlists/5/delete
 
 ### 1. Buat Slider
 
-***Endpoint:***
+**_Endpoint:_**
+
 ```bash
 Method: POST
-Type: 
+Type:
 URL: http://127.0.0.1:8000/api/slides/create
 ```
 
-***Body:***
+**_Body:_**
 | Key | Value | Description |
 | --- | ------|-------------|
-| url | https://google.com |  |
+| url | https://google.com | |
 | image | Image Object | |
 
-***Response:***
+**_Response:_**
+
 ```json
 {
     "message": "Slider Created Successfully"
 }
 ```
 
-***Status Code:*** 201
+**_Status Code:_** 201
 
-***More example Requests/Responses***
+**_More example Requests/Responses_**
 
 #### I. Example request:
 
-***Body:*** 
+**_Body:_**
 | Key | Value | Description |
 | --- | ------|-------------|
-| url | https://youtube.com |  |
+| url | https://youtube.com | |
 | image | Image Object | |
 
 #### I. Example response
+
 ```json
 {
     "message": "Slider Created Successfully"
 }
 ```
 
-***Status Code:*** 201
+**_Status Code:_** 201
 
 ### 2. All Slider
 
-***Endpoint:***
+**_Endpoint:_**
+
 ```bash
 Method: GET
-Type: 
+Type:
 URL: http://127.0.0.1:8000/api/slides
 ```
 
-***Response:***
+**_Response:_**
+
 ```json
 {
     "data": [
@@ -3608,50 +3447,55 @@ URL: http://127.0.0.1:8000/api/slides
 }
 ```
 
-***Status Code:*** 200
+**_Status Code:_** 200
 
 ### 3. Ubah Slider
 
-***Endpoint:***
+**_Endpoint:_**
+
 ```bash
 Method: PUT
-Type: 
+Type:
 URL: http://127.0.0.1:8000/api/slides/2/update
 ```
 
-***Body:***
+**_Body:_**
+
 ```json
 {
     "url": "https://facebook.com"
 }
 ```
 
-***Response:***
+**_Response:_**
+
 ```json
 {
     "message": "Slider Updated Successfully"
 }
 ```
 
-***Status Code:*** 200
+**_Status Code:_** 200
 
 ### 4. Hapus Slider
 
-***Endpoint:***
+**_Endpoint:_**
+
 ```bash
 Method: DELETE
-Type: 
+Type:
 URL: http://127.0.0.1:8000/api/slides/2/update
 ```
 
-***Response:***
+**_Response:_**
+
 ```json
 {
     "message": "Slider Deleted Successfully"
 }
 ```
 
-***Status Code:*** 200
+**_Status Code:_** 200
 
 <br>
 
@@ -3661,13 +3505,16 @@ URL: http://127.0.0.1:8000/api/slides/2/update
 
 ### 2. Detail Topup
 
-***Endpoint:***
+**_Endpoint:_**
+
 ```bash
 Method: GET
-Type: 
+Type:
 URL: http://127.0.0.1:8000/api/topup/73/details"
 ```
-***Response:***
+
+**_Response:_**
+
 ```json
 {
     "error": false,
@@ -3696,14 +3543,16 @@ URL: http://127.0.0.1:8000/api/topup/73/details"
 
 ### 1. All Feeds
 
-***Endpoint:***
+**_Endpoint:_**
+
 ```bash
 Method: GET
-Type: 
+Type:
 URL: http://127.0.0.1:8000/api/feeds
 ```
 
-***Response:***
+**_Response:_**
+
 ```json
 [
     {
@@ -3834,14 +3683,16 @@ URL: http://127.0.0.1:8000/api/feeds
 
 ### 2. Menyukai Feed
 
-***Endpoint:***
+**_Endpoint:_**
+
 ```bash
 Method: POST
-Type: 
+Type:
 URL: http://127.0.0.1:8000/api/feeds/{id}/like
 ```
 
-***Response:***
+**_Response:_**
+
 ```json
 {
     "message": "Berhasil menyukai feed",
@@ -3851,18 +3702,20 @@ URL: http://127.0.0.1:8000/api/feeds/{id}/like
 }
 ```
 
-***Status Code:*** 200
+**_Status Code:_** 200
 
 ### 3. Batalkan Menyukai Feed
 
-***Endpoint:***
+**_Endpoint:_**
+
 ```bash
 Method: POST
-Type: 
+Type:
 URL: http://127.0.0.1:8000/api/feeds/{id}/like
 ```
 
-***Response:***
+**_Response:_**
+
 ```json
 {
     "message": "Berhasil batalkan menyukai feed",
@@ -3872,7 +3725,7 @@ URL: http://127.0.0.1:8000/api/feeds/{id}/like
 }
 ```
 
-***Status Code:*** 200
+**_Status Code:_** 200
 
 <br>
 
@@ -3880,14 +3733,16 @@ URL: http://127.0.0.1:8000/api/feeds/{id}/like
 
 ### 1. All Ada Yang Baru
 
-***Endpoint:***
+**_Endpoint:_**
+
 ```bash
 Method: GET
-Type: 
+Type:
 URL: http://127.0.0.1:8000/api/adayangbaru
 ```
 
-***Response:***
+**_Response:_**
+
 ```json
 [
     {
@@ -3917,25 +3772,27 @@ URL: http://127.0.0.1:8000/api/adayangbaru
 ]
 ```
 
-***Status Code:*** 200
+**_Status Code:_** 200
 
 ### 2. Buat Ada Yang Baru
 
-***Endpoint:***
+**_Endpoint:_**
+
 ```bash
 Method: POST
-Type: 
+Type:
 URL: http://127.0.0.1:8000/api/adayangbaru/create
 ```
 
-***Body:***
+**_Body:_**
 | Key | Value | Description |
 | --- | ------|-------------|
-| judul | tes126 |  |
+| judul | tes126 | |
 | tanggal | 2022-11-10 | |
 | deskripsi | testestes4 | |
 
-***Response:***
+**_Response:_**
+
 ```json
 {
     "message": "Berhasil menambahkan data",
@@ -3951,18 +3808,19 @@ URL: http://127.0.0.1:8000/api/adayangbaru/create
 }
 ```
 
-***Status Code:*** 200
+**_Status Code:_** 200
 
 ### 3. Ubah Ada Yang Baru
 
-***Endpoint:***
+**_Endpoint:_**
+
 ```bash
 Method: POST
-Type: 
+Type:
 URL: http://127.0.0.1:8000/api/adayangbaru/{id}
 ```
 
-***Body:***
+**_Body:_**
 | Key | Value | Description |
 | --- | ------|-------------|
 | \_method | PUT | |
@@ -3970,7 +3828,8 @@ URL: http://127.0.0.1:8000/api/adayangbaru/{id}
 | tanggal | 2000-01-01 | |
 | deskripsi | testestes5 | |
 
-***Response:***
+**_Response:_**
+
 ```json
 {
     "message": "Berhasil mengubah data",
@@ -3986,18 +3845,20 @@ URL: http://127.0.0.1:8000/api/adayangbaru/{id}
 }
 ```
 
-***Status Code:*** 200
+**_Status Code:_** 200
 
 ### 4. Hapus Ada Yang Baru
 
-***Endpoint:***
+**_Endpoint:_**
+
 ```bash
 Method: DELETE
-Type: 
+Type:
 URL: http://127.0.0.1:8000/api/adayangbaru/{id}
 ```
 
-***Response:***
+**_Response:_**
+
 ```json
 {
     "message": "Berhasil menghapus data",
@@ -4006,30 +3867,31 @@ URL: http://127.0.0.1:8000/api/adayangbaru/{id}
 }
 ```
 
-***Status Code:*** 200
-
-
+**_Status Code:_** 200
 
 ## Admin
 
 ### 1. Get Users
-***Note***
+
+**_Note_**
 data ini hanya bisa diakses oleh user yang mempunyai role **Admin**
 
-***Endpoint:***
+**_Endpoint:_**
+
 ```bash
 Method: GET
-Type: 
+Type:
 URL: http://127.0.0.1:8000/api/admin/users
 ```
 
-***Headers:***
+**_Headers:_**
 
-| Key | Value | Description |
-| --- | ------|-------------|
-| Authorization | Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC8xMjcuMC4wLjE6ODAwMFwvYXBpXC9hdXRoXC9sb2dpbiIsImlhdCI6MTYzODg2ODM5MSwiZXhwIjoxNjM4ODcxOTkxLCJuYmYiOjE2Mzg4NjgzOTEsImp0aSI6IjByS1AwSFVncVpudHBjaEMiLCJzdWIiOjIxMTEsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.KYUHlQ0fUEwQp6jjKQp3XqhFfMpR8H5lFJWuV_ZsTXM |  |
+| Key           | Value                                                                                                                                                                                                                                                                                                                                              | Description |
+| ------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------- |
+| Authorization | Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC8xMjcuMC4wLjE6ODAwMFwvYXBpXC9hdXRoXC9sb2dpbiIsImlhdCI6MTYzODg2ODM5MSwiZXhwIjoxNjM4ODcxOTkxLCJuYmYiOjE2Mzg4NjgzOTEsImp0aSI6IjByS1AwSFVncVpudHBjaEMiLCJzdWIiOjIxMTEsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.KYUHlQ0fUEwQp6jjKQp3XqhFfMpR8H5lFJWuV_ZsTXM |             |
 
-***Response:***
+**_Response:_**
+
 ```json
 {
     "data": [
@@ -4064,23 +3926,25 @@ URL: http://127.0.0.1:8000/api/admin/users
             "no_telp": null,
             "role": "User",
             "tanggal_dibuat": "27/11/2022 14:18"
-        },
+        }
     ]
 }
 ```
 
-***Status Code:*** 200
+**_Status Code:_** 200
 
 ### 2. Galang Dana
 
-***Endpoint:***
+**_Endpoint:_**
+
 ```bash
 Method: GET
-Type: 
+Type:
 URL: http://127.0.0.1:8000/api/admin/galangdana
 ```
 
-***Expected Response:***
+**_Expected Response:_**
+
 ```json
 {
     "data": [
@@ -4133,10 +3997,12 @@ URL: http://127.0.0.1:8000/api/admin/galangdana
 }
 ```
 
-***Status Code:*** 200
+**_Status Code:_** 200
 
 <br>
 
-___
+---
+
 [Back to top](#peduly)
+
 > Made with &#9829; by [thedevsaddam](https://github.com/thedevsaddam) | Generated at: 2021-10-19 11:55:52 by [docgen](https://github.com/thedevsaddam/docgen)
