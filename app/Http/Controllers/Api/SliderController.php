@@ -11,29 +11,32 @@ use function PHPUnit\Framework\fileExists;
 
 class SliderController extends Controller
 {
-    public function index() {
+    public function index()
+    {
         // return full image url for each slider
         $sliders = Slider::all();
         foreach ($sliders as $slider) {
             $slider->image = config('app.url') . '/images/images_carousel/' . $slider->image;
         }
+
         return response()->json([
-            'data' => $sliders
+            'data' => $sliders,
         ]);
     }
 
-    public function create(Request $request) {
+    public function create(Request $request)
+    {
         // make validator and response with json
         $validator = Validator::make($request->all(), [
             'url' => 'nullable|url',
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048'
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
         // check validator is fails the return 400 bad request
         if ($validator->fails()) {
             return response()->json([
                 'message' => 'Validation Error',
-                'errors' => $validator->errors()
+                'errors' => $validator->errors(),
             ], 400);
         }
 
@@ -55,11 +58,12 @@ class SliderController extends Controller
 
         // return response json with success message
         return response()->json([
-            'message' => 'Slider Created Successfully'
+            'message' => 'Slider Created Successfully',
         ], 201);
     }
 
-    public function update(Request $request, $id) {
+    public function update(Request $request, $id)
+    {
         $slider = Slider::find($id);
         // create validation
         $validator = Validator::make($request->all(), [
@@ -70,12 +74,12 @@ class SliderController extends Controller
         if ($validator->fails()) {
             return response()->json([
                 'message' => 'Validation Error',
-                'errors' => $validator->errors()
+                'errors' => $validator->errors(),
             ], 400);
         }
-        if(!$slider) {
+        if (! $slider) {
             return response()->json([
-                'message' => 'Slider Not Found'
+                'message' => 'Slider Not Found',
             ], 404);
         }
         // update the slider
@@ -84,15 +88,16 @@ class SliderController extends Controller
 
         // return response json with success update message
         return response()->json([
-            'message' => 'Slider Updated Successfully'
+            'message' => 'Slider Updated Successfully',
         ], 200);
     }
 
-    public function delete($id) {
+    public function delete($id)
+    {
         $slider = Slider::find($id);
-        if(!$slider) {
+        if (! $slider) {
             return response()->json([
-                'message' => 'Slider Not Found'
+                'message' => 'Slider Not Found',
             ], 404);
         }
 
@@ -105,7 +110,7 @@ class SliderController extends Controller
 
         // return response json with success delete message
         return response()->json([
-            'message' => 'Slider Deleted Successfully'
+            'message' => 'Slider Deleted Successfully',
         ], 200);
     }
 }

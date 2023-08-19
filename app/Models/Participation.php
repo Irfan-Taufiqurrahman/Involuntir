@@ -14,7 +14,7 @@ class Participation extends Model
         'user_id',
         'nomor_hp',
         'akun_linkedin',
-        'pesan'
+        'pesan',
     ];
 
     public function activity()

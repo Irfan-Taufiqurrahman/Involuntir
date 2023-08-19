@@ -9,7 +9,8 @@ class RencanaPenggunaanDana extends Model
 {
     use HasFactory;
 
-    public function icon() {
+    public function icon()
+    {
         return $this->belongsTo(IconRencanaPenggunaanDana::class);
     }
 }

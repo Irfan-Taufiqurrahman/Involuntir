@@ -9,18 +9,20 @@ class Feed extends Model
 {
     use HasFactory;
 
-    protected $fillable = ["user_id", "content", "insertion_link", "insertion_link_title"];
+    protected $fillable = ['user_id', 'content', 'insertion_link', 'insertion_link_title'];
 
     public function user()
     {
         return $this->belongsTo(User::class);
     }
 
-    public function like_count() {
+    public function like_count()
+    {
         return $this->hasMany(Like::class)->count();
     }
 
-    public function likes() {
+    public function likes()
+    {
         return $this->hasMany(Like::class);
     }
 }

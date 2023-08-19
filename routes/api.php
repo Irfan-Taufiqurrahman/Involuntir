@@ -1,42 +1,39 @@
 <?php
 
-use App\Http\Controllers\Api\{
-    AccountVerificationController,
-    Admin\UserAdminController,
-    Admin\CampaignAdminController,
-    ActivityController,
-    CriteriaController,
-    TaskController,
-    ParticipationController,
-    CampaignController,
-    CategoryController,
-    CompanyController,
-    DoaDanKabarBaikController,
-    DonationController,
-    AdaYangBaruController,
-    GoogleController,
-    LikeController,
-    RencanaPenggunaanDanaController,
-    CampaignReportController,
-    TokenController,
-    AuthController,
-    BankTransferController,
-    EMoneyController,
-    FeedController,
-    FundraiserController,
-    NotificationController,
-    PasswordController,
-    PaymentController,
-    SliderController,
-    UserController,
-    WishlistController
-};
+use App\Http\Controllers\Api\AccountVerificationController;
+use App\Http\Controllers\Api\ActivityController;
+use App\Http\Controllers\Api\AdaYangBaruController;
+use App\Http\Controllers\Api\Admin\CampaignAdminController;
+use App\Http\Controllers\Api\Admin\UserAdminController;
+use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\BankTransferController;
+use App\Http\Controllers\Api\CampaignController;
+use App\Http\Controllers\Api\CampaignReportController;
+use App\Http\Controllers\Api\CategoryController;
+use App\Http\Controllers\Api\CompanyController;
+use App\Http\Controllers\Api\CriteriaController;
+use App\Http\Controllers\Api\DoaDanKabarBaikController;
+use App\Http\Controllers\Api\DonationController;
+use App\Http\Controllers\Api\EMoneyController;
+use App\Http\Controllers\Api\FeedController;
+use App\Http\Controllers\Api\FundraiserController;
+use App\Http\Controllers\Api\GoogleController;
+use App\Http\Controllers\Api\LikeController;
+use App\Http\Controllers\Api\NotificationController;
+use App\Http\Controllers\Api\ParticipationController;
+use App\Http\Controllers\Api\PasswordController;
+use App\Http\Controllers\Api\PaymentController;
+use App\Http\Controllers\Api\RencanaPenggunaanDanaController;
+use App\Http\Controllers\Api\SliderController;
+use App\Http\Controllers\Api\TaskController;
+use App\Http\Controllers\Api\TokenController;
+use App\Http\Controllers\Api\UserController;
+use App\Http\Controllers\Api\WishlistController;
 use App\Http\Controllers\BalanceController;
 use App\Http\Controllers\KabarTerbaruController;
 use App\Http\Controllers\PaymentCallbackController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\TransactionController;
-use App\Http\Controllers\TransaksiController;
 use App\Http\Controllers\UrgentCampaignsController;
 use Illuminate\Support\Facades\Route;
 
@@ -180,7 +177,6 @@ Route::post('/payments/midtrans-notification', [PaymentCallbackController::class
 
 // Route::post('/notification/push', [NotificationController::class, 'post']);
 
-
 Route::prefix('password')->group(function () {
     Route::get('/resetemail', [PasswordController::class, 'resetEmail']);
 
@@ -188,7 +184,6 @@ Route::prefix('password')->group(function () {
     Route::post('/request-otp', [PasswordController::class, 'requestOtp']);
     Route::post('/verify-otp', [PasswordController::class, 'verifyOtp']);
 });
-
 
 Route::group(['middleware' => ['web']], function () {
     Route::prefix('token')->group(function () {

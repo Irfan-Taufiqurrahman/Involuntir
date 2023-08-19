@@ -5,11 +5,11 @@ namespace App\Models;
 use Illuminate\Contracts\Auth\CanResetPassword;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Tymon\JWTAuth\Contracts\JWTSubject;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 class User extends Authenticatable implements JWTSubject, MustVerifyEmail, CanResetPassword
 {
@@ -17,6 +17,7 @@ class User extends Authenticatable implements JWTSubject, MustVerifyEmail, CanRe
     use HasFactory;
     use SoftDeletes;
     use Notifiable;
+
     /**
      * The attributes that are mass assignable.
      *
@@ -52,6 +53,7 @@ class User extends Authenticatable implements JWTSubject, MustVerifyEmail, CanRe
     ];
 
     protected $dates = ['deleted_at'];
+
     /**
      * The attributes that should be hidden for arrays.
      *
@@ -142,6 +144,7 @@ class User extends Authenticatable implements JWTSubject, MustVerifyEmail, CanRe
         if ($this->tipe !== 'organisasi') {
             return null;
         }
+
         return $this->hasOne(Company::class);
     }
 

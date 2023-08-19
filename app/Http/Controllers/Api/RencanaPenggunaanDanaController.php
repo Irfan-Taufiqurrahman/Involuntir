@@ -4,27 +4,28 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Campaign;
-use App\Models\Donation;
 use App\Models\IconRencanaPenggunaanDana;
 use App\Models\RencanaPenggunaanDana;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class RencanaPenggunaanDanaController extends Controller
 {
-    public function decreementDonation($nominal, $penggunaan): int {
+    public function decreementDonation($nominal, $penggunaan): int
+    {
         $value = $nominal;
         foreach ($penggunaan as $item) {
-            if($item->is_percent) {
+            if ($item->is_percent) {
                 $value -= $nominal * $item->biaya / 100;
             } else {
                 $value -= $item->biaya;
             }
         }
+
         return $value;
     }
 
-    public function index($campaign_id) {
+    public function index($campaign_id)
+    {
         $campaign = Campaign::find($campaign_id);
         $total_donasi = $campaign->donations()->get(DB::raw('SUM(donasi) as total_donasi'));
 
@@ -36,14 +37,14 @@ class RencanaPenggunaanDanaController extends Controller
             'judul' => 'Donasi untuk program',
             'biaya' => "$decrementDonation",
             'is_percent' => false,
-            'icon' => IconRencanaPenggunaanDana::first()
+            'icon' => IconRencanaPenggunaanDana::first(),
         ];
 
         return response()->json([
             'target_donasi' => $campaign->nominal_campaign,
             'donasi_terkumpul' => $total_donasi[0]->total_donasi,
             'rencana' => $rencana_penggunaan,
-            'untuk_program' => $for_program
+            'untuk_program' => $for_program,
         ]);
     }
 }

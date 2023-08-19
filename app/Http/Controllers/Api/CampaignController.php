@@ -9,52 +9,52 @@ use App\Models\Category;
 use App\Models\Donation;
 use App\Models\KabarTerbaru;
 use Carbon\Carbon;
+use Cviebrock\EloquentSluggable\Services\SlugService;
 use Error;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Validator;
-use Cviebrock\EloquentSluggable\Services\SlugService;
 use Illuminate\Support\Facades\Storage;
-use phpDocumentor\Reflection\Types\Boolean;
-use Symfony\Component\HttpFoundation\Test\Constraint\ResponseIsRedirected;
+use Illuminate\Support\Facades\Validator;
 
 class CampaignController extends Controller
 {
-    private $data = NULL;
+    private $data = null;
 
     private function categoryFiltering($kategori)
     {
-        $this->data = Campaign::where("kategori_campaign", ucwords(str_replace('_', ' & ', $kategori)));
+        $this->data = Campaign::where('kategori_campaign', ucwords(str_replace('_', ' & ', $kategori)));
     }
 
     private function orderByFiltering($order)
     {
-        if ($order === "mendesak") {
+        if ($order === 'mendesak') {
             $this->data = $this->data ? $this->data->orderBy('campaigns.batas_waktu_campaigns', 'ASC') : Campaign::orderBy('campaigns.batas_waktu_campaign', 'ASC');
-        } else if ($order === "populer") {
+        } elseif ($order === 'populer') {
             $this->data = $this->data ? $this->data->orderBy(DB::raw('donations_count'), 'DESC') : Campaign::orderBy(DB::raw('donations_count'), 'DESC');
-        } else if ($order === "terbaru") {
+        } elseif ($order === 'terbaru') {
             $this->data = $this->data ? $this->data->orderBy('campaigns.created_at', 'DESC') : Campaign::orderBy('campaigns.created_at', 'DESC');
-        }else {
-            return new Error("order salah");
+        } else {
+            return new Error('order salah');
         }
     }
 
     private function byFiltering($filter)
     {
-        $this->data = $this->data ? $this->data->join('users', 'users.id', "=", 'campaigns.user_id')->where('users.tipe', $filter) : Campaign::join('users', 'users.id', "=", 'campaigns.user_id')->where('users.tipe', $filter);
+        $this->data = $this->data ? $this->data->join('users', 'users.id', '=', 'campaigns.user_id')->where('users.tipe', $filter) : Campaign::join('users', 'users.id', '=', 'campaigns.user_id')->where('users.tipe', $filter);
     }
 
-    private function getAllCampaignsWithoutFiltering() {
-        return Campaign::leftJoin("donations", "donations.campaign_id", "=", "campaigns.id")->groupBy("campaigns.id")->orderBy('campaigns.created_at', 'DESC')->where('status_publish', 'published')->orWhere('status_publish', NULL)->get(['campaigns.id', "judul_campaign", "campaigns.judul_slug", "foto_campaign", "nominal_campaign", "batas_waktu_campaign", "campaigns.created_at", DB::raw("SUM(IF(donations.status_donasi = 'Approved', donations.donasi, 0)) as total_donasi, sum(if(donations.status_donasi = 'Approved', 1, 0)) as donations_count")]);
+    private function getAllCampaignsWithoutFiltering()
+    {
+        return Campaign::leftJoin('donations', 'donations.campaign_id', '=', 'campaigns.id')->groupBy('campaigns.id')->orderBy('campaigns.created_at', 'DESC')->where('status_publish', 'published')->orWhere('status_publish', null)->get(['campaigns.id', 'judul_campaign', 'campaigns.judul_slug', 'foto_campaign', 'nominal_campaign', 'batas_waktu_campaign', 'campaigns.created_at', DB::raw("SUM(IF(donations.status_donasi = 'Approved', donations.donasi, 0)) as total_donasi, sum(if(donations.status_donasi = 'Approved', 1, 0)) as donations_count")]);
     }
 
-    private function getAllCampaignsWithoutFilteringWithLimit($limit) {
-        return Campaign::leftJoin("donations", "donations.campaign_id", "=", "campaigns.id")->groupBy("campaigns.id")->limit($limit)->orderBy('campaigns.created_at', 'DESC')->where('status_publish', 'published')->orWhere('status_publish', NULL)->get(['campaigns.id', "judul_campaign", "campaigns.judul_slug", "foto_campaign", "nominal_campaign", "batas_waktu_campaign", "campaigns.created_at", DB::raw("SUM(IF(donations.status_donasi = 'Approved', donations.donasi, 0)) as total_donasi, sum(if(donations.status_donasi = 'Approved', 1, 0)) as donations_count")]);
+    private function getAllCampaignsWithoutFilteringWithLimit($limit)
+    {
+        return Campaign::leftJoin('donations', 'donations.campaign_id', '=', 'campaigns.id')->groupBy('campaigns.id')->limit($limit)->orderBy('campaigns.created_at', 'DESC')->where('status_publish', 'published')->orWhere('status_publish', null)->get(['campaigns.id', 'judul_campaign', 'campaigns.judul_slug', 'foto_campaign', 'nominal_campaign', 'batas_waktu_campaign', 'campaigns.created_at', DB::raw("SUM(IF(donations.status_donasi = 'Approved', donations.donasi, 0)) as total_donasi, sum(if(donations.status_donasi = 'Approved', 1, 0)) as donations_count")]);
     }
 
     public function index()
@@ -72,15 +72,15 @@ class CampaignController extends Controller
                 $this->byFiltering(request()->filter);
             }
 
-            if(request()->limit) {
-                $this->data = $this->data ? $this->data->leftJoin("donations", "donations.campaign_id", "=", "campaigns.id")->groupBy("campaigns.id")->limit(request()->limit)->orderBy('campaigns.created_at', 'DESC')->where('status_publish', 'published')->orWhere('status_publish', NULL)->get(['campaigns.id', "judul_campaign", "campaigns.judul_slug", "foto_campaign", "nominal_campaign", "batas_waktu_campaign", "campaigns.created_at", DB::raw("SUM(IF(donations.status_donasi = 'Approved', donations.donasi, 0)) as total_donasi, sum(if(donations.status_donasi = 'Approved', 1, 0)) as donations_count")]) : $this->getAllCampaignsWithoutFilteringWithLimit(request()->limit);
-            }else {
-                $this->data = $this->data ? $this->data->leftJoin("donations", "donations.campaign_id", "=", "campaigns.id")->groupBy("campaigns.id")->orderBy('campaigns.created_at', 'DESC')->where('status_publish', 'published')->orWhere('status_publish', NULL)->get(['campaigns.id', "judul_campaign", "campaigns.judul_slug", "foto_campaign", "nominal_campaign", "batas_waktu_campaign", "campaigns.created_at", DB::raw("SUM(IF(donations.status_donasi = 'Approved', donations.donasi, 0)) as total_donasi, sum(if(donations.status_donasi = 'Approved', 1, 0)) as donations_count")]) : $this->getAllCampaignsWithoutFiltering();
+            if (request()->limit) {
+                $this->data = $this->data ? $this->data->leftJoin('donations', 'donations.campaign_id', '=', 'campaigns.id')->groupBy('campaigns.id')->limit(request()->limit)->orderBy('campaigns.created_at', 'DESC')->where('status_publish', 'published')->orWhere('status_publish', null)->get(['campaigns.id', 'judul_campaign', 'campaigns.judul_slug', 'foto_campaign', 'nominal_campaign', 'batas_waktu_campaign', 'campaigns.created_at', DB::raw("SUM(IF(donations.status_donasi = 'Approved', donations.donasi, 0)) as total_donasi, sum(if(donations.status_donasi = 'Approved', 1, 0)) as donations_count")]) : $this->getAllCampaignsWithoutFilteringWithLimit(request()->limit);
+            } else {
+                $this->data = $this->data ? $this->data->leftJoin('donations', 'donations.campaign_id', '=', 'campaigns.id')->groupBy('campaigns.id')->orderBy('campaigns.created_at', 'DESC')->where('status_publish', 'published')->orWhere('status_publish', null)->get(['campaigns.id', 'judul_campaign', 'campaigns.judul_slug', 'foto_campaign', 'nominal_campaign', 'batas_waktu_campaign', 'campaigns.created_at', DB::raw("SUM(IF(donations.status_donasi = 'Approved', donations.donasi, 0)) as total_donasi, sum(if(donations.status_donasi = 'Approved', 1, 0)) as donations_count")]) : $this->getAllCampaignsWithoutFiltering();
             }
 
-            return response()->json(["data" => $this->data ? $this->data : $this->getAllCampaignsWithoutFiltering()]);
-        }catch(Error $err) {
-            return response()->json(["message" => $err->getMessage()], 401);
+            return response()->json(['data' => $this->data ? $this->data : $this->getAllCampaignsWithoutFiltering()]);
+        } catch (Error $err) {
+            return response()->json(['message' => $err->getMessage()], 401);
         }
     }
 
@@ -90,7 +90,7 @@ class CampaignController extends Controller
             ->where('judul_slug', $campaign)
             ->get();
 
-        if($data_campaign->isEmpty()) {
+        if ($data_campaign->isEmpty()) {
             return response()->json(['message' => 'campaign tidak ditemukan'], 404);
         }
 
@@ -117,7 +117,7 @@ class CampaignController extends Controller
             ->select('komentar', 'nama', 'photo', 'users.id')
             ->where('campaign_id', $id_campaign)
             ->where('status_donasi', 'Approved')
-            ->where('komentar', '!=', NULL)
+            ->where('komentar', '!=', null)
             ->get();
 
         $donatur = Donation::join('users', 'user_id', '=', 'users.id')->where('campaign_id', $id_campaign)
@@ -137,8 +137,8 @@ class CampaignController extends Controller
                 'doa_donatur' => $doa_donatur,
                 'kabar_terbaru' => $kabar_terbaru,
                 'donatur' => $donatur,
-                'is_mine' => $user ? ($user->id === $id_fundraiser) : false
-            ]
+                'is_mine' => $user ? ($user->id === $id_fundraiser) : false,
+            ],
         ]);
     }
 
@@ -163,25 +163,29 @@ class CampaignController extends Controller
                 'campaign' => $campaign,
                 'user' => $campaign->user,
                 'current_donation' => $curr_donation,
-                'jumlah_donatur' => $jumlah_donatur
-            ]
+                'jumlah_donatur' => $jumlah_donatur,
+            ],
         ]);
     }
 
-    private function imageValidation(Request $request, $imageName) {
+    private function imageValidation(Request $request, $imageName)
+    {
         $validator = Validator::make($request->all(), [
             $imageName => 'image|mimes:jpeg,png,jpg|max:1024',
         ]);
+
         return $validator;
     }
 
-    private function uploadImage(Request $request, $file, $judul_slug) {
-        $fileName     = $judul_slug . '.' . $request->file($file)->extension();
+    private function uploadImage(Request $request, $file, $judul_slug)
+    {
+        $fileName = $judul_slug . '.' . $request->file($file)->extension();
         $request->file($file)->move(public_path('images/images_campaign'), $fileName);
+
         return $fileName;
     }
 
-    private function detailToHTML($cerita_tentang_pembuat_campaign, $cerita_tentang_penerima_manfaat, $cerita_tentang_masalah_dan_usaha,  $berapa_biaya_yang_dibutuhkan, $kenapa_galangdana_dibutuhkan, $foto_tentang_campaign, $foto_tentang_campaign_2, $foto_tentang_campaign_3)
+    private function detailToHTML($cerita_tentang_pembuat_campaign, $cerita_tentang_penerima_manfaat, $cerita_tentang_masalah_dan_usaha, $berapa_biaya_yang_dibutuhkan, $kenapa_galangdana_dibutuhkan, $foto_tentang_campaign, $foto_tentang_campaign_2, $foto_tentang_campaign_3)
     {
         $base_url = env('APP_URL');
         $pembuat_campaign = "<p>$cerita_tentang_pembuat_campaign<br><br>";
@@ -189,39 +193,43 @@ class CampaignController extends Controller
         $masalah_dan_usaha = "$cerita_tentang_masalah_dan_usaha<br><br>";
         $biaya_yang_dibutuhkan = "$berapa_biaya_yang_dibutuhkan<br><br>";
         $alasan = "$kenapa_galangdana_dibutuhkan<br><br></p>";
-        $foto_tentang_campaign = $foto_tentang_campaign ? "<img width='100%' src='$base_url/images/images_campaign/$foto_tentang_campaign' ><br><br>" : "";
-        $foto_tentang_campaign_2 = $foto_tentang_campaign_2 ? "<img width='100%' src='$base_url/images/images_campaign/$foto_tentang_campaign_2' ><br><br>" : "";
-        $foto_tentang_campaign_3 = $foto_tentang_campaign_3 ? "<img width='100%' src='$base_url/images/images_campaign/$foto_tentang_campaign_3' ><br><br>" : "";
+        $foto_tentang_campaign = $foto_tentang_campaign ? "<img width='100%' src='$base_url/images/images_campaign/$foto_tentang_campaign' ><br><br>" : '';
+        $foto_tentang_campaign_2 = $foto_tentang_campaign_2 ? "<img width='100%' src='$base_url/images/images_campaign/$foto_tentang_campaign_2' ><br><br>" : '';
+        $foto_tentang_campaign_3 = $foto_tentang_campaign_3 ? "<img width='100%' src='$base_url/images/images_campaign/$foto_tentang_campaign_3' ><br><br>" : '';
 
         return $pembuat_campaign . $penerima_manfaat . $foto_tentang_campaign . $masalah_dan_usaha . $foto_tentang_campaign_2 . $biaya_yang_dibutuhkan . $foto_tentang_campaign_3 . $alasan;
     }
 
-    public function publish(Request $request) {
+    public function publish(Request $request)
+    {
         $request->status_publish = 'published';
+
         return $this->create($request);
     }
 
-    public function draft(Request $request) {
+    public function draft(Request $request)
+    {
         $request->status_publish = 'drafted';
         $this->create($request);
     }
 
-    public function create(Request $request) {
+    public function create(Request $request)
+    {
         $rules = [
             'status_publish' => 'required|in:published,drafted',
         ];
-        if($request->status_publish === 'published') {
+        if ($request->status_publish === 'published') {
             // dicek dulu lah
             $rules = [
                 'judul_campaign' => 'required|string|max:255',
-                'category_id'   => 'required',
+                'category_id' => 'required',
                 'campaign_type' => 'required|in:event,compensation,operational,construction',
                 'foto_campaign' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
                 'kategori_penerima_manfaat' => 'required|in:sendiri,keluarga,orang_lain',
-                'penerima'      => 'required|string|max:255',
-                'tujuan'        => 'required|string|max:255',
-                'lokasi'    => 'required|string|max:255',
-                'alamat'   => 'required|string|max:255',
+                'penerima' => 'required|string|max:255',
+                'tujuan' => 'required|string|max:255',
+                'lokasi' => 'required|string|max:255',
+                'alamat' => 'required|string|max:255',
                 'nominal_campaign' => 'required|numeric',
                 'batas_waktu_campaign' => 'required|numeric', // per hari
                 'rincian_penggunaan' => 'required|string',
@@ -236,80 +244,79 @@ class CampaignController extends Controller
 
         $validator = Validator::make($request->all(), $rules);
 
-        if($validator->fails()) {
+        if ($validator->fails()) {
             return response()->json(['message' => $validator->errors()], 400);
         }
 
         // check category_id is exist
         $category = Category::find($request->category_id);
-        if (!$category) {
+        if (! $category) {
             return response()->json(['message' => "category with id: $request->category not found!"]);
         }
 
         $judul_slug = $request->judul_slug ? $request->judul_slug : SlugService::createSlug(Campaign::class, 'judul_slug', request('judul_campaign'));
 
+        $foto_campaign = null;
+        $foto_campaign_2 = null;
+        $foto_campaign_3 = null;
+        $foto_campaign_4 = null;
+        $foto_tentang_campaign = null;
+        $foto_tentang_campaign_2 = null;
+        $foto_tentang_campaign_3 = null;
 
-        $foto_campaign = NULL;
-        $foto_campaign_2 = NULL;
-        $foto_campaign_3 = NULL;
-        $foto_campaign_4 = NULL;
-        $foto_tentang_campaign = NULL;
-        $foto_tentang_campaign_2 = NULL;
-        $foto_tentang_campaign_3 = NULL;
-
-        if($request->file('foto_campaign')) {
-            $validator = $this->imageValidation($request,'foto_campaign');
-            if($validator->fails()) {
+        if ($request->file('foto_campaign')) {
+            $validator = $this->imageValidation($request, 'foto_campaign');
+            if ($validator->fails()) {
                 return response()->json(['message' => $validator->errors()], 400);
             }
             $foto_campaign = $this->uploadImage($request, 'foto_campaign', $judul_slug);
         }
-        if($request->file('foto_campaign_2')) {
+        if ($request->file('foto_campaign_2')) {
             $validator = $this->imageValidation($request, 'foto_campaign_2');
-            if($validator->fails()) {
+            if ($validator->fails()) {
                 return response()->json(['message' => $validator->errors()], 400);
             }
-            $foto_campaign_2 = $this->uploadImage($request, 'foto_campaign_2', $judul_slug . "-2");
+            $foto_campaign_2 = $this->uploadImage($request, 'foto_campaign_2', $judul_slug . '-2');
         }
-        if($request->file('foto_campaign_3')) {
+        if ($request->file('foto_campaign_3')) {
             $validator = $this->imageValidation($request, 'foto_campaign_3');
-            if($validator->fails()) {
+            if ($validator->fails()) {
                 return response()->json(['message' => $validator->errors()], 400);
             }
-            $foto_campaign_3 = $this->uploadImage($request, 'foto_campaign_3', $judul_slug . "-3");
+            $foto_campaign_3 = $this->uploadImage($request, 'foto_campaign_3', $judul_slug . '-3');
         }
-        if($request->file('foto_campaign_4')) {
+        if ($request->file('foto_campaign_4')) {
             $validator = $this->imageValidation($request, 'foto_campaign_4');
-            if($validator->fails()) {
+            if ($validator->fails()) {
                 return response()->json(['message' => $validator->errors()], 400);
             }
-            $foto_campaign_4 = $this->uploadImage($request, 'foto_campaign_4', $judul_slug . "-4");
+            $foto_campaign_4 = $this->uploadImage($request, 'foto_campaign_4', $judul_slug . '-4');
         }
-        if($request->file('foto_tentang_campaign')) {
+        if ($request->file('foto_tentang_campaign')) {
             $validator = $this->imageValidation($request, 'foto_tentang_campaign');
-            if($validator->fails()) {
+            if ($validator->fails()) {
                 return response()->json(['message' => $validator->errors()], 400);
             }
-            $foto_tentang_campaign = $this->uploadImage($request, 'foto_tentang_campaign', "foto-tentang-campaign-" . $judul_slug);
+            $foto_tentang_campaign = $this->uploadImage($request, 'foto_tentang_campaign', 'foto-tentang-campaign-' . $judul_slug);
         }
-        if($request->file('foto_tentang_campaign_2')) {
+        if ($request->file('foto_tentang_campaign_2')) {
             $validator = $this->imageValidation($request, 'foto_tentang_campaign_2');
-            if($validator->fails()) {
+            if ($validator->fails()) {
                 return response()->json(['message' => $validator->errors()], 400);
             }
-            $foto_tentang_campaign_2 = $this->uploadImage($request, 'foto_tentang_campaign_2', "foto-tentang-campaign-" . $judul_slug . "-2");
+            $foto_tentang_campaign_2 = $this->uploadImage($request, 'foto_tentang_campaign_2', 'foto-tentang-campaign-' . $judul_slug . '-2');
         }
-        if($request->file('foto_tentang_campaign_3')) {
+        if ($request->file('foto_tentang_campaign_3')) {
             $validator = $this->imageValidation($request, 'foto_tentang_campaign_3');
-            if($validator->fails()) {
+            if ($validator->fails()) {
                 return response()->json(['message' => $validator->errors()], 400);
             }
-            $foto_tentang_campaign_3 = $this->uploadImage($request, 'foto_tentang_campaign_3', "foto-tentang-campaign-" . $judul_slug . "-3");
+            $foto_tentang_campaign_3 = $this->uploadImage($request, 'foto_tentang_campaign_3', 'foto-tentang-campaign-' . $judul_slug . '-3');
         }
 
         $user = auth('api')->user();
 
-        if(!$user) {
+        if (! $user) {
             return response()->json(['message' => 'user not found!'], 404);
         }
 
@@ -354,15 +361,14 @@ class CampaignController extends Controller
             'category_id' => $request->category_id,
             'status_publish' => $request->status_publish,
             'updated_at' => $request->status_publish === 'published' ? Carbon::now() : null,
-            'kategori_campaign' => $category->name // sementara pake ini
+            'kategori_campaign' => $category->name, // sementara pake ini
         ]);
 
-
-//      send email after campaign created
-        if($request->status_publish === 'published') {
+        //      send email after campaign created
+        if ($request->status_publish === 'published') {
             Mail::to($user->email)->send(new CampaignCreated($campaign));
             $campaign->update([
-                'email_sent_at' => Carbon::now()
+                'email_sent_at' => Carbon::now(),
             ]);
         }
 
@@ -371,29 +377,30 @@ class CampaignController extends Controller
         return response()->json(['data' => $campaign], 201);
     }
 
-    public function update(Request $request, $id) {
+    public function update(Request $request, $id)
+    {
         $campaign = Campaign::findOrFail($id);
         $user = auth('api')->user();
 
-        if($user->id !== intval($campaign->user_id)) {
+        if ($user->id !== intval($campaign->user_id)) {
             return response()->json(['message' => 'Unauthorized'], 401);
         }
 
         $rules = [
             'status_publish' => 'required|in:published,drafted',
         ];
-        if($request->status_publish === 'published') {
+        if ($request->status_publish === 'published') {
             // dicek dulu lah
             $rules = [
                 'judul_campaign' => 'required|string|max:255',
-                'category_id'   => 'required',
+                'category_id' => 'required',
                 'campaign_type' => 'required|in:event,compensation,operational,construction',
                 'foto_campaign' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
                 'kategori_penerima_manfaat' => 'required|in:sendiri,keluarga,orang_lain',
-                'penerima'      => 'required|string|max:255',
-                'tujuan'        => 'required|string|max:255',
-                'lokasi'    => 'required|string|max:255',
-                'alamat'   => 'required|string|max:255',
+                'penerima' => 'required|string|max:255',
+                'tujuan' => 'required|string|max:255',
+                'lokasi' => 'required|string|max:255',
+                'alamat' => 'required|string|max:255',
                 'nominal_campaign' => 'required|numeric',
                 'batas_waktu_campaign' => 'required|numeric', // per hari
                 'rincian_penggunaan' => 'required|string',
@@ -408,18 +415,17 @@ class CampaignController extends Controller
 
         $validator = Validator::make($request->all(), $rules);
 
-        if($validator->fails()) {
+        if ($validator->fails()) {
             return response()->json(['message' => $validator->errors()], 400);
         }
 
         // check category_id is exist
         $category = Category::find($request->category_id);
-        if (!$category) {
+        if (! $category) {
             return response()->json(['message' => "category with id: $request->category not found!"]);
         }
 
         $judul_slug = $request->judul_slug ? $request->judul_slug : SlugService::createSlug(Campaign::class, 'judul_slug', request('judul_campaign'));
-
 
         $foto_campaign = $campaign->foto_campaign;
         $foto_campaign_2 = $campaign->foto_campaign_2;
@@ -429,61 +435,61 @@ class CampaignController extends Controller
         $foto_tentang_campaign_2 = $campaign->foto_tentang_campaign_2;
         $foto_tentang_campaign_3 = $campaign->foto_tentang_campaign_3;
 
-        if($request->file('foto_campaign')) {
-            $validator = $this->imageValidation($request,'foto_campaign');
-            if($validator->fails()) {
+        if ($request->file('foto_campaign')) {
+            $validator = $this->imageValidation($request, 'foto_campaign');
+            if ($validator->fails()) {
                 return response()->json(['message' => $validator->errors()], 400);
             }
             File::delete(public_path('images/images_campaign/' . $campaign->foto_campaign));
             $foto_campaign = $this->uploadImage($request, 'foto_campaign', $judul_slug);
         }
-        if($request->file('foto_campaign_2')) {
+        if ($request->file('foto_campaign_2')) {
             $validator = $this->imageValidation($request, 'foto_campaign_2');
-            if($validator->fails()) {
+            if ($validator->fails()) {
                 return response()->json(['message' => $validator->errors()], 400);
             }
             File::delete(public_path('images/images_campaign/' . $campaign->foto_campaign_2));
-            $foto_campaign_2 = $this->uploadImage($request, 'foto_campaign_2', $judul_slug . "-2");
+            $foto_campaign_2 = $this->uploadImage($request, 'foto_campaign_2', $judul_slug . '-2');
         }
-        if($request->file('foto_campaign_3')) {
+        if ($request->file('foto_campaign_3')) {
             $validator = $this->imageValidation($request, 'foto_campaign_3');
-            if($validator->fails()) {
+            if ($validator->fails()) {
                 return response()->json(['message' => $validator->errors()], 400);
             }
             File::delete(public_path('images/images_campaign/' . $campaign->foto_campaign_3));
-            $foto_campaign_3 = $this->uploadImage($request, 'foto_campaign_3', $judul_slug . "-3");
+            $foto_campaign_3 = $this->uploadImage($request, 'foto_campaign_3', $judul_slug . '-3');
         }
-        if($request->file('foto_campaign_4')) {
+        if ($request->file('foto_campaign_4')) {
             $validator = $this->imageValidation($request, 'foto_campaign_4');
-            if($validator->fails()) {
+            if ($validator->fails()) {
                 return response()->json(['message' => $validator->errors()], 400);
             }
             File::delete(public_path('images/images_campaign/' . $campaign->foto_campaign_4));
-            $foto_campaign_4 = $this->uploadImage($request, 'foto_campaign_4', $judul_slug . "-4");
+            $foto_campaign_4 = $this->uploadImage($request, 'foto_campaign_4', $judul_slug . '-4');
         }
-        if($request->file('foto_tentang_campaign')) {
+        if ($request->file('foto_tentang_campaign')) {
             $validator = $this->imageValidation($request, 'foto_tentang_campaign');
-            if($validator->fails()) {
+            if ($validator->fails()) {
                 return response()->json(['message' => $validator->errors()], 400);
             }
             File::delete(public_path('images/images_campaign/' . $campaign->foto_tentang_campaign));
-            $foto_tentang_campaign = $this->uploadImage($request, 'foto_tentang_campaign', "foto-tentang-campaign-" . $judul_slug);
+            $foto_tentang_campaign = $this->uploadImage($request, 'foto_tentang_campaign', 'foto-tentang-campaign-' . $judul_slug);
         }
-        if($request->file('foto_tentang_campaign_2')) {
+        if ($request->file('foto_tentang_campaign_2')) {
             $validator = $this->imageValidation($request, 'foto_tentang_campaign_2');
-            if($validator->fails()) {
+            if ($validator->fails()) {
                 return response()->json(['message' => $validator->errors()], 400);
             }
             File::delete(public_path('images/images_campaign/' . $campaign->foto_tentang_campaign_2));
-            $foto_tentang_campaign_2 = $this->uploadImage($request, 'foto_tentang_campaign_2', "foto-tentang-campaign-" . $judul_slug . "-2");
+            $foto_tentang_campaign_2 = $this->uploadImage($request, 'foto_tentang_campaign_2', 'foto-tentang-campaign-' . $judul_slug . '-2');
         }
-        if($request->file('foto_tentang_campaign_3')) {
+        if ($request->file('foto_tentang_campaign_3')) {
             $validator = $this->imageValidation($request, 'foto_tentang_campaign_3');
-            if($validator->fails()) {
+            if ($validator->fails()) {
                 return response()->json(['message' => $validator->errors()], 400);
             }
             File::delete(public_path('images/images_campaign/' . $campaign->foto_tentang_campaign_3));
-            $foto_tentang_campaign_3 = $this->uploadImage($request, 'foto_tentang_campaign_3', "foto-tentang-campaign-" . $judul_slug . "-3");
+            $foto_tentang_campaign_3 = $this->uploadImage($request, 'foto_tentang_campaign_3', 'foto-tentang-campaign-' . $judul_slug . '-3');
         }
 
         $user = auth('api')->user();
@@ -527,16 +533,15 @@ class CampaignController extends Controller
             'foto_tentang_campaign_3' => $foto_tentang_campaign_3,
             'category_id' => $request->category_id,
             'status_publish' => $request->status_publish,
-            'updated_at' => $request->status_publish === 'published' ? Carbon::now() : NULL,
-            'kategori_campaign' => $category->name // sementara pake ini
+            'updated_at' => $request->status_publish === 'published' ? Carbon::now() : null,
+            'kategori_campaign' => $category->name, // sementara pake ini
         ]);
 
-
-//      send email after campaign created
-        if($request->status_publish === 'published' && !$campaign->email_sent_at) {
+        //      send email after campaign created
+        if ($request->status_publish === 'published' && ! $campaign->email_sent_at) {
             Mail::to($user->email)->send(new CampaignCreated($campaign));
             $campaign->update([
-                'email_sent_at' => Carbon::now()
+                'email_sent_at' => Carbon::now(),
             ]);
         }
 
@@ -546,7 +551,8 @@ class CampaignController extends Controller
     }
 
     // @deprecated
-    public function create_old(Request $request) {
+    public function create_old(Request $request)
+    {
         $validator = Validator::make($request->all(), [
             'kategori_campaign' => 'required|string',
             'judul_campaign' => 'required|string',
@@ -561,22 +567,22 @@ class CampaignController extends Controller
             'detail_campaign' => 'required',
         ]);
 
-        if($validator->fails()) {
-            return response()->json(["message" => $validator->errors()], 400);
+        if ($validator->fails()) {
+            return response()->json(['message' => $validator->errors()], 400);
         }
 
         $judul_slug = $request->judul_slug ? $request->judul_slug : SlugService::createSlug(Campaign::class, 'judul_slug', request('judul_campaign'));
 
         $foto_campaign = null;
-        if($request->foto_campaign) {
+        if ($request->foto_campaign) {
             $image_64 = $request->foto_campaign; //your base64 encoded data
             $extension = explode('/', explode(':', substr($image_64, 0, strpos($image_64, ';')))[1])[1];   // .jpg .png
-            $replace = substr($image_64, 0, strpos($image_64, ',')+1);
+            $replace = substr($image_64, 0, strpos($image_64, ',') + 1);
             $image = str_replace($replace, '', $image_64);
             $image = str_replace(' ', '+', $image);
             $foto_campaign = $judul_slug . '.' . $extension;
 
-            Storage::disk('local')->put('images/images_campaign/'.$foto_campaign, base64_decode($image));
+            Storage::disk('local')->put('images/images_campaign/' . $foto_campaign, base64_decode($image));
         }
 
         // if ($request->foto_campaign && $request->foto_campaign->isValid()) {
@@ -588,17 +594,17 @@ class CampaignController extends Controller
             'kategori_campaign' => $request->kategori_campaign,
             'judul_campaign' => $request->judul_campaign,
             'nominal_campaign' => $request->target_donasi,
-            'batas_waktu_campaign' => date("Y-m-d", strtotime($request->batas_waktu_campaign)),
+            'batas_waktu_campaign' => date('Y-m-d', strtotime($request->batas_waktu_campaign)),
             'regencies' => $request->lokasi,
             'alamat_lengkap' => $request->alamat_lengkap,
             'tujuan' => $request->tujuan,
             'penerima' => $request->penerima,
             'detail_campaign' => $request->detail_campaign,
-            "user_id" => Auth::user()->id,
+            'user_id' => Auth::user()->id,
             'foto_campaign' => $foto_campaign,
             'judul_slug' => $judul_slug,
             'detail_campaign' => $request->detail_campaign,
-            'status' => 'Pending'
+            'status' => 'Pending',
         ]);
 
         return response()->json(['message' => 'berhasil membuat campaign', 'data' => $campaign, 'error' => false]);
@@ -607,29 +613,33 @@ class CampaignController extends Controller
     private function getCategory(string $category)
     {
         return Campaign::orderBy('campaigns.created_at')
-            ->where('kategori_campaign', $category)->leftJoin("donations", "donations.campaign_id", "=", "campaigns.id")->groupBy("campaigns.id")->get(['campaigns.id', "judul_campaign", "campaigns.judul_slug", "foto_campaign", "nominal_campaign", "batas_waktu_campaign", DB::raw('sum(donasi) as total_donasi')]);
+            ->where('kategori_campaign', $category)->leftJoin('donations', 'donations.campaign_id', '=', 'campaigns.id')->groupBy('campaigns.id')->get(['campaigns.id', 'judul_campaign', 'campaigns.judul_slug', 'foto_campaign', 'nominal_campaign', 'batas_waktu_campaign', DB::raw('sum(donasi) as total_donasi')]);
     }
 
-    public function isExist($slug) {
+    public function isExist($slug)
+    {
         return response()->json(['isExist' => Campaign::where('juduL_slug', $slug)->first() ? true : false]);
     }
 
-    public function destroy(Campaign $campaign) {
+    public function destroy(Campaign $campaign)
+    {
         // old image is not deleted because this is a soft delete
         $campaign->delete();
+
         return response()->json(['message' => 'berhasil menghapus campaign'], 200);
     }
 
-    public function myCampaigns() {
+    public function myCampaigns()
+    {
         $user = Auth::user();
 
-        $campaigns = Campaign::where('campaigns.user_id', $user->id)->leftJoin("donations", "donations.campaign_id", "=", "campaigns.id")
-                    ->groupBy("campaigns.id")->orderBy('campaigns.created_at', 'DESC')
-                    ->get(['campaigns.id', "judul_campaign", "campaigns.judul_slug",
-                            "foto_campaign", "nominal_campaign", "batas_waktu_campaign",
-                            "campaigns.created_at",
-                            DB::raw("SUM(IF(donations.status_donasi = 'Approved', donations.donasi, 0)) as total_donasi, sum(if(donations.status_donasi = 'Approved', 1, 0)) as donations_count")]);;
+        $campaigns = Campaign::where('campaigns.user_id', $user->id)->leftJoin('donations', 'donations.campaign_id', '=', 'campaigns.id')
+            ->groupBy('campaigns.id')->orderBy('campaigns.created_at', 'DESC')
+            ->get(['campaigns.id', 'judul_campaign', 'campaigns.judul_slug',
+                'foto_campaign', 'nominal_campaign', 'batas_waktu_campaign',
+                'campaigns.created_at',
+                DB::raw("SUM(IF(donations.status_donasi = 'Approved', donations.donasi, 0)) as total_donasi, sum(if(donations.status_donasi = 'Approved', 1, 0)) as donations_count")]);
 
-        return response()->json(["data" => $campaigns], 200);
+        return response()->json(['data' => $campaigns], 200);
     }
 }

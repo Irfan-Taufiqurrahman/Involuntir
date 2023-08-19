@@ -1,16 +1,16 @@
 <?php
 
 namespace App\Http\Controllers\Midtrans;
-use Illuminate\Http\Request; 
+
 use App\Http\Controllers\Controller;
 
 class CoreApi extends Controller
 {
     public static function charge($params)
     {
-        $payloads = array(
-            'payment_type' => 'bank_transfer'
-        );
+        $payloads = [
+            'payment_type' => 'bank_transfer',
+        ];
 
         if (array_key_exists('item_details', $params)) {
             $gross_amount = 0;
@@ -25,7 +25,7 @@ class CoreApi extends Controller
         if (Config::$isSanitized) {
             Sanitizer::jsonRequest($payloads);
         }
-        
+
         $result = ApiRequestor::post(
             Config::getBaseUrl() . '/charge',
             Config::$serverKey,
@@ -38,13 +38,13 @@ class CoreApi extends Controller
     /**
      * Capture pre-authorized transaction
      *
-     * @param string $param Order ID or transaction ID, that you want to capture
+     * @param  string  $param Order ID or transaction ID, that you want to capture
      */
     public static function capture($param)
     {
-        $payloads = array(
-        'transaction_id' => $param,
-        );
+        $payloads = [
+            'transaction_id' => $param,
+        ];
 
         $result = ApiRequestor::post(
             Config::getBaseUrl() . '/capture',

@@ -3,7 +3,6 @@
 namespace App\Mail;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
@@ -20,7 +19,7 @@ class DonasiBerhasil extends Mailable
 
     public function __construct($data)
     {
-        $this->data=$data;
+        $this->data = $data;
     }
 
     /**
@@ -34,11 +33,11 @@ class DonasiBerhasil extends Mailable
             ->from('noreply@peduly.com', 'Peduly')
             ->view('emails.donasiberhasil')
             ->with([
-                "nama_donatur"=>$this->data->nama,
-                "nama_fundraiser"=> $this->data->nama_fundraiser,
-                "nominal"=>number_format(floatval($this->data->donasi)),
-                'metode'=>$this->data->metode_pembayaran,
-                'judul'=>$this->data->judul_campaign
-        ]);
+                'nama_donatur' => $this->data->nama,
+                'nama_fundraiser' => $this->data->nama_fundraiser,
+                'nominal' => number_format(floatval($this->data->donasi)),
+                'metode' => $this->data->metode_pembayaran,
+                'judul' => $this->data->judul_campaign,
+            ]);
     }
 }

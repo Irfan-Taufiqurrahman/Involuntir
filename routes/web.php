@@ -1,13 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\AuthController;
-use App\Http\Controllers\Api\DonationController;
-use App\Http\Controllers\Auth\VerificationController;
-use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EmailVerifController;
-use App\Http\Controllers\GalangdanaController;
-use App\Http\Controllers\TransaksiController;
-use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
@@ -30,10 +24,9 @@ Route::get('/', function () {
     return view('newHome');
 });
 
-Route::get('/command', function() {
+Route::get('/command', function () {
     Artisan::command('config:cache');
 });
-
 
 Route::get('email/verification', [EmailVerifController::class, 'verifEmail']);
 
@@ -46,18 +39,19 @@ Auth::routes(['verify' => true]);
 Route::view('donation', 'snap.donation');
 
 // will be execute when the photo doesnot found in public/images/images_campaign
-Route::get('/images/images_campaign/{filename}', function($filename) {
-    $path = Storage::path('images/images_campaign/'.$filename);
-    if (!File::exists($path)) {
+Route::get('/images/images_campaign/{filename}', function ($filename) {
+    $path = Storage::path('images/images_campaign/' . $filename);
+    if (! File::exists($path)) {
         abort(404);
     }
     $file = File::get($path);
     $type = File::mimeType($path);
     $response = Response::make($file, 200);
-    $response->header("Content-Type", $type);
+    $response->header('Content-Type', $type);
+
     return $response;
 });
 
 Route::get('/email', function () {
-   return view('emails.campaigncreated');
+    return view('emails.campaigncreated');
 });

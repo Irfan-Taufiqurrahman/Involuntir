@@ -9,7 +9,8 @@ class IconRencanaPenggunaanDana extends Model
 {
     use HasFactory;
 
-    public function rencana() {
+    public function rencana()
+    {
         return $this->hasOne(RencanaPenggunaanDana::class);
     }
 }

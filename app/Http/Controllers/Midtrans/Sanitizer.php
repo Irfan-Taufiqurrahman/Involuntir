@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\Midtrans;
-use Illuminate\Http\Request; 
+
 use App\Http\Controllers\Controller;
 
 class Sanitizer extends Controller
@@ -10,19 +10,21 @@ class Sanitizer extends Controller
 
     public function __construct()
     {
-        $this->filters = array();
+        $this->filters = [];
     }
 
     /**
      * Validates and modify data
-     * 
-     * @param mixed[] $json
+     *
+     * @param  mixed[]  $json
      */
     public static function jsonRequest(&$json)
     {
-        $keys = array('item_details', 'customer_details');
+        $keys = ['item_details', 'customer_details'];
         foreach ($keys as $key) {
-            if (!array_key_exists($key, $json)) continue;
+            if (! array_key_exists($key, $json)) {
+                continue;
+            }
 
             $camel = static::upperCamelize($key);
             $function = "field$camel";
@@ -63,28 +65,30 @@ class Sanitizer extends Controller
 
         static::fieldPhone($field['phone']);
 
-        if (!empty($field['billing_address']) || !empty($field['shipping_address'])) {
-            $keys = array('billing_address', 'shipping_address');
+        if (! empty($field['billing_address']) || ! empty($field['shipping_address'])) {
+            $keys = ['billing_address', 'shipping_address'];
             foreach ($keys as $key) {
-                if (!array_key_exists($key, $field)) continue;
+                if (! array_key_exists($key, $field)) {
+                    continue;
+                }
 
                 $camel = static::upperCamelize($key);
                 $function = "field$camel";
                 static::$function($field[$key]);
             }
         }
-        
+
     }
 
     private static function fieldBillingAddress(&$field)
     {
-        $fields = array(
-            'first_name'   => 20,
-            'last_name'    => 20,
-            'address'      => 200,
-            'city'         => 20,
-            'country_code' => 10
-        );
+        $fields = [
+            'first_name' => 20,
+            'last_name' => 20,
+            'address' => 200,
+            'city' => 20,
+            'country_code' => 10,
+        ];
 
         foreach ($fields as $key => $value) {
             if (array_key_exists($key, $field)) {
@@ -121,7 +125,9 @@ class Sanitizer extends Controller
             ->maxLength(19)
             ->apply($field);
 
-        if ($plus) $field = '+' . $field;
+        if ($plus) {
+            $field = '+' . $field;
+        }
         $self = new self;
         $field = $self
             ->maxLength(19)
@@ -133,6 +139,7 @@ class Sanitizer extends Controller
         $this->filters[] = function ($input) use ($length) {
             return substr($input, 0, $length);
         };
+
         return $this;
     }
 
@@ -141,6 +148,7 @@ class Sanitizer extends Controller
         $this->filters[] = function ($input) use ($regex) {
             return preg_replace("/[^$regex]/", '', $input);
         };
+
         return $this;
     }
 
@@ -149,6 +157,7 @@ class Sanitizer extends Controller
         foreach ($this->filters as $filter) {
             $input = call_user_func($filter, $input);
         }
+
         return $input;
     }
 

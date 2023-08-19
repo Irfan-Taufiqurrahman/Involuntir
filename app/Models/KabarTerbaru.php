@@ -9,7 +9,7 @@ class KabarTerbaru extends Model
 {
     use HasFactory;
 
-    protected $fillable = ["judul", "body", 'campaign_id', 'user_id'];
+    protected $fillable = ['judul', 'body', 'campaign_id', 'user_id'];
 
     public function campaign()
     {

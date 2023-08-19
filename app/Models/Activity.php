@@ -2,18 +2,18 @@
 
 namespace App\Models;
 
+use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Cviebrock\EloquentSluggable\Sluggable;
 
 class Activity extends Model
 {
     use HasFactory, SoftDeletes;
     use Sluggable;
-    protected $table = "activities";
+
+    protected $table = 'activities';
 
     protected $fillable = [
         'category_id',
@@ -30,7 +30,7 @@ class Activity extends Model
         'status_publish',
         'status',
         'kuota',
-        'tautan'
+        'tautan',
     ];
 
     protected $casts = ['kuota' => 'integer'];
@@ -41,8 +41,8 @@ class Activity extends Model
     {
         return [
             'judul_slug' => [
-                'source' => 'judul_activity'
-            ]
+                'source' => 'judul_activity',
+            ],
         ];
     }
 
@@ -51,14 +51,17 @@ class Activity extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function category() {
+    public function category()
+    {
         return $this->belongsTo(Category::class);
     }
 
-    public function getTipeActivityAttribute($value) {
-        if($value === 'In-Person') {
+    public function getTipeActivityAttribute($value)
+    {
+        if ($value === 'In-Person') {
             return 'Tatap Muka';
         }
+
         return $value;
     }
 }

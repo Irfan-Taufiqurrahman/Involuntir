@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\Midtrans;
-use Illuminate\Http\Request; 
+
 use App\Http\Controllers\Controller;
 
 class Snap extends Controller
@@ -9,7 +9,7 @@ class Snap extends Controller
     public static function getSnapToken($params)
     {
         // return (Snap::createTransaction($params)->token);
-        return (Snap::createTransaction($params));
+        return Snap::createTransaction($params);
     }
 
     /**
@@ -27,18 +27,19 @@ class Snap extends Controller
      *   $paymentUrl = Snap::getSnapToken($params);
      * ```
      *
-     * @param  array $params Payment options
+     * @param  array  $params Payment options
      * @return object Snap response (token and redirect_url).
+     *
      * @throws Exception curl error or midtrans error
      */
     public static function createTransaction($params)
     {
-        $payloads = array(
-        'credit_card' => array(
-            // 'enabled_payments' => array('credit_card'),
-            'secure' => Config::$is3ds
-        )
-        );
+        $payloads = [
+            'credit_card' => [
+                // 'enabled_payments' => array('credit_card'),
+                'secure' => Config::$is3ds,
+            ],
+        ];
 
         if (array_key_exists('item_details', $params)) {
             $gross_amount = 0;
@@ -61,5 +62,5 @@ class Snap extends Controller
         );
 
         return $result;
-    }  
+    }
 }

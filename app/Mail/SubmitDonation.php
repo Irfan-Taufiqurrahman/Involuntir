@@ -3,9 +3,7 @@
 namespace App\Mail;
 
 use Carbon\Carbon;
-use DateTime;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
@@ -18,10 +16,12 @@ class SubmitDonation extends Mailable
      *
      * @return void
      */
-
     protected $nama_lengkap;
+
     protected $nominal;
+
     protected $metode;
+
     protected $judul_campaign;
 
     public function __construct($nama_lengkap, $nominal, $metode, $judul_campaign)
@@ -38,10 +38,10 @@ class SubmitDonation extends Mailable
      * @return $this
      */
     public function build()
-    {   
-        
+    {
+
         $besok = Carbon::tomorrow(new \DateTimeZone('Asia/Jakarta'))->isoFormat('dddd, D MMMM Y');
-        
+
         return $this->subject('Instruksi Transaksi')
             ->from('noreply@peduly.com', 'Peduly')
             ->view('emails.instruksi')->with([
@@ -49,7 +49,7 @@ class SubmitDonation extends Mailable
                 'nominal' => $this->nominal,
                 'metode' => $this->metode,
                 'judul' => $this->judul_campaign,
-                'hari' => $besok
+                'hari' => $besok,
             ]);
     }
 }

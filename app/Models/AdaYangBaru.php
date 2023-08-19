@@ -9,7 +9,7 @@ class AdaYangBaru extends Model
     protected $fillable = [
         'judul',
         'tanggal',
-        'deskripsi'
+        'deskripsi',
     ];
 
     // table

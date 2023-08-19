@@ -9,9 +9,10 @@ class UrgentCampaign extends Model
 {
     use HasFactory;
 
-    protected $fillable = ["campaign_id"];
+    protected $fillable = ['campaign_id'];
 
-    public function campaign() {
+    public function campaign()
+    {
         return $this->belongsTo(Campaign::class);
     }
 }

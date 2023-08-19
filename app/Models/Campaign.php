@@ -2,18 +2,19 @@
 
 namespace App\Models;
 
+use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Cviebrock\EloquentSluggable\Sluggable;
 
 class Campaign extends Model
 {
     use HasFactory, SoftDeletes;
     use Sluggable;
-    protected $table = "campaigns";
+
+    protected $table = 'campaigns';
 
     protected $fillable = [
         'judul_campaign',
@@ -48,7 +49,7 @@ class Campaign extends Model
         'ajakan',
         'status_publish',
         'category_id',
-        'email_sent_at'
+        'email_sent_at',
     ];
 
     protected $dates = ['deleted_at'];
@@ -57,8 +58,8 @@ class Campaign extends Model
     {
         return [
             'judul_slug' => [
-                'source' => 'judul_campaign'
-            ]
+                'source' => 'judul_campaign',
+            ],
         ];
     }
 
@@ -67,7 +68,8 @@ class Campaign extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function urgent() {
+    public function urgent()
+    {
         return $this->hasOne(UrgentCampaign::class);
     }
 
@@ -76,19 +78,23 @@ class Campaign extends Model
         return $this->hasMany(Donation::class);
     }
 
-    public function totalDonations() {
+    public function totalDonations()
+    {
         return $this->donations->sum('donasi');
     }
 
-    public function kabar_terbaru() {
+    public function kabar_terbaru()
+    {
         return $this->hasMany(KabarTerbaru::class);
     }
 
-    public function wishlists() {
+    public function wishlists()
+    {
         return $this->hasMany(Wishlist::class);
     }
 
-    public function category() {
+    public function category()
+    {
         return $this->belongsTo(Category::class);
     }
 }

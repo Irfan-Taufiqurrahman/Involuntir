@@ -3,7 +3,6 @@
 namespace App\Mail;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
@@ -17,6 +16,7 @@ class MailVerification extends Mailable
      * @return void
      */
     protected $user;
+
     protected $link;
 
     public function __construct($user, $link)
@@ -36,8 +36,8 @@ class MailVerification extends Mailable
             ->from('noreply@peduly.com', 'Peduly')
             ->view('emails.verify_email')
             ->with([
-                'user'=>$this->user->name,
-                'link'=>$this->link
+                'user' => $this->user->name,
+                'link' => $this->link,
             ]);
     }
 }

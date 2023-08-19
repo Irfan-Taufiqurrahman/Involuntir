@@ -1,18 +1,21 @@
 <?php
 
 namespace App\Http\Controllers\Midtrans;
-use Illuminate\Http\Request;
+
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 
 class Config extends Controller
 {
-    public static $serverKey = "SB-Mid-server-SfD9vYaMCswFXQk_y4aiVmpZ";
+    public static $serverKey = 'SB-Mid-server-SfD9vYaMCswFXQk_y4aiVmpZ';
+
     /**
      * Your merchant's client key
      *
      * @static
      */
     public static $clientKey;
+
     /**
      * True for production
      * false for sandbox mode
@@ -20,12 +23,14 @@ class Config extends Controller
      * @static
      */
     public static $isProduction = true;
+
     /**
      * Set it true to enable 3D Secure by default
      *
      * @static
      */
     public static $is3ds = false;
+
     /**
      * Enable request params sanitizer (validate and modify charge request params).
      * See Midtrans_Sanitizer for more details
@@ -33,16 +38,20 @@ class Config extends Controller
      * @static
      */
     public static $isSanitized = false;
+
     /**
      * Default options for every request
      *
      * @static
      */
-    public static $curlOptions = array();
+    public static $curlOptions = [];
 
     const SANDBOX_BASE_URL = 'https://api.sandbox.midtrans.com/v2';
+
     const PRODUCTION_BASE_URL = 'https://api.midtrans.com/v2';
+
     const SNAP_SANDBOX_BASE_URL = 'https://app.sandbox.midtrans.com/snap/v1';
+
     const SNAP_PRODUCTION_BASE_URL = 'https://app.midtrans.com/snap/v1';
 
     /**

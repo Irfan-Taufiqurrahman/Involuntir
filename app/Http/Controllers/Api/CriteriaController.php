@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Models\Criteria;
 use App\Models\Activity;
+use App\Models\Criteria;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -13,16 +13,17 @@ class CriteriaController extends Controller
     public function create(Request $request, Activity $activity)
     {
         Validator::make($request->all(), [
-            'deskripsi' => 'required|string'
+            'deskripsi' => 'required|string',
         ]);
         $activity = Activity::find($activity->id);
 
-        if(!$activity)
+        if (! $activity) {
             return response()->json(['message' => 'id tidak ditemukan']);
+        }
 
         $criteria = Criteria::create([
             'activity_id' => $activity->id,
-            'deskripsi' => $request->deskripsi
+            'deskripsi' => $request->deskripsi,
         ]);
 
         return response()->json($criteria);
@@ -31,8 +32,8 @@ class CriteriaController extends Controller
     public function show(Activity $activity)
     {
         $data = Criteria::join('activities', 'activity_id', '=', 'activities.id')
-                ->where('activity_id', $activity->id)
-                ->get(['criterias.id', 'activity_id', 'deskripsi']);
+            ->where('activity_id', $activity->id)
+            ->get(['criterias.id', 'activity_id', 'deskripsi']);
 
         return response()->json($data);
     }
@@ -40,12 +41,13 @@ class CriteriaController extends Controller
     public function update(Request $request, $id)
     {
         Validator::make($request->all(), [
-            'deskripsi' => 'required|string'
+            'deskripsi' => 'required|string',
         ]);
         $criteria = Criteria::find($id);
 
-        if (!$criteria)
+        if (! $criteria) {
             return response()->json(['message' => 'id tidak ditemukan']);
+        }
 
         $criteria->deskripsi = $request->deskripsi;
         $criteria->save();
@@ -57,8 +59,9 @@ class CriteriaController extends Controller
     {
         $criteria = Criteria::find($id);
 
-        if (!$criteria)
+        if (! $criteria) {
             return response()->json(['message' => 'id tidak ditemukan']);
+        }
 
         $criteria->delete();
 

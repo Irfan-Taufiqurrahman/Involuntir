@@ -3,7 +3,6 @@
 namespace App\Mail;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
@@ -17,6 +16,7 @@ class resetMail extends Mailable
      * @return void
      */
     protected $user;
+
     protected $link;
 
     public function __construct($user, $link)
@@ -36,8 +36,8 @@ class resetMail extends Mailable
             ->from('noreply@peduly.com', 'Peduly')
             ->view('emails.resetEmail')
             ->with([
-                'user'=>$this->user->name,
-                'link'=>$this->link
+                'user' => $this->user->name,
+                'link' => $this->link,
             ]);
     }
 }

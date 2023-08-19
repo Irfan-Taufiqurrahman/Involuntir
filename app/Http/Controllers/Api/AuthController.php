@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Mail\MailVerification;
 use App\Models\KodeReferal;
 use App\Models\User;
+use DB;
 use GuzzleHttp\Exception\ClientException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -15,26 +16,26 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use Laravel\Socialite\Facades\Socialite;
-use Namshi\JOSE\JWT;
-use Tymon\JWTAuth\Facades\JWTAuth;
 use Tymon\JWTAuth\Exceptions\JWTException;
-use DB;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 class AuthController extends Controller
 {
-    private function generateKodeReferal() {
+    private function generateKodeReferal()
+    {
         $user = DB::table('users')->select('id', 'role')
-                                  ->where('id', '=', Auth::user()->id)
-                                  ->first();
+            ->where('id', '=', Auth::user()->id)
+            ->first();
 
-        if ($user->role == 'Fundraiser')
+        if ($user->role == 'Fundraiser') {
             $kodeReferal = 'FR';
-        else if ($user->role == 'Volunteer')
+        } elseif ($user->role == 'Volunteer') {
             $kodeReferal = 'VLNTR';
-        else
+        } else {
             $kodeReferal = 'PDLY';
-        
-        return $kodeReferal.$user->id;
+        }
+
+        return $kodeReferal . $user->id;
     }
 
     public function login(Request $request)
@@ -42,14 +43,14 @@ class AuthController extends Controller
         $credentials = $request->only('email', 'password');
 
         try {
-            if (!$token = JWTAuth::attempt($credentials)) {
+            if (! $token = JWTAuth::attempt($credentials)) {
                 return response()->json(['error' => 'invalid_credentials'], 400);
             }
             $user = User::where('email', $request->email)->first();
-            if(!KodeReferal::where('id_user', $user->id)->first()) {
+            if (! KodeReferal::where('id_user', $user->id)->first()) {
                 KodeReferal::create([
                     'id_user' => $user->id,
-                    'kode_referal' => $this->generateKodeReferal()
+                    'kode_referal' => $this->generateKodeReferal(),
                 ]);
             }
         } catch (JWTException $e) {
@@ -64,7 +65,7 @@ class AuthController extends Controller
         $validator = Validator::make(request()->only('name', 'email', 'password'), [
             'name' => 'required|min:2|max:20',
             'email' => 'required|email|unique:users',
-            'password' => 'required|min:8'
+            'password' => 'required|min:8',
         ]);
 
         if ($validator->fails()) {
@@ -74,7 +75,7 @@ class AuthController extends Controller
         $user = User::create([
             'name' => request()->name,
             'email' => request()->email,
-            'password' => Hash::make(request()->password)
+            'password' => Hash::make(request()->password),
         ]);
 
         // KodeReferal::create([
@@ -99,7 +100,7 @@ class AuthController extends Controller
         $validator = Validator::make(request()->only('name', 'email', 'password'), [
             'name' => 'required|min:2|max:20',
             'email' => 'required|email|unique:users',
-            'password' => 'required|min:8'
+            'password' => 'required|min:8',
         ]);
 
         if ($validator->fails()) {
@@ -109,11 +110,12 @@ class AuthController extends Controller
         $user = new User([
             'name' => request()->name,
             'email' => request()->email,
-            'password' => Hash::make(request()->password)
+            'password' => Hash::make(request()->password),
         ]);
         $token = JWTAuth::fromUser($user);
 
         $user->sendEmailVerificationNotification();
+
         return response()->json(compact('user', 'token'), 201);
     }
 
@@ -126,23 +128,23 @@ class AuthController extends Controller
             JWTAuth::parseToken()->invalidate($token);
 
             return response()->json([
-                'error'   => false,
-                'message' => trans('auth.logged_out')
+                'error' => false,
+                'message' => trans('auth.logged_out'),
             ]);
         } catch (TokenExpiredException $exception) {
             return response()->json([
-                'error'   => true,
-                'message' => trans('auth.token.expired')
+                'error' => true,
+                'message' => trans('auth.token.expired'),
             ], 401);
         } catch (TokenInvalidException $exception) {
             return response()->json([
-                'error'   => true,
-                'message' => trans('auth.token.invalid')
+                'error' => true,
+                'message' => trans('auth.token.invalid'),
             ], 401);
         } catch (JWTException $exception) {
             return response()->json([
-                'error'   => true,
-                'message' => trans('auth.token.missing')
+                'error' => true,
+                'message' => trans('auth.token.missing'),
             ], 500);
         }
     }
@@ -152,20 +154,20 @@ class AuthController extends Controller
         $user = User::where('email', $request->email)->first();
 
         if ($user) {
-            if (!$user->hasVerifiedEmail()) {
-                return response()->json(["error" => true, "message" => "email belum diverifikasi"], 401);
+            if (! $user->hasVerifiedEmail()) {
+                return response()->json(['error' => true, 'message' => 'email belum diverifikasi'], 401);
             }
 
-            return response()->json(["error" => false, "message" => "email sudah diverifikasi"], 200);
+            return response()->json(['error' => false, 'message' => 'email sudah diverifikasi'], 200);
         }
 
-        return response()->json(["error" => true, "message" => "email tidak ditemukan"], 404);
+        return response()->json(['error' => true, 'message' => 'email tidak ditemukan'], 404);
     }
 
     public function getAuthenticatedUser()
     {
         try {
-            if (!$user = JWTAuth::parseToken()->authenticate()) {
+            if (! $user = JWTAuth::parseToken()->authenticate()) {
                 return response()->json(['user_not_found'], 404);
             }
             $user->balance;
@@ -187,15 +189,15 @@ class AuthController extends Controller
 
         $user = auth('api')->user();
 
-        if (!$user) {
-            return response()->json(["error" => true, "message" => "token invalid"]);
+        if (! $user) {
+            return response()->json(['error' => true, 'message' => 'token invalid']);
         }
 
         $link = env('APP_URL') . "/email/verification?email=$user->email&token=$token";
 
         Mail::to($user->email)->send(new MailVerification($user, $link));
 
-        return response()->json(["error" => false, "message" => "email verifikasi sudah terkirim"], 201);
+        return response()->json(['error' => false, 'message' => 'email verifikasi sudah terkirim'], 201);
     }
 
     public function redirectToGoogle()

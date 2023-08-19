@@ -10,17 +10,16 @@ class IsAdmin
     /**
      * Handle an incoming request.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure  $next
      * @return mixed
      */
     public function handle(Request $request, Closure $next)
     {
-        if (!auth()->check() || auth()->user()->role !== 'Admin') {
+        if (! auth()->check() || auth()->user()->role !== 'Admin') {
             auth()->logout();
             // abort(403);
             return redirect('/');
         }
+
         return $next($request);
     }
 }

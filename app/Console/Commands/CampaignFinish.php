@@ -43,14 +43,11 @@ class CampaignFinish extends Command
         //Dapatkan tanggal hari ini
         $now = Carbon::now()->format('Y-m-d');
 
-        Campaign::whereDate('batas_waktu_campaign','<', $now)->update([
-            'status' => 'Selesai'
-            
+        Campaign::whereDate('batas_waktu_campaign', '<', $now)->update([
+            'status' => 'Selesai',
+
         ]);
         Log::info($now);
 
-
-
-        
     }
 }

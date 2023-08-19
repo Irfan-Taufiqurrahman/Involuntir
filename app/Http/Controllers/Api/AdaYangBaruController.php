@@ -9,12 +9,15 @@ use Illuminate\Support\Facades\Validator;
 
 class AdaYangBaruController extends Controller
 {
-    private function timestamp_to_date($timestamp) {
+    private function timestamp_to_date($timestamp)
+    {
         $date = date('Y-m-d', strtotime($timestamp));
-        $months = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
+        $months = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
         $splittedDate = explode('-', $date);
-        return $splittedDate[2] . ' ' . $months[(int)$splittedDate[1]] . ' ' . $splittedDate[0];
+
+        return $splittedDate[2] . ' ' . $months[(int) $splittedDate[1]] . ' ' . $splittedDate[0];
     }
+
     public function index()
     {
         $data = AdaYangBaru::orderBy('tanggal', 'DESC')->get();
@@ -31,20 +34,20 @@ class AdaYangBaruController extends Controller
         $validator = Validator::make($request->all(), [
             'judul' => 'required|string|max:255',
             'tanggal' => 'required|date',
-            'deskripsi' => 'nullable|string|max:1000'
+            'deskripsi' => 'nullable|string|max:1000',
         ]);
 
         if ($validator->fails()) {
             return response()->json([
                 'message' => 'Validation Error',
-                'errors' => $validator->errors()
+                'errors' => $validator->errors(),
             ], 400);
-        };
+        }
 
         $adaYangBaru = AdaYangBaru::create([
             'judul' => $request->judul,
             'tanggal' => $request->tanggal,
-            'deskripsi' => $request->deskripsi
+            'deskripsi' => $request->deskripsi,
         ]);
 
         return response()->json(['message' => 'Berhasil menambahkan data', 'data' => $adaYangBaru, 'error' => false]);
@@ -54,28 +57,32 @@ class AdaYangBaruController extends Controller
     {
         $adaYangBaru = AdaYangBaru::find($id);
 
-        if (!$adaYangBaru)
+        if (! $adaYangBaru) {
             return response()->json(['message' => 'id tidak ditemukan']);
+        }
 
         $validator = Validator::make($request->all(), [
             'judul' => 'string|max:255',
             'tanggal' => 'date',
-            'deskripsi' => 'nullable|string|max:1000'
+            'deskripsi' => 'nullable|string|max:1000',
         ]);
 
         if ($validator->fails()) {
             return response()->json([
                 'message' => 'Validation Error',
-                'errors' => $validator->errors()
+                'errors' => $validator->errors(),
             ], 400);
-        };
+        }
 
-        if ($request->has('judul'))
+        if ($request->has('judul')) {
             $adaYangBaru->judul = $request->judul;
-        if ($request->has('tanggal'))
+        }
+        if ($request->has('tanggal')) {
             $adaYangBaru->tanggal = $request->tanggal;
-        if ($request->has('deskripsi'))
+        }
+        if ($request->has('deskripsi')) {
             $adaYangBaru->deskripsi = $request->deskripsi;
+        }
 
         $adaYangBaru->save();
 
@@ -86,8 +93,9 @@ class AdaYangBaruController extends Controller
     {
         $adaYangBaru = AdaYangBaru::find($id);
 
-        if (!$adaYangBaru)
+        if (! $adaYangBaru) {
             return response()->json(['message' => 'id tidak ditemukan']);
+        }
 
         $adaYangBaru->delete();
 

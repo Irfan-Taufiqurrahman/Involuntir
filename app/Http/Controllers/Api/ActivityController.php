@@ -6,46 +6,39 @@ use App\Http\Controllers\Controller;
 // use App\Mail\ActivityCreated;
 use App\Models\Activity;
 use App\Models\Category;
-use App\Models\Participation;
-use App\Models\KabarTerbaru;
-use App\Models\Task;
 use App\Models\Criteria;
+use App\Models\Participation;
+use App\Models\Task;
 use Carbon\Carbon;
-use Error;
+use Cviebrock\EloquentSluggable\Services\SlugService;
+use Illuminate\Http\Client\HttpClientException;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
-use Cviebrock\EloquentSluggable\Services\SlugService;
-use Illuminate\Http\Client\HttpClientException;
-use Illuminate\Log\Logger;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Storage;
-use phpDocumentor\Reflection\Types\Boolean;
-use Symfony\Component\HttpFoundation\Test\Constraint\ResponseIsRedirected;
 
 class ActivityController extends Controller
 {
-    private $data = NULL;
+    private $data = null;
 
     private function categoryFiltering($id)
     {
-        $this->data = Activity::where("category_id", $id);
+        $this->data = Activity::where('category_id', $id);
     }
 
     private function orderByFiltering($order)
     {
-        if ($order === "mendesak") {
-            $this->data = $this->data ? $this->data->orderBy("activities.batas_waktu", 'ASC') : Activity::orderBy("activities.batas_waktu", 'ASC');
-        } else if ($order === "populer") {
+        if ($order === 'mendesak') {
+            $this->data = $this->data ? $this->data->orderBy('activities.batas_waktu', 'ASC') : Activity::orderBy('activities.batas_waktu', 'ASC');
+        } elseif ($order === 'populer') {
             $this->data = $this->data ? $this->data->orderBy(DB::raw('total_volunteer'), 'DESC') : Activity::orderBy(DB::raw('total_volunteer'), 'DESC');
-        } else if ($order === "terbaru") {
+        } elseif ($order === 'terbaru') {
             $this->data = $this->data ? $this->data->orderBy('activities.created_at', 'DESC') : Activity::orderBy('activities.created_at', 'DESC');
         } else {
-            throw new HttpClientException("invalid order key", 400);
+            throw new HttpClientException('invalid order key', 400);
         }
     }
 
@@ -54,16 +47,16 @@ class ActivityController extends Controller
         $roles = [
             'peduly' => 'users.tipe = "Fundraiser" OR users.tipe = "Volunteer"',
             'organisasi' => 'users.tipe = "organisasi"',
-            'pribadi' => 'users.tipe = "pribadi" OR users.tipe = "Individu"'
+            'pribadi' => 'users.tipe = "pribadi" OR users.tipe = "Individu"',
         ];
 
-        if (!array_key_exists($filter, $roles)) {
-            throw new HttpClientException("invalid filter key", 400);
+        if (! array_key_exists($filter, $roles)) {
+            throw new HttpClientException('invalid filter key', 400);
         }
 
-        $this->data = $this->data ? $this->data->join('users', 'users.id', "=", 'activities.user_id')
+        $this->data = $this->data ? $this->data->join('users', 'users.id', '=', 'activities.user_id')
             ->whereRaw($roles[$filter])
-            : Activity::join('users', 'users.id', "=", 'activities.user_id')->whereRaw($roles[$filter]);
+            : Activity::join('users', 'users.id', '=', 'activities.user_id')->whereRaw($roles[$filter]);
     }
 
     private function getAllActivitiesWithoutFiltering()
@@ -97,25 +90,25 @@ class ActivityController extends Controller
 
             $activities = $this->data ? $this->data : $this->getAllActivitiesWithoutFiltering();
 
-            $joinWithRelatedTables = $activities->leftJoin("participations", "participations.activity_id", "=", "activities.id")
-                ->groupBy("activities.id")
+            $joinWithRelatedTables = $activities->leftJoin('participations', 'participations.activity_id', '=', 'activities.id')
+                ->groupBy('activities.id')
                 ->where('status_publish', 'published')
-                ->orWhere('status_publish', NULL)
+                ->orWhere('status_publish', null)
                 ->get([
                     'activities.id',
-                    "judul_activity",
-                    "judul_slug",
-                    "foto_activity",
-                    "batas_waktu",
-                    "activities.created_at",
-                    "tipe_activity",
+                    'judul_activity',
+                    'judul_slug',
+                    'foto_activity',
+                    'batas_waktu',
+                    'activities.created_at',
+                    'tipe_activity',
                     DB::raw("CONCAT(DATEDIFF(batas_waktu, CURRENT_DATE), ' hari') as sisa_waktu"),
-                    DB::raw("COUNT(participations.id) as total_volunteer")
+                    DB::raw('COUNT(participations.id) as total_volunteer'),
                 ]);
 
-            return response()->json(["data" => $joinWithRelatedTables]);
+            return response()->json(['data' => $joinWithRelatedTables]);
         } catch (HttpClientException $err) {
-            return response()->json(["message" => $err->getMessage()], $err->getCode());
+            return response()->json(['message' => $err->getMessage()], $err->getCode());
         }
     }
 
@@ -135,7 +128,6 @@ class ActivityController extends Controller
         $activist = DB::table('users')
             ->where('id', $id_activist)
             ->get(['username', 'photo', 'name', 'status_akun', 'role', 'tipe', 'jenis_organisasi']);
-
 
         $total_volunteer = DB::table('participations')
             ->select(DB::raw('COUNT(participations.id) as total_volunteer'))
@@ -169,8 +161,8 @@ class ActivityController extends Controller
                 'volunteer' => $volunteer,
                 'tugas' => $tasks,
                 'kriteria' => $criterias,
-                'is_mine' => $user ? ($user->id === $id_activist) : false
-            ]
+                'is_mine' => $user ? ($user->id === $id_activist) : false,
+            ],
         ]);
     }
 
@@ -198,8 +190,8 @@ class ActivityController extends Controller
                 'activity' => $activity,
                 'total_volunteer' => $total_volunteer,
                 'tugas' => $tasks,
-                'kriteria' => $criterias
-            ]
+                'kriteria' => $criterias,
+            ],
         ]);
     }
 
@@ -208,26 +200,30 @@ class ActivityController extends Controller
         $validator = Validator::make($request->all(), [
             $imageName => 'image|mimes:jpeg,png,jpg|max:1024',
         ]);
+
         return $validator;
     }
 
     private function uploadImage(Request $request, $file, $judul_slug)
     {
-        $fileName     = $judul_slug . '.' . $request->file($file)->extension();
+        $fileName = $judul_slug . '.' . $request->file($file)->extension();
         $path = 'images/images_activity';
         $request->file($file)->move(public_path($path), $fileName);
+
         return env('APP_URL') . "/$path/$fileName";
     }
 
     public function publish(Request $request)
     {
         $request['status_publish'] = 'published';
+
         return $this->create($request);
     }
 
     public function draft(Request $request)
     {
         $request['status_publish'] = 'drafted';
+
         return $this->create($request);
     }
 
@@ -239,16 +235,16 @@ class ActivityController extends Controller
         if ($request->status_publish === 'published') {
             // dicek dulu lah
             $rules = [
-                'category_id'     => 'required|numeric',
-                'judul_activity'  => 'required|string|max:255',
-                'foto_activity'   => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+                'category_id' => 'required|numeric',
+                'judul_activity' => 'required|string|max:255',
+                'foto_activity' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
                 'detail_activity' => 'required|string',
-                'batas_waktu'     => 'required|numeric',
-                'waktu_activity'  => 'required|string',
-                'lokasi'          => 'required|string|max:255',
-                'tipe_activity'   => 'required|in:Virtual,In-Person,Hybrid',
-                'kuota'           => 'required|numeric',
-                'tautan'          => 'required|string'
+                'batas_waktu' => 'required|numeric',
+                'waktu_activity' => 'required|string',
+                'lokasi' => 'required|string|max:255',
+                'tipe_activity' => 'required|in:Virtual,In-Person,Hybrid',
+                'kuota' => 'required|numeric',
+                'tautan' => 'required|string',
             ];
         }
 
@@ -260,11 +256,11 @@ class ActivityController extends Controller
 
         // check category_id is exist
         $category = Category::find($request->category_id);
-        if (!$category) {
+        if (! $category) {
             return response()->json(['message' => "category with id: $request->category_id not found!"]);
         }
 
-        $judul_slug = "";
+        $judul_slug = '';
         // dicek apakah ada custom slug
         if ($request->judul_slug) {
             // cek apakah slug sudah digunakan
@@ -278,7 +274,7 @@ class ActivityController extends Controller
             $judul_slug = SlugService::createSlug(Activity::class, 'judul_slug', request('judul_activity'));
         }
 
-        $foto_activity = NULL;
+        $foto_activity = null;
 
         if ($request->file('foto_activity')) {
             $validator = $this->imageValidation($request, 'foto_activity');
@@ -290,33 +286,33 @@ class ActivityController extends Controller
 
         $user = auth('api')->user();
 
-        if (!$user) {
+        if (! $user) {
             return response()->json(['message' => 'user not found!'], 404);
         }
 
         $activity = Activity::create([
-            'category_id'     => $category->id,
-            'user_id'         => $user->id,
-            'judul_activity'  => $request->judul_activity,
-            'judul_slug'      => $judul_slug,
-            'foto_activity'   => $foto_activity,
+            'category_id' => $category->id,
+            'user_id' => $user->id,
+            'judul_activity' => $request->judul_activity,
+            'judul_slug' => $judul_slug,
+            'foto_activity' => $foto_activity,
             'detail_activity' => $request->detail_activity,
-            'batas_waktu'     => Carbon::now()->addDays($request->batas_waktu),
-            'waktu_activity'  => $request->waktu_activity,
-            'lokasi'          => $request->lokasi,
-            'tipe_activity'   => $request->tipe_activity,
-            'status_publish'  => $request->status_publish,
-            'status'          => 'Pending',
-            'kuota'           => $request->kuota ? $request->kuota : 0,
-            'tautan'          => $request->tautan ? $request->tautan : 'involuntir',
-            'updated_at'      => $request->status_publish === 'published' ? Carbon::now() : null
+            'batas_waktu' => Carbon::now()->addDays($request->batas_waktu),
+            'waktu_activity' => $request->waktu_activity,
+            'lokasi' => $request->lokasi,
+            'tipe_activity' => $request->tipe_activity,
+            'status_publish' => $request->status_publish,
+            'status' => 'Pending',
+            'kuota' => $request->kuota ? $request->kuota : 0,
+            'tautan' => $request->tautan ? $request->tautan : 'involuntir',
+            'updated_at' => $request->status_publish === 'published' ? Carbon::now() : null,
         ]);
 
         $tasks = $request->tasks ? json_decode($request->tasks) : [];
         foreach ($tasks as $task) {
             $task = Task::create([
                 'activity_id' => $activity->id,
-                'deskripsi' => $task
+                'deskripsi' => $task,
             ]);
         }
 
@@ -326,7 +322,7 @@ class ActivityController extends Controller
         foreach ($criterias as $criteria) {
             Criteria::create([
                 'activity_id' => $activity->id,
-                'deskripsi' => $criteria
+                'deskripsi' => $criteria,
             ]);
         }
 
@@ -350,14 +346,14 @@ class ActivityController extends Controller
         if ($request->status_publish === 'published') {
             // dicek dulu lah
             $rules = [
-                'category_id'     => 'numeric',
-                'judul_activity'  => 'string|max:255',
-                'foto_activity'   => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+                'category_id' => 'numeric',
+                'judul_activity' => 'string|max:255',
+                'foto_activity' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
                 'detail_activity' => 'string',
-                'batas_waktu'     => 'numeric',
-                'waktu_activity'  => 'string',
-                'lokasi'          => 'string|max:255',
-                'tipe_activity'   => 'in:Virtual,In-Person,Hybrid'
+                'batas_waktu' => 'numeric',
+                'waktu_activity' => 'string',
+                'lokasi' => 'string|max:255',
+                'tipe_activity' => 'in:Virtual,In-Person,Hybrid',
             ];
         }
 
@@ -369,7 +365,7 @@ class ActivityController extends Controller
 
         // check category_id is exist
         $category_id = $request->category_id ? Category::find($request->category_id) : $activity->category_id;
-        if (!$category_id) {
+        if (! $category_id) {
             return response()->json(['message' => "category with id: $request->category not found!"]);
         }
 
@@ -390,7 +386,6 @@ class ActivityController extends Controller
         $lokasi = $request->lokasi ? $request->lokasi : $activity->lokasi;
 
         $tipe_activity = $request->tipe_activity ? $request->tipe_activity : $activity->tipe_activity;
-
 
         $foto_activity = $activity->foto_activity;
 
@@ -417,19 +412,18 @@ class ActivityController extends Controller
         // );
 
         $activity->update([
-            'category_id'     => $category_id,
-            'judul_activity'  => $judul_activity,
-            'judul_slug'      => $judul_slug,
-            'foto_activity'   => $foto_activity,
+            'category_id' => $category_id,
+            'judul_activity' => $judul_activity,
+            'judul_slug' => $judul_slug,
+            'foto_activity' => $foto_activity,
             'detail_activity' => $detail_activity,
-            'batas_waktu'     => $batas_waktu,
-            'waktu_activity'  => $waktu_activity,
-            'lokasi'          => $lokasi,
-            'tipe_activity'   => $tipe_activity,
-            'status_publish'  => $request->status_publish,
-            'updated_at'      => $request->status_publish === 'published' ? Carbon::now() : $activity->updated_at
+            'batas_waktu' => $batas_waktu,
+            'waktu_activity' => $waktu_activity,
+            'lokasi' => $lokasi,
+            'tipe_activity' => $tipe_activity,
+            'status_publish' => $request->status_publish,
+            'updated_at' => $request->status_publish === 'published' ? Carbon::now() : $activity->updated_at,
         ]);
-
 
         //      send email after campaign created
         // if($request->status_publish === 'published' && !$campaign->email_sent_at) {
@@ -447,7 +441,7 @@ class ActivityController extends Controller
     private function getCategory(Category $category)
     {
         return Activity::orderBy('activities.created_at')
-            ->where('category_id', $category->id)->leftJoin("participations", "participations.activity_id", "=", "activities.id")->groupBy("activities.id")->get(['activities.id', "judul_activity", "judul_slug", "foto_activity", "batas_waktu", "activities.created_at", DB::raw("COUNT(participations.id) as total_volunteer")]);
+            ->where('category_id', $category->id)->leftJoin('participations', 'participations.activity_id', '=', 'activities.id')->groupBy('activities.id')->get(['activities.id', 'judul_activity', 'judul_slug', 'foto_activity', 'batas_waktu', 'activities.created_at', DB::raw('COUNT(participations.id) as total_volunteer')]);
     }
 
     public function isExist($slug)
@@ -459,6 +453,7 @@ class ActivityController extends Controller
     {
         // old image is not deleted because this is a soft delete
         $activity->delete();
+
         return response()->json(['message' => 'berhasil menghapus activity'], 200);
     }
 
@@ -466,15 +461,15 @@ class ActivityController extends Controller
     {
         $user = Auth::user();
 
-        $activities = Activity::where('activities.user_id', $user->id)->leftJoin("participations", "participations.activity_id", "=", "activities.id")
-            ->groupBy("activities.id")->orderBy('activities.created_at', 'DESC')
+        $activities = Activity::where('activities.user_id', $user->id)->leftJoin('participations', 'participations.activity_id', '=', 'activities.id')
+            ->groupBy('activities.id')->orderBy('activities.created_at', 'DESC')
             ->get([
-                'activities.id', "judul_activity", "judul_slug",
-                "foto_activity", "batas_waktu",
-                "activities.created_at",
-                DB::raw("COUNT(participations.id) as total_volunteer")
+                'activities.id', 'judul_activity', 'judul_slug',
+                'foto_activity', 'batas_waktu',
+                'activities.created_at',
+                DB::raw('COUNT(participations.id) as total_volunteer'),
             ]);
 
-        return response()->json(["data" => $activities], 200);
+        return response()->json(['data' => $activities], 200);
     }
 }

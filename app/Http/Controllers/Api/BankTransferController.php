@@ -19,6 +19,7 @@ class BankTransferController extends Controller
     public function generateKode($prefix = 'INVD')
     {
         $time = str_replace('.', '', microtime(true));
+
         return $prefix . $time;
     }
 
@@ -31,11 +32,11 @@ class BankTransferController extends Controller
             'alamat_email' => 'required',
             'user_id' => 'required',
             'campaign_id' => 'required',
-            'bank_name' => 'required|min:3|in:bni,bri,mandiri,permata'
+            'bank_name' => 'required|min:3|in:bni,bri,mandiri,permata',
         ]);
 
-        if($validator->fails()) {
-            return response()->json(["message" => $validator->errors()], 400);
+        if ($validator->fails()) {
+            return response()->json(['message' => $validator->errors()], 400);
         }
 
         $nominal = $request->input('nominal');
@@ -51,11 +52,11 @@ class BankTransferController extends Controller
         $kode_donasi = $this->generateKode();
 
         $tanggal_donasi = Carbon::now(new \DateTimeZone('Asia/Jakarta'));
-        $deadline = date('created_at', strtotime("+1 day"));
+        $deadline = date('created_at', strtotime('+1 day'));
 
-        $campaign = Campaign::where("id", $campaign_id)->first();
+        $campaign = Campaign::where('id', $campaign_id)->first();
 
-        $campaign = $campaign ? $campaign : Campaign::where("judul_slug", $campaign_id)->first();
+        $campaign = $campaign ? $campaign : Campaign::where('judul_slug', $campaign_id)->first();
 
         try {
             $donation = new Donation();
@@ -78,26 +79,27 @@ class BankTransferController extends Controller
             $responsePayment = new BankPaymentService($donation, $campaign, $request->input('bank_name'));
             $response = $responsePayment->sendRequest();
 
-            if(isset($response->va_numbers[0]->va_number)) {
+            if (isset($response->va_numbers[0]->va_number)) {
                 $donation->nomor_va = $response->va_numbers[0]->va_number;
-            }else if(isset($response->permata_va_number)) {
+            } elseif (isset($response->permata_va_number)) {
                 $donation->nomor_va = $response->permata_va_number;
-            }else if(isset($response->bill_key) && isset($response->biller_code)) {
+            } elseif (isset($response->bill_key) && isset($response->biller_code)) {
                 $donation->nomor_va = $response->biller_code . ',' . $response->bill_key;
             }
 
             $donation->save();
 
             $donation->midtrans_response = $response;
-            
+
             DB::table('akun_anonim')->insert([
-                "id_donasi" => $donation->id,
-                "nama" => $nama_lengkap,
+                'id_donasi' => $donation->id,
+                'nama' => $nama_lengkap,
                 'email' => $email,
                 'no_hp' => $nomor_hp,
-                'kode_referal' => $kode_referensi
+                'kode_referal' => $kode_referensi,
             ]);
-            return response()->json(["data" => $donation, "msg" => "success"], 201);
+
+            return response()->json(['data' => $donation, 'msg' => 'success'], 201);
         } catch (Exception $err) {
             throw $err;
         }

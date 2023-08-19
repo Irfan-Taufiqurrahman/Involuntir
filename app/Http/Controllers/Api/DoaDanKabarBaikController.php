@@ -18,8 +18,8 @@ class DoaDanKabarBaikController extends Controller
         return response()->json([
             'data' => [
                 'doa' => $doa,
-                'user' => $doa->user
-            ]
+                'user' => $doa->user,
+            ],
         ]);
     }
 }

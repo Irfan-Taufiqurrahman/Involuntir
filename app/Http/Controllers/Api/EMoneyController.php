@@ -19,6 +19,7 @@ class EMoneyController extends Controller
     public function generateKode($prefix = 'INVD')
     {
         $time = str_replace('.', '', microtime(true));
+
         return $prefix . $time;
     }
 
@@ -31,11 +32,11 @@ class EMoneyController extends Controller
             'alamat_email' => 'required',
             'user_id' => 'required',
             'campaign_id' => 'required',
-            'emoney_name' => 'required|min:3|in:gopay,shopeepay,dana'
+            'emoney_name' => 'required|min:3|in:gopay,shopeepay,dana',
         ]);
 
-        if($validator->fails()) {
-            return response()->json(["message" => $validator->errors()], 400);
+        if ($validator->fails()) {
+            return response()->json(['message' => $validator->errors()], 400);
         }
 
         $nominal = $request->input('nominal');
@@ -51,9 +52,9 @@ class EMoneyController extends Controller
         $kode_donasi = $this->generateKode();
 
         $tanggal_donasi = Carbon::now(new \DateTimeZone('Asia/Jakarta'));
-        $deadline = date('created_at', strtotime("+1 day"));
+        $deadline = date('created_at', strtotime('+1 day'));
 
-        $campaign = Campaign::where("id", $campaign_id)->first();
+        $campaign = Campaign::where('id', $campaign_id)->first();
 
         $donation = new Donation();
         $donation->nama = $nama_lengkap;
@@ -69,7 +70,7 @@ class EMoneyController extends Controller
         $donation->deadline = $deadline;
         $donation->tanggal_donasi = $tanggal_donasi;
         $donation->status_donasi = 'Pending';
-        
+
         try {
             Mail::to($email)->send(new SubmitDonation($nama_lengkap, $nominal, $metode, $campaign->judul_campaign));
             $responsePayment = new EMoneyPaymentService($donation, 'gopay');
@@ -81,15 +82,15 @@ class EMoneyController extends Controller
             $donation->midtrans_response = $response;
 
             // i don't know why must the kode_referal must be inserted to akun_anonim table, the database structure is very annoying
-            DB::table('akun_anonim')->insert([ 
-                "id_donasi" => $donation->id,
-                "nama" => $nama_lengkap,
+            DB::table('akun_anonim')->insert([
+                'id_donasi' => $donation->id,
+                'nama' => $nama_lengkap,
                 'email' => $email,
                 'no_hp' => $nomor_hp,
-                'kode_referal' => $kode_referensi
+                'kode_referal' => $kode_referensi,
             ]);
 
-            return response()->json(["data" => $donation, "msg" => "success"], 201);
+            return response()->json(['data' => $donation, 'msg' => 'success'], 201);
         } catch (Exception $err) {
             return response()->json(['message' => $err->getMessage()], 400);
         }

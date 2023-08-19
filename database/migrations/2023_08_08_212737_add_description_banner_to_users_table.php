@@ -14,7 +14,7 @@ class AddDescriptionBannerToUsersTable extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->string('banner')->nullable()->after("photo");
+            $table->string('banner')->nullable()->after('photo');
             $table->string('description')->nullable()->after('banner');
         });
     }

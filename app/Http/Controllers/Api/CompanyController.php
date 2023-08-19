@@ -8,8 +8,9 @@ use Illuminate\Http\Request;
 
 class CompanyController extends Controller
 {
-    public function index(Request $request) {
-        if($request->has('latitude') && $request->has('longitude')) {
+    public function index(Request $request)
+    {
+        if ($request->has('latitude') && $request->has('longitude')) {
             $latitude = $request->latitude;
             $longitude = $request->longitude;
             // menggunakan rumus untuk menghitung jarak anatar user dan company
@@ -19,16 +20,16 @@ class CompanyController extends Controller
             ) + sin( radians(?) ) *
             sin( radians( latitude ) ) )
             ) AS distance', [$latitude, $longitude, $latitude])
-            ->having('distance', '!=', "")
-            ->orderBy('distance')
-            ->get();
+                ->having('distance', '!=', '')
+                ->orderBy('distance')
+                ->get();
         } else {
             $companies = Company::all();
         }
 
         return response()->json([
             'status' => 'success',
-            'data' => $companies
+            'data' => $companies,
         ]);
     }
 }

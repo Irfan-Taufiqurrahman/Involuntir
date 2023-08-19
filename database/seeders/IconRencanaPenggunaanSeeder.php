@@ -19,7 +19,7 @@ class IconRencanaPenggunaanSeeder extends Seeder
             ],
             [
                 'icon' => '/icon/icon/rencana_penggunaan/instagram.svg',
-            ]
+            ],
         ];
 
         \App\Models\IconRencanaPenggunaanDana::insert($data);

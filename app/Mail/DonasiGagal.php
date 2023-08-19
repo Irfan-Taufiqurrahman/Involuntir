@@ -3,7 +3,6 @@
 namespace App\Mail;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
@@ -16,12 +15,16 @@ class DonasiGagal extends Mailable
      *
      * @return void
      */
-
     protected $nominal;
+
     protected $metode;
-    protected $nama_donatur; 
-    protected $email; 
+
+    protected $nama_donatur;
+
+    protected $email;
+
     protected $judul_campaign;
+
     protected $nama_fundraiser;
 
     public function __construct($donation)
@@ -30,7 +33,7 @@ class DonasiGagal extends Mailable
         $this->nominal = number_format(floatval($donation->donasi));
         $this->metode = $donation->metode_pembayaran;
         $this->email = $donation->email;
-        $this->judul_campaign =  $donation->campaign->judul_campaign;
+        $this->judul_campaign = $donation->campaign->judul_campaign;
         $this->nama_fundraiser = $donation->nama_fundraiser;
     }
 

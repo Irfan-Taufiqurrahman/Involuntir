@@ -11,11 +11,8 @@ use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Validator;
-use Tymon\JWTAuth\Http\Parser\AuthHeaders;
 
 class FundraiserController extends Controller
 {
@@ -24,8 +21,9 @@ class FundraiserController extends Controller
         $data = DB::table('donations')
             ->orderBy('id', 'desc')
             ->get();
+
         return response()->json([
-            'data_donatur' => $data
+            'data_donatur' => $data,
         ]);
     }
 
@@ -40,7 +38,7 @@ class FundraiserController extends Controller
         //     ->orderBy('donations.id', 'desc')
         //     ->get();
 
-        $month_years = DB::table('kode_referal')->select("id", "kode_referal.kode_referal", DB::raw("DATE_FORMAT(donations.created_at, '%d-%m-%Y') as month_year"))->groupBy(DB::raw("DATE_FORMAT(donations.created_at, '%d-%m-%Y')"))->orderBy(DB::raw('donations.created_at'), 'desc')
+        $month_years = DB::table('kode_referal')->select('id', 'kode_referal.kode_referal', DB::raw("DATE_FORMAT(donations.created_at, '%d-%m-%Y') as month_year"))->groupBy(DB::raw("DATE_FORMAT(donations.created_at, '%d-%m-%Y')"))->orderBy(DB::raw('donations.created_at'), 'desc')
             ->join('akun_anonim', 'akun_anonim.kode_referal', '=', 'kode_referal.kode_referal')
             ->join('donations', 'donations.id', '=', 'akun_anonim.id_donasi')
             ->where('id_user', '=', $idFundraiser)
@@ -51,34 +49,36 @@ class FundraiserController extends Controller
 
         foreach ($month_years as $month_year) {
             array_push($data, [
-                "id" => $month_year->id,
-                "month_year" => $month_year->month_year,
-                "total_donasi" => $this->getTotalDonationsByMonthYear($month_year->month_year, $month_year->kode_referal),
-                "jumlah_donasi" => $this->getCountDonationsByMonthYear($month_year->month_year, $month_year->kode_referal),
-                "donasi" => $this->getDonationsByMonthYear($month_year->month_year, $month_year->kode_referal)
+                'id' => $month_year->id,
+                'month_year' => $month_year->month_year,
+                'total_donasi' => $this->getTotalDonationsByMonthYear($month_year->month_year, $month_year->kode_referal),
+                'jumlah_donasi' => $this->getCountDonationsByMonthYear($month_year->month_year, $month_year->kode_referal),
+                'donasi' => $this->getDonationsByMonthYear($month_year->month_year, $month_year->kode_referal),
             ]);
         }
 
         return response()->json([
-            $data
+            $data,
         ]);
     }
 
     public function getTotalDonationsByMonthYear($month_year, $kode_referal)
     {
         $total = DB::selectOne("select sum(donasi) as total_donasi from donations join akun_anonim on donations.id = akun_anonim.id_donasi where akun_anonim.kode_referal = '$kode_referal' AND DATE_FORMAT(donations.created_at, '%d-%m-%Y') = '$month_year' AND status_donasi = 'Approved' group by DATE_FORMAT(donations.created_at, '%d-%m-%Y')");
+
         return $total ? $total->total_donasi : 0;
     }
 
     public function getCountDonationsByMonthYear($month_year, $kode_referal)
     {
         $total = DB::selectOne("select count(id) as jumlah_donasi from donations join akun_anonim on donations.id = akun_anonim.id_donasi where akun_anonim.kode_referal = '$kode_referal' AND DATE_FORMAT(donations.created_at, '%d-%m-%Y') = '$month_year' AND status_donasi = 'Approved' group by DATE_FORMAT(donations.created_at, '%d-%m-%Y')");
+
         return $total ? $total->jumlah_donasi : 0;
     }
 
     public function getDonationsByMonthYear($month_year, $kode_referal)
     {
-        return Donation::where(DB::raw("DATE_FORMAT(donations.created_at, '%d-%m-%Y')"), $month_year)->join("users", "users.id", "=", "user_id")->join('akun_anonim', 'akun_anonim.id_donasi', '=', 'donations.id')->where('akun_anonim.kode_referal', $kode_referal)->orderBy('donations.created_at', 'desc')->get(["donations.id", "donations.user_id", "donations.nama", "donasi", "status_donasi", "donations.created_at", "metode_pembayaran", DB::raw("IF(metode_pembayaran = 'cod', 'Tunai', 'Transfer') as pembayaran")]);
+        return Donation::where(DB::raw("DATE_FORMAT(donations.created_at, '%d-%m-%Y')"), $month_year)->join('users', 'users.id', '=', 'user_id')->join('akun_anonim', 'akun_anonim.id_donasi', '=', 'donations.id')->where('akun_anonim.kode_referal', $kode_referal)->orderBy('donations.created_at', 'desc')->get(['donations.id', 'donations.user_id', 'donations.nama', 'donasi', 'status_donasi', 'donations.created_at', 'metode_pembayaran', DB::raw("IF(metode_pembayaran = 'cod', 'Tunai', 'Transfer') as pembayaran")]);
     }
 
     public function approve(Request $request)
@@ -97,16 +97,16 @@ class FundraiserController extends Controller
 
             Mail::to($data->email)->send(new DonasiBerhasil($data));
             $donation = Donation::where('id', $id_donasi)->first();
-            
+
             $donation->update([
-                'status_donasi' => 'Approved'
+                'status_donasi' => 'Approved',
             ]);
 
-            if($donation->komentar) {
+            if ($donation->komentar) {
                 Feed::create([
                     'user_id' => $donation->user_id,
                     'content' => $donation->komentar,
-                    'insertion_link' => env('FRONTEND_URL') . "/" . $data->campaign->judul_slug,
+                    'insertion_link' => env('FRONTEND_URL') . '/' . $data->campaign->judul_slug,
                     'insertion_link_title' => $donation->campaign->judul_campaign,
                 ]);
             }
@@ -125,7 +125,7 @@ class FundraiserController extends Controller
             DB::table('donations')
                 ->where('id', $id_donasi)
                 ->update([
-                    'status_donasi' => 'Rejected'
+                    'status_donasi' => 'Rejected',
                 ]);
             $data = Donation::with('campaign')->find($id_donasi);
 
@@ -136,13 +136,14 @@ class FundraiserController extends Controller
             }
 
             Mail::to($data->email)->send(new DonasiGagal($data));
+
             return response()->json(['status' => 201, 'msg' => 'success edited']);
         } catch (Exception $e) {
             return response()->json(['status' => 202, 'msg' => 'failed! error: ' . $e]);
         }
     }
 
-    function sqlRingkasanHarian($rawSQL, $idFundraiser, $date, $status = "Approved")
+    public function sqlRingkasanHarian($rawSQL, $idFundraiser, $date, $status = 'Approved')
     {
         return $this->baseSQL($idFundraiser)
             ->whereDate('donations.created_at', '=', $date)
@@ -151,7 +152,7 @@ class FundraiserController extends Controller
             ->first();
     }
 
-    function sqlWeeklyReport($idFundraiser, $date, $status = "Approved")
+    public function sqlWeeklyReport($idFundraiser, $date, $status = 'Approved')
     {
         return $this->baseSQL($idFundraiser)
             ->whereRaw('donations.created_at >= DATE_ADD(DATE(?), INTERVAL - WEEKDAY(CURDATE()) DAY)', $date)
@@ -161,7 +162,7 @@ class FundraiserController extends Controller
             ->get();
     }
 
-    function baseSQL($idFundraiser)
+    public function baseSQL($idFundraiser)
     {
         return DB::table('kode_referal')
             ->join('akun_anonim', 'akun_anonim.kode_referal', '=', 'kode_referal.kode_referal')
@@ -174,7 +175,6 @@ class FundraiserController extends Controller
         $idFundraiser = $request->input('id_fundraiser');
         $date = $request->input('date'); //format YYYY-MM-DD
         $kemarin = date('Y-m-d', strtotime('-1 day', strtotime($date)));
-
 
         $sumDonasiBerhasil = $this->sqlRingkasanHarian(
             'sum(donations.donasi) donasi_berhasil',
@@ -277,7 +277,7 @@ class FundraiserController extends Controller
             ['report_3_harian' => $sum3dayago],
             ['top_donatur' => $topdonatur],
             ['top_fundraiser' => $topfundraiser],
-            ['list_donatur' => $listdonatur]
+            ['list_donatur' => $listdonatur],
         ]);
     }
 
@@ -299,32 +299,33 @@ class FundraiserController extends Controller
                 ->where('kode_referal', $kode_referal)
                 ->first();
 
-            $transaksiTerakhir = DB::table("akun_anonim")->join('donations', 'id_donasi', '=', 'donations.id')
+            $transaksiTerakhir = DB::table('akun_anonim')->join('donations', 'id_donasi', '=', 'donations.id')
                 ->where('kode_referal', $kode_referal)
                 ->join('users', 'users.id', 'donations.id')
-                ->select(["donations.id", "donations.user_id", "donations.nama", "donasi", "status_donasi", "donations.created_at", "metode_pembayaran", DB::raw("IF(metode_pembayaran = 'cod', 'Tunai', 'Transfer') as pembayaran")])
+                ->select(['donations.id', 'donations.user_id', 'donations.nama', 'donasi', 'status_donasi', 'donations.created_at', 'metode_pembayaran', DB::raw("IF(metode_pembayaran = 'cod', 'Tunai', 'Transfer') as pembayaran")])
                 ->where(DB::raw('Date(donations.created_at)'), Carbon::today())
                 ->orderBy('created_at', 'desc')->limit(4)->get();
 
             $komisi = (15 / 100 * intval($allTransaksi->total_komisi));
 
             return response()->json([
-                "nama" => $user->name,
-                "kode_referal" => $kode_referal,
+                'nama' => $user->name,
+                'kode_referal' => $kode_referal,
                 'total_komisi' => intval($komisi),
                 'semua' => intval($allTransaksi->total_komisi),
                 'total_donasi_hari_ini' => intval($transaksiHariIni->total_donasi_hari_ini),
                 'uang_terkumpul_hari_ini' => intval($transaksiHariIni->uang_terkumpul_hari_ini),
-                'transaksi_terakhir' => $transaksiTerakhir
+                'transaksi_terakhir' => $transaksiTerakhir,
             ]);
         }
 
-        return response()->json(["Kode referal tidak ada"], 404);
+        return response()->json(['Kode referal tidak ada'], 404);
     }
 
     public function detailDonation(Request $request)
     {
-        $donation = DB::table('donations')->where('donations.id', $request->id)->join('campaigns', 'campaigns.id', '=', 'donations.campaign_id')->get(['donations.id', "campaigns.foto_campaign as foto_campaign", "donations.nama as nama", "donations.email as email", "kode_donasi", 'judul_campaign', 'donasi', 'metode_pembayaran', 'status_donasi', 'donations.created_at', 'deadline']);
-        return response()->json(["message" => "successfully fetching donation detail", "data" => $donation[0], "error" => false]);
+        $donation = DB::table('donations')->where('donations.id', $request->id)->join('campaigns', 'campaigns.id', '=', 'donations.campaign_id')->get(['donations.id', 'campaigns.foto_campaign as foto_campaign', 'donations.nama as nama', 'donations.email as email', 'kode_donasi', 'judul_campaign', 'donasi', 'metode_pembayaran', 'status_donasi', 'donations.created_at', 'deadline']);
+
+        return response()->json(['message' => 'successfully fetching donation detail', 'data' => $donation[0], 'error' => false]);
     }
 }

@@ -8,7 +8,7 @@ class Criteria extends Model
 {
     protected $fillable = [
         'activity_id',
-        'deskripsi'
+        'deskripsi',
     ];
 
     public function activity()

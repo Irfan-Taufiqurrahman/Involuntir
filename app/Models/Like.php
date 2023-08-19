@@ -8,7 +8,7 @@ class Like extends Model
 {
     protected $fillable = [
         'feed_id',
-        'user_id'
+        'user_id',
     ];
 
     public function feed()

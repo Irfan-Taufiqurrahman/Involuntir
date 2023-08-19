@@ -6,13 +6,13 @@ use App\Http\Controllers\Controller;
 use App\Mail\resetMail;
 use App\Models\User;
 use Carbon\Carbon;
-use Illuminate\Validation\Rules;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
+use Illuminate\Validation\Rules;
 
 class PasswordController extends Controller
 {
@@ -20,17 +20,17 @@ class PasswordController extends Controller
     {
         $user = DB::table('users')->where('email', $request->input('email'))->first();
 
-        if (!$user) {
+        if (! $user) {
             return response()->json([
-                "status" => 202,
-                "msg" => 'User tidak ditemukan'
+                'status' => 202,
+                'msg' => 'User tidak ditemukan',
             ]);
         }
 
         DB::table('password_resets')->insert([
             'email' => $request->email,
             'token' => Str::random(60),
-            'created_at' => Carbon::now('Asia/Jakarta')
+            'created_at' => Carbon::now('Asia/Jakarta'),
         ]);
 
         $tokenData = DB::table('password_resets')
@@ -42,7 +42,7 @@ class PasswordController extends Controller
 
         return response()->json([
             'status' => 201,
-            'msg' => 'email sended'
+            'msg' => 'email sended',
         ], 201);
     }
 
@@ -54,7 +54,6 @@ class PasswordController extends Controller
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
 
         ]);
-
 
         if ($validator->fails()) {
             return response()->json($validator->errors());
@@ -70,11 +69,10 @@ class PasswordController extends Controller
             }
         );
 
-
         if ($status == Password::PASSWORD_RESET) {
             return response()->json([
                 'status' => 201,
-                'message' => 'sukses mengganti password'
+                'message' => 'sukses mengganti password',
             ], 201);
         }
 
@@ -114,7 +112,7 @@ class PasswordController extends Controller
         });
 
         return response()->json([
-            'message' => 'OTP sent successfully'
+            'message' => 'OTP sent successfully',
         ]);
     }
 
@@ -138,7 +136,7 @@ class PasswordController extends Controller
             // Jika OTP valid, berikan token atau lanjutkan proses reset password di sini
             $token = Password::createToken(User::where('email', $email)->first());
 
-            return response()->json(['message' => 'OTP verified successfully', "token" => $token]);
+            return response()->json(['message' => 'OTP verified successfully', 'token' => $token]);
         } else {
             return response()->json(['error' => 'Invalid OTP'], 422);
         }

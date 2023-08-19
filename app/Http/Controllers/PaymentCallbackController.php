@@ -9,7 +9,6 @@ use App\Models\Feed;
 use App\Models\Transaction;
 use App\Models\User;
 use App\Services\Midtrans\CallbackService;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 
 class PaymentCallbackController extends Controller
@@ -20,14 +19,14 @@ class PaymentCallbackController extends Controller
         if ($callback->isSignatureKeyVerified()) {
             $notification = $callback->getNotification();
 
-            if ($callback->getType() === "T") {
+            if ($callback->getType() === 'T') {
                 $transaction = $callback->getTransaction();
 
                 $data = Transaction::where('invoice_id', $transaction->invoice_id)->with('balance')->first();
-                if($callback->isSuccess()) {
-                    if($transaction->payment_method === "bank_transfer") {
+                if ($callback->isSuccess()) {
+                    if ($transaction->payment_method === 'bank_transfer') {
                         $data->balance->amount = $data->balance->amount + config('midtrans.fee_bank_transfer')($data->amount);
-                    } else if($transaction->payment_method === "gopay") {
+                    } elseif ($transaction->payment_method === 'gopay') {
                         $data->balance->amount = $data->balance->amount + config('midtrans.fee_qris')($data->amount);
                     }
                     $data->status = 'approved';
@@ -35,12 +34,12 @@ class PaymentCallbackController extends Controller
                     $data->save();
                 }
 
-                if($callback->isExpire()) {
+                if ($callback->isExpire()) {
                     $data->status = 'rejected';
                     $data->save();
                 }
 
-                if($callback->isCancelled()) {
+                if ($callback->isCancelled()) {
                     $data->status = 'rejected';
                     $data->save();
                 }
@@ -58,11 +57,11 @@ class PaymentCallbackController extends Controller
                     if ($fundraiser) {
                         $data->nama_fundraiser = $fundraiser->name;
                     }
-                    if($data->komentar) {
+                    if ($data->komentar) {
                         Feed::create([
                             'user_id' => $data->user_id,
                             'content' => $data->komentar,
-                            'insertion_link' => env('FRONTEND_URL') . "/" . $data->campaign->judul_slug,
+                            'insertion_link' => env('FRONTEND_URL') . '/' . $data->campaign->judul_slug,
                             'insertion_link_title' => $data->campaign->judul_campaign,
                         ]);
                     }
@@ -89,10 +88,11 @@ class PaymentCallbackController extends Controller
                     Mail::to($data->email)->send(new DonasiGagal($data));
                 }
             }
+
             return response()->json([
                 'success' => true,
                 'data' => $data,
-                'message' => 'Notifikasi berhasil diproses'
+                'message' => 'Notifikasi berhasil diproses',
             ]);
         } else {
             return response()
