@@ -44,7 +44,7 @@ class ActivityController extends Controller
             $this->data = $this->data ? $this->data->orderBy(DB::raw('total_volunteer'), 'DESC') : Activity::orderBy(DB::raw('total_volunteer'), 'DESC');
         } else if ($order === "terbaru") {
             $this->data = $this->data ? $this->data->orderBy('activities.created_at', 'DESC') : Activity::orderBy('activities.created_at', 'DESC');
-        }else {
+        } else {
             throw new HttpClientException("invalid order key", 400);
         }
     }
@@ -57,21 +57,22 @@ class ActivityController extends Controller
             'pribadi' => 'users.tipe = "pribadi" OR users.tipe = "Individu"'
         ];
 
-        if(!array_key_exists($filter, $roles)) {
+        if (!array_key_exists($filter, $roles)) {
             throw new HttpClientException("invalid filter key", 400);
         }
 
-        $this->data = $this->data ? $this->data->
-                                    join('users', 'users.id', "=", 'activities.user_id')
-                                    ->whereRaw($roles[$filter]) 
-                                    : Activity::join('users', 'users.id', "=", 'activities.user_id')->whereRaw($roles[$filter]);
+        $this->data = $this->data ? $this->data->join('users', 'users.id', "=", 'activities.user_id')
+            ->whereRaw($roles[$filter])
+            : Activity::join('users', 'users.id', "=", 'activities.user_id')->whereRaw($roles[$filter]);
     }
 
-    private function getAllActivitiesWithoutFiltering() {
+    private function getAllActivitiesWithoutFiltering()
+    {
         return Activity::orderBy('created_at', 'DESC');
     }
 
-    private function getAllActivitiesWithoutFilteringWithLimit($limit) {
+    private function getAllActivitiesWithoutFilteringWithLimit($limit)
+    {
         $this->data = $this->data ? $this->data->limit($limit) : Activity::limit($limit);
     }
 
@@ -90,30 +91,30 @@ class ActivityController extends Controller
                 $this->byFiltering(request()->filter);
             }
 
-            if(request()->limit) {
+            if (request()->limit) {
                 $this->getAllActivitiesWithoutFilteringWithLimit(request()->limit);
             }
 
             $activities = $this->data ? $this->data : $this->getAllActivitiesWithoutFiltering();
 
             $joinWithRelatedTables = $activities->leftJoin("participations", "participations.activity_id", "=", "activities.id")
-                                                ->groupBy("activities.id")
-                                                ->where('status_publish', 'published')
-                                                ->orWhere('status_publish', NULL)
-                                                ->get([
-                                                    'activities.id', 
-                                                    "judul_activity", 
-                                                    "judul_slug", 
-                                                    "foto_activity", 
-                                                    "batas_waktu", 
-                                                    "activities.created_at",
-                                                    "tipe_activity",
-                                                    DB::raw("CONCAT(DATEDIFF(batas_waktu, CURRENT_DATE), ' hari') as sisa_waktu"),
-                                                    DB::raw("COUNT(participations.id) as total_volunteer")
-                                                ]);
+                ->groupBy("activities.id")
+                ->where('status_publish', 'published')
+                ->orWhere('status_publish', NULL)
+                ->get([
+                    'activities.id',
+                    "judul_activity",
+                    "judul_slug",
+                    "foto_activity",
+                    "batas_waktu",
+                    "activities.created_at",
+                    "tipe_activity",
+                    DB::raw("CONCAT(DATEDIFF(batas_waktu, CURRENT_DATE), ' hari') as sisa_waktu"),
+                    DB::raw("COUNT(participations.id) as total_volunteer")
+                ]);
 
             return response()->json(["data" => $joinWithRelatedTables]);
-        }catch(HttpClientException $err) {
+        } catch (HttpClientException $err) {
             return response()->json(["message" => $err->getMessage()], $err->getCode());
         }
     }
@@ -124,7 +125,7 @@ class ActivityController extends Controller
             ->where('judul_slug', $activity)
             ->get();
 
-        if($data_activity->isEmpty()) {
+        if ($data_activity->isEmpty()) {
             return response()->json(['message' => 'activity tidak ditemukan'], 404);
         }
 
@@ -133,25 +134,25 @@ class ActivityController extends Controller
 
         $activist = DB::table('users')
             ->where('id', $id_activist)
-            ->get(['users.id', 'photo', 'name', 'status_akun', 'role', 'tipe', 'jenis_organisasi']);
+            ->get(['username', 'photo', 'name', 'status_akun', 'role', 'tipe', 'jenis_organisasi']);
 
 
         $total_volunteer = DB::table('participations')
-                           ->select(DB::raw('COUNT(participations.id) as total_volunteer'))
-                           ->where('activity_id', '=', $id_activity)
-                           ->get();
-        
+            ->select(DB::raw('COUNT(participations.id) as total_volunteer'))
+            ->where('activity_id', '=', $id_activity)
+            ->get();
+
         $volunteer = Participation::join('users', 'user_id', '=', 'users.id')
-                     ->where('activity_id', $id_activity)
-                     ->get(['users.id', 'photo', 'name', 'nomor_hp', 'participations.created_at']);
+            ->where('activity_id', $id_activity)
+            ->get(['photo', 'username',  'name', 'nomor_hp', 'participations.created_at']);
 
         $tasks = Task::join('activities', 'activity_id', '=', 'activities.id')
-                 ->where('activity_id', $id_activity)
-                 ->get(DB::raw('tasks.id, tasks.deskripsi, tasks.created_at'));
+            ->where('activity_id', $id_activity)
+            ->get(DB::raw('tasks.id, tasks.deskripsi, tasks.created_at'));
 
         $criterias = Criteria::join('activities', 'activity_id', '=', 'activities.id')
-                     ->where('activity_id', $id_activity)
-                     ->get(DB::raw('criterias.id, criterias.deskripsi, criterias.created_at'));
+            ->where('activity_id', $id_activity)
+            ->get(DB::raw('criterias.id, criterias.deskripsi, criterias.created_at'));
 
         $user = auth('api')->user();
 
@@ -178,17 +179,17 @@ class ActivityController extends Controller
         $id_activity = $activity->id;
 
         $total_volunteer = DB::table('participations')
-                           ->select(DB::raw('COUNT(participations.id) as total_volunteer'))
-                           ->where('activity_id', '=', $id_activity)
-                           ->get();
-        
+            ->select(DB::raw('COUNT(participations.id) as total_volunteer'))
+            ->where('activity_id', '=', $id_activity)
+            ->get();
+
         $tasks = Task::join('activities', 'activity_id', '=', 'activities.id')
-                 ->where('activity_id', $id_activity)
-                 ->get();
-          
+            ->where('activity_id', $id_activity)
+            ->get();
+
         $criterias = Criteria::join('activities', 'activity_id', '=', 'activities.id')
-                     ->where('activity_id', $id_activity)
-                     ->get();
+            ->where('activity_id', $id_activity)
+            ->get();
 
         $user = $activity->user;
 
@@ -202,35 +203,40 @@ class ActivityController extends Controller
         ]);
     }
 
-    private function imageValidation(Request $request, $imageName) {
+    private function imageValidation(Request $request, $imageName)
+    {
         $validator = Validator::make($request->all(), [
             $imageName => 'image|mimes:jpeg,png,jpg|max:1024',
         ]);
         return $validator;
     }
 
-    private function uploadImage(Request $request, $file, $judul_slug) {
+    private function uploadImage(Request $request, $file, $judul_slug)
+    {
         $fileName     = $judul_slug . '.' . $request->file($file)->extension();
         $path = 'images/images_activity';
         $request->file($file)->move(public_path($path), $fileName);
         return env('APP_URL') . "/$path/$fileName";
     }
 
-    public function publish(Request $request) {
+    public function publish(Request $request)
+    {
         $request['status_publish'] = 'published';
         return $this->create($request);
     }
 
-    public function draft(Request $request) {
+    public function draft(Request $request)
+    {
         $request['status_publish'] = 'drafted';
         return $this->create($request);
     }
 
-    public function create(Request $request) {
+    public function create(Request $request)
+    {
         $rules = [
             'status_publish' => 'required|in:published,drafted',
         ];
-        if($request->status_publish === 'published') {
+        if ($request->status_publish === 'published') {
             // dicek dulu lah
             $rules = [
                 'category_id'     => 'required|numeric',
@@ -248,7 +254,7 @@ class ActivityController extends Controller
 
         $validator = Validator::make($request->all(), $rules);
 
-        if($validator->fails()) {
+        if ($validator->fails()) {
             return response()->json(['message' => $validator->errors()], 400);
         }
 
@@ -257,12 +263,12 @@ class ActivityController extends Controller
         if (!$category) {
             return response()->json(['message' => "category with id: $request->category_id not found!"]);
         }
-        
+
         $judul_slug = "";
         // dicek apakah ada custom slug
-        if($request->judul_slug) {
+        if ($request->judul_slug) {
             // cek apakah slug sudah digunakan
-            if(Activity::where('judul_slug', $request->judul_slug)->first()) {
+            if (Activity::where('judul_slug', $request->judul_slug)->first()) {
                 return response()->json(['message' => 'judul slug sudah digunakan'], 400);
             } else {
                 $judul_slug = $request->judul_slug;
@@ -274,9 +280,9 @@ class ActivityController extends Controller
 
         $foto_activity = NULL;
 
-        if($request->file('foto_activity')) {
-            $validator = $this->imageValidation($request,'foto_activity');
-            if($validator->fails()) {
+        if ($request->file('foto_activity')) {
+            $validator = $this->imageValidation($request, 'foto_activity');
+            if ($validator->fails()) {
                 return response()->json(['message' => $validator->errors()], 400);
             }
             $foto_activity = $this->uploadImage($request, 'foto_activity', $judul_slug);
@@ -284,7 +290,7 @@ class ActivityController extends Controller
 
         $user = auth('api')->user();
 
-        if(!$user) {
+        if (!$user) {
             return response()->json(['message' => 'user not found!'], 404);
         }
 
@@ -307,7 +313,7 @@ class ActivityController extends Controller
         ]);
 
         $tasks = $request->tasks ? json_decode($request->tasks) : [];
-        foreach($tasks as $task){
+        foreach ($tasks as $task) {
             $task = Task::create([
                 'activity_id' => $activity->id,
                 'deskripsi' => $task
@@ -317,7 +323,7 @@ class ActivityController extends Controller
         $activity->tasks = $tasks;
 
         $criterias = $request->criterias ? json_decode($request->criterias) : [];
-        foreach($criterias as $criteria){
+        foreach ($criterias as $criteria) {
             Criteria::create([
                 'activity_id' => $activity->id,
                 'deskripsi' => $criteria
@@ -329,18 +335,19 @@ class ActivityController extends Controller
         return response()->json(['data' => $activity], 201);
     }
 
-    public function update(Request $request, $id) {
+    public function update(Request $request, $id)
+    {
         $activity = Activity::findOrFail($id);
         $user = auth('api')->user();
 
-        if($user->id !== intval($activity->user_id)) {
+        if ($user->id !== intval($activity->user_id)) {
             return response()->json(['message' => 'Unauthorized'], 401);
         }
 
         $rules = [
             'status_publish' => 'required|in:published,drafted',
         ];
-        if($request->status_publish === 'published') {
+        if ($request->status_publish === 'published') {
             // dicek dulu lah
             $rules = [
                 'category_id'     => 'numeric',
@@ -356,7 +363,7 @@ class ActivityController extends Controller
 
         $validator = Validator::make($request->all(), $rules);
 
-        if($validator->fails()) {
+        if ($validator->fails()) {
             return response()->json(['message' => $validator->errors()], 400);
         }
 
@@ -374,7 +381,7 @@ class ActivityController extends Controller
 
         $batas_waktu = $request->batas_waktu ? $activity->created_at->addDays($request->batas_waktu) : $activity->batas_waktu;
 
-        if ($batas_waktu < Carbon::now()){
+        if ($batas_waktu < Carbon::now()) {
             return response()->json(['message' => 'batas waktu sudah terlewati']);
         }
 
@@ -387,9 +394,9 @@ class ActivityController extends Controller
 
         $foto_activity = $activity->foto_activity;
 
-        if($request->file('foto_activity')) {
-            $validator = $this->imageValidation($request,'foto_activity');
-            if($validator->fails()) {
+        if ($request->file('foto_activity')) {
+            $validator = $this->imageValidation($request, 'foto_activity');
+            if ($validator->fails()) {
                 return response()->json(['message' => $validator->errors()], 400);
             }
             File::delete(public_path('images/images_activity/' . $activity->foto_activity));
@@ -424,7 +431,7 @@ class ActivityController extends Controller
         ]);
 
 
-//      send email after campaign created
+        //      send email after campaign created
         // if($request->status_publish === 'published' && !$campaign->email_sent_at) {
         //     Mail::to($user->email)->send(new CampaignCreated($campaign));
         //     $campaign->update([
@@ -443,25 +450,30 @@ class ActivityController extends Controller
             ->where('category_id', $category->id)->leftJoin("participations", "participations.activity_id", "=", "activities.id")->groupBy("activities.id")->get(['activities.id', "judul_activity", "judul_slug", "foto_activity", "batas_waktu", "activities.created_at", DB::raw("COUNT(participations.id) as total_volunteer")]);
     }
 
-    public function isExist($slug) {
+    public function isExist($slug)
+    {
         return response()->json(['isExist' => Activity::where('judul_slug', $slug)->first() ? true : false]);
     }
 
-    public function destroy(Activity $activity) {
+    public function destroy(Activity $activity)
+    {
         // old image is not deleted because this is a soft delete
         $activity->delete();
         return response()->json(['message' => 'berhasil menghapus activity'], 200);
     }
 
-    public function myActivities() {
+    public function myActivities()
+    {
         $user = Auth::user();
 
         $activities = Activity::where('activities.user_id', $user->id)->leftJoin("participations", "participations.activity_id", "=", "activities.id")
-                    ->groupBy("activities.id")->orderBy('activities.created_at', 'DESC')
-                    ->get(['activities.id', "judul_activity", "judul_slug",
-                            "foto_activity", "batas_waktu",
-                            "activities.created_at",
-                            DB::raw("COUNT(participations.id) as total_volunteer")]);
+            ->groupBy("activities.id")->orderBy('activities.created_at', 'DESC')
+            ->get([
+                'activities.id', "judul_activity", "judul_slug",
+                "foto_activity", "batas_waktu",
+                "activities.created_at",
+                DB::raw("COUNT(participations.id) as total_volunteer")
+            ]);
 
         return response()->json(["data" => $activities], 200);
     }
