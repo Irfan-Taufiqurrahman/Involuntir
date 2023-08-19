@@ -142,4 +142,12 @@ class UserController extends Controller
         $kode = KodeReferal::where('id_user', $user->id)->first();
         return response()->json(["data" => ["kode_referal" => $kode ? $kode->kode_referal : null]]);
     }
+
+    public function show(User $user)
+    {
+        return response()->json([
+            "status" => true,
+            "data" => $user
+        ]);
+    }
 }

@@ -62,6 +62,7 @@ Route::prefix('google')->group(function () {
 
 Route::middleware('jwt.verify')->group(function () {
     Route::get('/user', [AuthController::class, 'getAuthenticatedUser']);
+    Route::get('/user/{user:username}', [UserController::class, 'show']);
     Route::post('/user', [UserController::class, 'editProfil']);
     Route::get('/user/kode_referal', [UserController::class, 'kodeReferal']);
     Route::put('/user/change_password', [UserController::class, 'changePassword']);

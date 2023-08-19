@@ -71,6 +71,17 @@ class User extends Authenticatable implements JWTSubject, MustVerifyEmail, CanRe
         'email_verified_at' => 'datetime',
     ];
 
+    protected static function booted()
+    {
+        static::created(function ($user) {
+            if ($user->username === null) {
+                $username = explode('@', $user->email)[0];
+                $user->username = $username;
+                $user->save();
+            }
+        });
+    }
+
     public function campaigns()
     {
         $this->hasMany(Campaign::class);
