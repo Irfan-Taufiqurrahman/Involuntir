@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Activity;
 use App\Models\KodeReferal;
 use App\Models\User;
 use Exception;
@@ -153,9 +154,23 @@ class UserController extends Controller
 
     public function show(User $user)
     {
+
+        $activities = Activity::where('activities.user_id', $user->id)->leftJoin('participations', 'participations.activity_id', '=', 'activities.id')
+            ->groupBy('activities.id')->orderBy('activities.created_at', 'DESC')
+            ->get([
+                'activities.id', 'judul_activity', 'judul_slug',
+                'judul_activity', 'judul_slug', 'foto_activity',
+                'batas_waktu', 'activities.created_at', 'tipe_activity',
+                'activities.created_at',
+                DB::raw('COUNT(participations.id) as total_volunteer'),
+            ]);
+
         return response()->json([
             'status' => true,
-            'data' => $user,
+            'data' => [
+                'user' => $user,
+                'activities' => $activities,
+            ],
         ]);
     }
 }

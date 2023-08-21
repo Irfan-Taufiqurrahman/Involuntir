@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Str;
 use Laravel\Sanctum\HasApiTokens;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
@@ -78,7 +79,12 @@ class User extends Authenticatable implements JWTSubject, MustVerifyEmail, CanRe
         static::created(function ($user) {
             if ($user->username === null) {
                 $username = explode('@', $user->email)[0];
-                $user->username = $username;
+                $newUsername = strtolower($username);
+
+                if (User::where('username', $newUsername)->first()) {
+                    $newUsername = Str::random(5);
+                }
+                $user->username = $newUsername;
                 $user->save();
             }
         });

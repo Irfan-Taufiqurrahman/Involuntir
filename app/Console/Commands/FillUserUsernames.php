@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Models\User;
 use Illuminate\Console\Command;
+use Illuminate\Support\Str;
 
 class FillUserUsernames extends Command
 {
@@ -43,7 +44,13 @@ class FillUserUsernames extends Command
 
         foreach ($users as $user) {
             $username = explode('@', $user->email)[0];
-            $user->username = $username;
+            $newUsername = strtolower($username);
+
+            if (User::where('username', $newUsername)->exists()) {
+                $newUsername = Str::random(5);
+            }
+            $user->username = $newUsername;
+
             $user->save();
         }
 
