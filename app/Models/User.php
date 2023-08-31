@@ -158,4 +158,9 @@ class User extends Authenticatable implements JWTSubject, MustVerifyEmail, CanRe
     {
         return $this->role === 'Admin';
     }
+
+    public function socials()
+    {
+        return $this->hasMany(SocialLink::class);
+    }
 }

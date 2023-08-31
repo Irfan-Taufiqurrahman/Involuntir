@@ -43,11 +43,11 @@ class AuthController extends Controller
         $credentials = $request->only('email', 'password');
 
         try {
-            if (! $token = JWTAuth::attempt($credentials)) {
+            if (!$token = JWTAuth::attempt($credentials)) {
                 return response()->json(['error' => 'invalid_credentials'], 400);
             }
             $user = User::where('email', $request->email)->first();
-            if (! KodeReferal::where('id_user', $user->id)->first()) {
+            if (!KodeReferal::where('id_user', $user->id)->first()) {
                 KodeReferal::create([
                     'id_user' => $user->id,
                     'kode_referal' => $this->generateKodeReferal(),
@@ -154,7 +154,7 @@ class AuthController extends Controller
         $user = User::where('email', $request->email)->first();
 
         if ($user) {
-            if (! $user->hasVerifiedEmail()) {
+            if (!$user->hasVerifiedEmail()) {
                 return response()->json(['error' => true, 'message' => 'email belum diverifikasi'], 401);
             }
 
@@ -167,7 +167,7 @@ class AuthController extends Controller
     public function getAuthenticatedUser()
     {
         try {
-            if (! $user = JWTAuth::parseToken()->authenticate()) {
+            if (!$user = JWTAuth::parseToken()->authenticate()) {
                 return response()->json(['user_not_found'], 404);
             }
             $user->balance;
@@ -180,6 +180,8 @@ class AuthController extends Controller
             return response()->json(['token_absent'], $e->getStatusCode());
         }
 
+        $user = $user->load('socials');
+
         return response()->json(compact('user'));
     }
 
@@ -189,7 +191,7 @@ class AuthController extends Controller
 
         $user = auth('api')->user();
 
-        if (! $user) {
+        if (!$user) {
             return response()->json(['error' => true, 'message' => 'token invalid']);
         }
 

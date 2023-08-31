@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Enums\LinkType;
 use App\Http\Controllers\Controller;
 use App\Models\Activity;
 use App\Models\KodeReferal;
@@ -14,9 +15,27 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rules\Enum;
 
 class UserController extends Controller
 {
+    protected function getValidationRules($linkType)
+    {
+        $commonRules = [
+            'url' => ['string']
+        ];
+
+        if ($linkType === LinkType::WEBSITE->value) {
+            return [
+                'url' => array_merge($commonRules['url'], ['url', 'active_url'])
+            ];
+        } else {
+            return [
+                'username' => array_merge($commonRules['url'], ['alpha_dash'])
+            ];
+        }
+    }
+
     public function pekerjaan(): JsonResponse
     {
         $data = DB::table('pekerjaans')->select('id', 'pekerjaan')->get();
@@ -57,6 +76,34 @@ class UserController extends Controller
     public function editProfil(Request $request): JsonResponse
     {
         $user = User::find(Auth::user()->id);
+
+        if ($request->has("socials")) {
+            $request->validate([
+                'socials.*.name' => ['required', 'string', new Enum(LinkType::class)],
+                'socials.*.url' => ['string', 'url', 'active_url'],
+                'socials.*.username' => ['string', 'alpha_dash']
+            ]);
+
+            foreach ($request->input('socials') as $socialLinkData) {
+                $linkType = $socialLinkData['name'];
+
+                $validationRules = $this->getValidationRules($linkType);
+
+                $validatedData = Validator::make($socialLinkData, $validationRules)->validate();
+                if ($linkType === LinkType::WEBSITE->value) {
+                    $user->socials()->updateOrCreate([
+                        'name' => $linkType,
+                        'url' => $validatedData['url']
+                    ]);
+                } else {
+                    $user->socials()->updateOrCreate([
+                        'name' => $linkType,
+                        'username' => $validatedData['username']
+                    ]);
+                }
+            }
+        }
+
 
         if ($request->has('email')) {
             $validator = Validator::make(request()->only('email'), [
@@ -104,7 +151,7 @@ class UserController extends Controller
 
             $user->update();
 
-            return response()->json(['status' => true, 'msg' => 'Profile Updated!', 'data' => $user]);
+            return response()->json(['status' => true, 'msg' => 'Profile Updated!', 'data' => $user->load('socials')]);
         } catch (Exception $e) {
             return response()->json(['status' => false, 'msg' => $e->getMessage(), 'data' => []], 500);
         }
@@ -154,6 +201,7 @@ class UserController extends Controller
 
     public function show(User $user)
     {
+        $user->load("socials");
 
         $activities = Activity::where('activities.user_id', $user->id)->leftJoin('participations', 'participations.activity_id', '=', 'activities.id')
             ->groupBy('activities.id')->orderBy('activities.created_at', 'DESC')

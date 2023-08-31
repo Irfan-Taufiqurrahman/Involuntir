@@ -76,7 +76,7 @@ Route::prefix('galangdana')->group(function () {
     Route::get('/{campaign}', [CampaignController::class, 'show']);
     Route::get('/byslug/{campaign}', [CampaignController::class, 'bySlug']);
 
-    // RENCANA PENGGUNAAN
+    // rencana penggunaan
     Route::get('/{campaign_id}/rencana_penggunaan', [RencanaPenggunaanDanaController::class, 'index']);
 
     // set campaign as urgent
