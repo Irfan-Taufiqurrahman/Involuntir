@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Enums\ActivityType;
 use App\Http\Controllers\Controller;
 use App\Models\Activity;
 use App\Models\Category;
@@ -17,6 +18,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rules\Enum;
 
 class ActivityController extends Controller
 {
@@ -48,7 +50,7 @@ class ActivityController extends Controller
             'pribadi' => 'users.tipe = "pribadi" OR users.tipe = "Individu"',
         ];
 
-        if (! array_key_exists($filter, $roles)) {
+        if (!array_key_exists($filter, $roles)) {
             throw new HttpClientException('invalid filter key', 400);
         }
 
@@ -227,73 +229,52 @@ class ActivityController extends Controller
 
     public function create(Request $request)
     {
-        $rules = [
-            'status_publish' => 'required|in:published,drafted',
-        ];
-        if ($request->status_publish === 'published') {
-            // dicek dulu lah
-            $rules = [
-                'category_id' => 'required|numeric',
-                'judul_activity' => 'required|string|max:255',
-                'foto_activity' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-                'detail_activity' => 'required|string',
-                'batas_waktu' => 'required|numeric',
-                'waktu_activity' => 'required|string',
-                'lokasi' => 'required|string|max:255',
-                'tipe_activity' => 'required|in:Virtual,In-Person,Hybrid',
-                'kuota' => 'required|numeric',
-                'tautan' => 'required|string',
-            ];
+        $user = auth('api')->user();
+
+        if (!$user) {
+            return response()->json(['message' => 'user not found!'], 404);
         }
 
-        $validator = Validator::make($request->all(), $rules);
+        $validator = Validator::make($request->all(), [
+            'judul_activity' => 'required|string|max:255',
+            'judul_slug' => 'nullable|string|unique:activities,judul_slug|max:255',
+            'category_id' => ['required', 'exists:categories,id'],
+            'detail_activity' => 'required|string',
+            'batas_waktu' => 'required|numeric',
+            'foto_activity' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'lokasi' => 'required|string|max:255',
+            'waktu_activity' => 'required|string',
+            'tipe_activity' => 'required|in:Virtual,In-Person,Hybrid',
+            'kuota' => 'required|numeric',
+            'tautan' => 'required|string',
+            'jenis_activity' => ['required', new Enum(ActivityType::class)],
+            'biaya_activity.*.per' => ['required', 'numeric'],
+            'biaya_activity.*.price' => ['required', 'numeric'],
+        ]);
 
         if ($validator->fails()) {
             return response()->json(['message' => $validator->errors()], 400);
         }
 
-        // check category_id is exist
-        $category = Category::find($request->category_id);
-        if (! $category) {
-            return response()->json(['message' => "category with id: $request->category_id not found!"]);
+        $validated = $validator->validated();
+
+        $slug = $validated['judul_slug'];
+        $photo = $request->file('foto_activity');
+        $activityType = $validated['jenis_activity'];
+        $activityPrices = $validated['biaya_activity'];
+
+        if (!empty($photo)) {
+            $photo = $this->uploadImage($request, 'foto_activity', $slug);
         }
 
-        $judul_slug = '';
-        // dicek apakah ada custom slug
-        if ($request->judul_slug) {
-            // cek apakah slug sudah digunakan
-            if (Activity::where('judul_slug', $request->judul_slug)->first()) {
-                return response()->json(['message' => 'judul slug sudah digunakan'], 400);
-            } else {
-                $judul_slug = $request->judul_slug;
-            }
-        } else {
-            // kalo gaada custom maka dibikinin
-            $judul_slug = SlugService::createSlug(Activity::class, 'judul_slug', request('judul_activity'));
-        }
 
-        $foto_activity = null;
-
-        if ($request->file('foto_activity')) {
-            $validator = $this->imageValidation($request, 'foto_activity');
-            if ($validator->fails()) {
-                return response()->json(['message' => $validator->errors()], 400);
-            }
-            $foto_activity = $this->uploadImage($request, 'foto_activity', $judul_slug);
-        }
-
-        $user = auth('api')->user();
-
-        if (! $user) {
-            return response()->json(['message' => 'user not found!'], 404);
-        }
 
         $activity = Activity::create([
-            'category_id' => $category->id,
+            'category_id' => $validated['category_id'],
             'user_id' => $user->id,
             'judul_activity' => $request->judul_activity,
-            'judul_slug' => $judul_slug,
-            'foto_activity' => $foto_activity,
+            'judul_slug' => $slug,
+            'foto_activity' => $photo,
             'detail_activity' => $request->detail_activity,
             'batas_waktu' => Carbon::now()->addDays($request->batas_waktu),
             'waktu_activity' => $request->waktu_activity,
@@ -303,10 +284,22 @@ class ActivityController extends Controller
             'status' => 'Pending',
             'kuota' => $request->kuota ? $request->kuota : 0,
             'tautan' => $request->tautan ? $request->tautan : 'involuntir',
+            'jenis_aktivity' =>  $activityType,
             'updated_at' => $request->status_publish === 'published' ? Carbon::now() : null,
         ]);
 
+        if (ActivityType::PAID->equals(ActivityType::from($activityType))) {
+
+            foreach ($activityPrices as $value) {
+                $activity->prices()->updateOrCreate($value);
+            }
+
+            $activity->save();
+        }
+
+
         $tasks = $request->tasks ? json_decode($request->tasks) : [];
+
         foreach ($tasks as $task) {
             $task = Task::create([
                 'activity_id' => $activity->id,
@@ -325,6 +318,8 @@ class ActivityController extends Controller
         }
 
         $activity->criterias = $criterias;
+
+        $activity->load('prices');
 
         return response()->json(['data' => $activity], 201);
     }
@@ -363,7 +358,7 @@ class ActivityController extends Controller
 
         // check category_id is exist
         $category_id = $request->category_id ? Category::find($request->category_id) : $activity->category_id;
-        if (! $category_id) {
+        if (!$category_id) {
             return response()->json(['message' => "category with id: $request->category not found!"]);
         }
 

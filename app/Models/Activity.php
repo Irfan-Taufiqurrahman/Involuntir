@@ -64,4 +64,9 @@ class Activity extends Model
 
         return $value;
     }
+
+    public function prices()
+    {
+        return $this->hasMany(ActivityPrice::class);
+    }
 }
