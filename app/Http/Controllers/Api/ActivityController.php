@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Enum;
 
 class ActivityController extends Controller
@@ -94,6 +95,7 @@ class ActivityController extends Controller
                 ->groupBy('activities.id')
                 ->where('status_publish', 'published')
                 ->orWhere('status_publish', null)
+                ->with('prices')
                 ->get([
                     'activities.id',
                     'judul_activity',
@@ -101,6 +103,7 @@ class ActivityController extends Controller
                     'foto_activity',
                     'batas_waktu',
                     'activities.created_at',
+                    'jenis_activity',
                     'tipe_activity',
                     DB::raw("CONCAT(DATEDIFF(batas_waktu, CURRENT_DATE), ' hari') as sisa_waktu"),
                     DB::raw('COUNT(participations.id) as total_volunteer'),
@@ -114,16 +117,14 @@ class ActivityController extends Controller
 
     public function bySlug($activity)
     {
-        $data_activity = DB::table('activities')
-            ->where('judul_slug', $activity)
-            ->get();
+        $data_activity = Activity::where('judul_slug', $activity)->with('prices')->first();
 
-        if ($data_activity->isEmpty()) {
+        if (empty($data_activity)) {
             return response()->json(['message' => 'activity tidak ditemukan'], 404);
         }
 
-        $id_activity = $data_activity[0]->id;
-        $id_activist = $data_activity[0]->user_id;
+        $id_activity = $data_activity->id;
+        $id_activist = $data_activity->user_id;
 
         $activist = DB::table('users')
             ->where('id', $id_activist)
@@ -149,9 +150,9 @@ class ActivityController extends Controller
         $user = auth('api')->user();
 
         $now = Carbon::createFromFormat('Y-m-d H:s:i', Carbon::now());
-        $batas_waktu = Carbon::createFromFormat('Y-m-d H:s:i', $data_activity[0]->batas_waktu);
+        $batas_waktu = Carbon::createFromFormat('Y-m-d H:s:i', $data_activity->batas_waktu);
 
-        $data_activity[0]->sisa_hari = $batas_waktu->diffInDays($now);
+        $data_activity->sisa_hari = $batas_waktu->diffInDays($now);
 
         return response()->json([
             'data' => [
@@ -168,6 +169,7 @@ class ActivityController extends Controller
 
     public function show(Activity $activity): JsonResponse
     {
+
         $id_activity = $activity->id;
 
         $total_volunteer = DB::table('participations')
@@ -187,7 +189,7 @@ class ActivityController extends Controller
 
         return response()->json([
             'data' => [
-                'activity' => $activity,
+                'activity' => $activity->load("prices"),
                 'total_volunteer' => $total_volunteer,
                 'tugas' => $tasks,
                 'kriteria' => $criterias,
@@ -247,10 +249,13 @@ class ActivityController extends Controller
             'tipe_activity' => 'required|in:Virtual,In-Person,Hybrid',
             'kuota' => 'required|numeric',
             'tautan' => 'required|string',
-            'jenis_activity' => ['required', new Enum(ActivityType::class)],
-            'biaya_activity.*.per' => ['required', 'numeric'],
-            'biaya_activity.*.price' => ['required', 'numeric'],
+            'jenis_activity' => ['nullable', new Enum(ActivityType::class)],
+            'biaya_activity' => ['required_if:jenis_activity,paid', 'array'],
+            'biaya_activity.*.per' => ['required_if:jenis_activity,paid', 'numeric'],
+            'biaya_activity.*.price' => ['required_if:jenis_activity,paid', 'numeric'],
+
         ]);
+
 
         if ($validator->fails()) {
             return response()->json(['message' => $validator->errors()], 400);
@@ -260,14 +265,12 @@ class ActivityController extends Controller
 
         $slug = $validated['judul_slug'];
         $photo = $request->file('foto_activity');
-        $activityType = $validated['jenis_activity'];
-        $activityPrices = $validated['biaya_activity'];
+        $activityType = $validated['jenis_activity'] ?? null;
+        $activityPrices = $validated['biaya_activity'] ?? [];
 
         if (!empty($photo)) {
             $photo = $this->uploadImage($request, 'foto_activity', $slug);
         }
-
-
 
         $activity = Activity::create([
             'category_id' => $validated['category_id'],
@@ -284,11 +287,12 @@ class ActivityController extends Controller
             'status' => 'Pending',
             'kuota' => $request->kuota ? $request->kuota : 0,
             'tautan' => $request->tautan ? $request->tautan : 'involuntir',
-            'jenis_aktivity' =>  $activityType,
+            'jenis_activity' =>  ActivityType::from($activityType),
             'updated_at' => $request->status_publish === 'published' ? Carbon::now() : null,
         ]);
 
-        if (ActivityType::PAID->equals(ActivityType::from($activityType))) {
+
+        if (!empty($activityType) && ActivityType::PAID->equals(ActivityType::from($activityType))) {
 
             foreach ($activityPrices as $value) {
                 $activity->prices()->updateOrCreate($value);
@@ -296,7 +300,6 @@ class ActivityController extends Controller
 
             $activity->save();
         }
-
 
         $tasks = $request->tasks ? json_decode($request->tasks) : [];
 
@@ -326,109 +329,68 @@ class ActivityController extends Controller
 
     public function update(Request $request, $id)
     {
-        $activity = Activity::findOrFail($id);
         $user = auth('api')->user();
 
+        if (!$user) {
+            return response()->json(['message' => 'User not found!'], 404);
+        }
+
+        $activity = Activity::find($id);
+
+        if (empty($activity)) {
+            return response()->json(['message' => 'activitas tidak ada'], 404);
+        }
+
+        // Otorisasi: Hanya pemilik aktivitas yang dapat mengubahnya
         if ($user->id !== intval($activity->user_id)) {
             return response()->json(['message' => 'Unauthorized'], 401);
         }
 
-        $rules = [
-            'status_publish' => 'required|in:published,drafted',
-        ];
-        if ($request->status_publish === 'published') {
-            // dicek dulu lah
-            $rules = [
-                'category_id' => 'numeric',
-                'judul_activity' => 'string|max:255',
-                'foto_activity' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-                'detail_activity' => 'string',
-                'batas_waktu' => 'numeric',
-                'waktu_activity' => 'string',
-                'lokasi' => 'string|max:255',
-                'tipe_activity' => 'in:Virtual,In-Person,Hybrid',
-            ];
-        }
-
-        $validator = Validator::make($request->all(), $rules);
+        $validator = Validator::make($request->all(), [
+            'judul_activity' => 'sometimes|required|string|max:255',
+            'judul_slug' => [
+                'sometimes',
+                'nullable',
+                'string',
+                'max:255',
+                Rule::unique('activities')->ignore($activity->id),
+            ],
+            'category_id' => ['sometimes', 'required', 'exists:categories,id'],
+            'detail_activity' => 'sometimes|required|string',
+            'batas_waktu' => 'sometimes|required|numeric',
+            'foto_activity' => 'sometimes|nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'lokasi' => 'sometimes|required|string|max:255',
+            'waktu_activity' => 'sometimes|required|string',
+            'tipe_activity' => 'sometimes|required|in:Virtual,In-Person,Hybrid',
+            'kuota' => 'sometimes|required|numeric',
+            'tautan' => 'sometimes|required|string',
+            'jenis_activity' => 'nullable', // Validasi yang boleh bernilai null
+            'biaya_activity' => ['sometimes', 'nullable', 'array'], // Validasi yang boleh bernilai null
+            'biaya_activity.*.per' => ['sometimes', 'nullable', 'numeric'], // Validasi yang boleh bernilai null
+            'biaya_activity.*.price' => ['sometimes', 'nullable', 'numeric'], // Validasi yang boleh bernilai null
+        ]);
 
         if ($validator->fails()) {
             return response()->json(['message' => $validator->errors()], 400);
         }
 
-        // check category_id is exist
-        $category_id = $request->category_id ? Category::find($request->category_id) : $activity->category_id;
-        if (!$category_id) {
-            return response()->json(['message' => "category with id: $request->category not found!"]);
+        $validated = $validator->validated();
+
+        // Update hanya nilai yang berubah
+        $activity->fill(array_filter($validated))->save();
+
+        $activityType = $validated['jenis_activity'] ?? null;
+
+        if (!empty($activityType) && ActivityType::FREE->equals(ActivityType::from($activityType))) {
+            // Menghapus semua biaya aktivitas jika jenis aktivitas berubah menjadi "free"
+            $activity->prices()->delete();
         }
 
-        $judul_activity = $request->judul_activity ? $request->judul_activity : $activity->judul_activity;
+        // Handle pembaruan tugas (tasks) dan kriteria (criterias) seperti dalam fungsi create
 
-        $judul_slug = $request->judul_slug ? $request->judul_slug : $activity->judul_slug;
+        $activity->load('prices');
 
-        $detail_activity = $request->detail_activity ? $request->detail_activity : $activity->detail_activity;
-
-        $batas_waktu = $request->batas_waktu ? $activity->created_at->addDays($request->batas_waktu) : $activity->batas_waktu;
-
-        if ($batas_waktu < Carbon::now()) {
-            return response()->json(['message' => 'batas waktu sudah terlewati']);
-        }
-
-        $waktu_activity = $request->waktu_activity ? $request->waktu_activity : $activity->waktu_activity;
-
-        $lokasi = $request->lokasi ? $request->lokasi : $activity->lokasi;
-
-        $tipe_activity = $request->tipe_activity ? $request->tipe_activity : $activity->tipe_activity;
-
-        $foto_activity = $activity->foto_activity;
-
-        if ($request->file('foto_activity')) {
-            $validator = $this->imageValidation($request, 'foto_activity');
-            if ($validator->fails()) {
-                return response()->json(['message' => $validator->errors()], 400);
-            }
-            File::delete(public_path('images/images_activity/' . $activity->foto_activity));
-            $foto_activity = $this->uploadImage($request, 'foto_activity', $judul_slug);
-        }
-
-        $user = auth('api')->user();
-
-        // $detail_campaign = $this->detailToHTML(
-        //     $request->cerita_tentang_pembuat_campaign,
-        //     $request->cerita_tentang_penerima_manfaat,
-        //     $request->cerita_tentang_masalah_dan_usaha,
-        //     $request->berapa_biaya_yang_dibutuhkan,
-        //     $request->kenapa_galangdana_dibutuhkan,
-        //     $foto_tentang_campaign,
-        //     $foto_tentang_campaign_2,
-        //     $foto_tentang_campaign_3
-        // );
-
-        $activity->update([
-            'category_id' => $category_id,
-            'judul_activity' => $judul_activity,
-            'judul_slug' => $judul_slug,
-            'foto_activity' => $foto_activity,
-            'detail_activity' => $detail_activity,
-            'batas_waktu' => $batas_waktu,
-            'waktu_activity' => $waktu_activity,
-            'lokasi' => $lokasi,
-            'tipe_activity' => $tipe_activity,
-            'status_publish' => $request->status_publish,
-            'updated_at' => $request->status_publish === 'published' ? Carbon::now() : $activity->updated_at,
-        ]);
-
-        //      send email after campaign created
-        // if($request->status_publish === 'published' && !$campaign->email_sent_at) {
-        //     Mail::to($user->email)->send(new CampaignCreated($campaign));
-        //     $campaign->update([
-        //         'email_sent_at' => Carbon::now()
-        //     ]);
-        // }
-
-        $activity->user = $user;
-
-        return response()->json(['data' => $activity], 201);
+        return response()->json(['data' => $activity], 200);
     }
 
     private function getCategory(Category $category)

@@ -9,6 +9,8 @@ class ActivityPrice extends Model
 
     protected $guarded = [];
 
+    public $timestamps = false;
+
     public function Activity()
     {
         return $this->belongsTo(Activity::class);

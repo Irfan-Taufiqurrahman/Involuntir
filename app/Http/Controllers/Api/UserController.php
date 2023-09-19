@@ -22,7 +22,7 @@ class UserController extends Controller
     protected function getValidationRules($linkType)
     {
         $commonRules = [
-            'url' => ['string']
+            'url' => ['nullable']
         ];
 
         if ($linkType === LinkType::WEBSITE->value) {
@@ -80,8 +80,8 @@ class UserController extends Controller
         if ($request->has("socials")) {
             $request->validate([
                 'socials.*.name' => ['required', 'string', new Enum(LinkType::class)],
-                'socials.*.url' => ['string', 'url', 'active_url'],
-                'socials.*.username' => ['string', 'alpha_dash']
+                'socials.*.url' => ['nullable', 'url', 'active_url'],
+                'socials.*.username' => ['nullable', 'alpha_dash']
             ]);
 
             foreach ($request->input('socials') as $socialLinkData) {
@@ -90,16 +90,20 @@ class UserController extends Controller
                 $validationRules = $this->getValidationRules($linkType);
 
                 $validatedData = Validator::make($socialLinkData, $validationRules)->validate();
-                if ($linkType === LinkType::WEBSITE->value) {
-                    $user->socials()->updateOrCreate([
-                        'name' => $linkType,
-                        'url' => $validatedData['url']
-                    ]);
+
+                // Selain itu, simpan atau perbarui tautan sosial sesuai dengan 'linkType' yang sesuai.
+                $dataToSave = ($linkType === LinkType::WEBSITE->value) ?
+                    ['url' => $validatedData['url']] :
+                    ['username' => $validatedData['username']];
+
+                // Cek apakah data yang akan disimpan (dataToSave) kosong, jika kosong maka hapus tautan sosialnya.
+                if (empty(array_filter($dataToSave))) {
+                    $user->socials()->where('name', $linkType)->delete();
                 } else {
-                    $user->socials()->updateOrCreate([
-                        'name' => $linkType,
-                        'username' => $validatedData['username']
-                    ]);
+                    $user->socials()->updateOrCreate(
+                        ['name' => $linkType],
+                        $dataToSave
+                    );
                 }
             }
         }
