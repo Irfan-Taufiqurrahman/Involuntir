@@ -10,14 +10,13 @@ use App\Models\Criteria;
 use App\Models\Participation;
 use App\Models\Task;
 use Carbon\Carbon;
-use Cviebrock\EloquentSluggable\Services\SlugService;
 use Illuminate\Http\Client\HttpClientException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Enum;
 
@@ -51,7 +50,7 @@ class ActivityController extends Controller
             'pribadi' => 'users.tipe = "pribadi" OR users.tipe = "Individu"',
         ];
 
-        if (!array_key_exists($filter, $roles)) {
+        if (! array_key_exists($filter, $roles)) {
             throw new HttpClientException('invalid filter key', 400);
         }
 
@@ -169,30 +168,15 @@ class ActivityController extends Controller
 
     public function show(Activity $activity): JsonResponse
     {
-
-        $id_activity = $activity->id;
-
-        $total_volunteer = DB::table('participations')
-            ->select(DB::raw('COUNT(participations.id) as total_volunteer'))
-            ->where('activity_id', '=', $id_activity)
-            ->get();
-
-        $tasks = Task::join('activities', 'activity_id', '=', 'activities.id')
-            ->where('activity_id', $id_activity)
-            ->get();
-
-        $criterias = Criteria::join('activities', 'activity_id', '=', 'activities.id')
-            ->where('activity_id', $id_activity)
-            ->get();
-
-        $user = $activity->user;
+        $activity = $activity->load([
+            'prices', 'participants',
+            'tasks',
+            'criterias',
+        ])->loadCount('participants');
 
         return response()->json([
             'data' => [
-                'activity' => $activity->load("prices"),
-                'total_volunteer' => $total_volunteer,
-                'tugas' => $tasks,
-                'kriteria' => $criterias,
+                'activity' => $activity,
             ],
         ]);
     }
@@ -233,13 +217,13 @@ class ActivityController extends Controller
     {
         $user = auth('api')->user();
 
-        if (!$user) {
+        if (! $user) {
             return response()->json(['message' => 'user not found!'], 404);
         }
 
         $validator = Validator::make($request->all(), [
             'judul_activity' => 'required|string|max:255',
-            'judul_slug' => 'nullable|string|unique:activities,judul_slug|max:255',
+            'judul_slug' => 'sometimes|string|unique:activities,judul_slug|max:255',
             'category_id' => ['required', 'exists:categories,id'],
             'detail_activity' => 'required|string',
             'batas_waktu' => 'required|numeric',
@@ -256,19 +240,18 @@ class ActivityController extends Controller
 
         ]);
 
-
         if ($validator->fails()) {
             return response()->json(['message' => $validator->errors()], 400);
         }
 
         $validated = $validator->validated();
 
-        $slug = $validated['judul_slug'];
+        $slug = ! empty($request->judul_slug) ? $validated['judul_slug'] : Str::slug($request->judul_activity . ' ' . Str::random(6));
         $photo = $request->file('foto_activity');
-        $activityType = $validated['jenis_activity'] ?? null;
-        $activityPrices = $validated['biaya_activity'] ?? [];
+        $activityType = $request->jenis_activity ?? ActivityType::FREE->value;
+        $activityPrices = $request->biaya_activity ?? [];
 
-        if (!empty($photo)) {
+        if (! empty($photo)) {
             $photo = $this->uploadImage($request, 'foto_activity', $slug);
         }
 
@@ -287,12 +270,11 @@ class ActivityController extends Controller
             'status' => 'Pending',
             'kuota' => $request->kuota ? $request->kuota : 0,
             'tautan' => $request->tautan ? $request->tautan : 'involuntir',
-            'jenis_activity' =>  ActivityType::from($activityType),
+            'jenis_activity' => $activityType,
             'updated_at' => $request->status_publish === 'published' ? Carbon::now() : null,
         ]);
 
-
-        if (!empty($activityType) && ActivityType::PAID->equals(ActivityType::from($activityType))) {
+        if (! empty($activityType) && ActivityType::PAID->equals(ActivityType::from($activityType))) {
 
             foreach ($activityPrices as $value) {
                 $activity->prices()->updateOrCreate($value);
@@ -331,7 +313,7 @@ class ActivityController extends Controller
     {
         $user = auth('api')->user();
 
-        if (!$user) {
+        if (! $user) {
             return response()->json(['message' => 'User not found!'], 404);
         }
 
@@ -381,7 +363,7 @@ class ActivityController extends Controller
 
         $activityType = $validated['jenis_activity'] ?? null;
 
-        if (!empty($activityType) && ActivityType::FREE->equals(ActivityType::from($activityType))) {
+        if (! empty($activityType) && ActivityType::FREE->equals(ActivityType::from($activityType))) {
             // Menghapus semua biaya aktivitas jika jenis aktivitas berubah menjadi "free"
             $activity->prices()->delete();
         }

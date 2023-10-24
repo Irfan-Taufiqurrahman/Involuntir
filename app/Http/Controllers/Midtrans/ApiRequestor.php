@@ -91,7 +91,7 @@ class ApiRequestor extends Controller
             }
             if (! in_array($result_array->status_code, [200, 201, 202, 407])) {
                 $message = 'Midtrans Error (' . $result_array->status_code . '): '
-                . $result_array->status_message;
+                    . $result_array->status_message;
                 if (isset($result_array->validation_messages)) {
                     $message .= '. Validation Messages (' . implode(', ', $result_array->validation_messages) . ')';
                 }

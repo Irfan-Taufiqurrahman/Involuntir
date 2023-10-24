@@ -22,16 +22,16 @@ class UserController extends Controller
     protected function getValidationRules($linkType)
     {
         $commonRules = [
-            'url' => ['nullable']
+            'url' => ['nullable'],
         ];
 
         if ($linkType === LinkType::WEBSITE->value) {
             return [
-                'url' => array_merge($commonRules['url'], ['url', 'active_url'])
+                'url' => array_merge($commonRules['url'], ['url', 'active_url']),
             ];
         } else {
             return [
-                'username' => array_merge($commonRules['url'], ['alpha_dash'])
+                'username' => array_merge($commonRules['url'], ['alpha_dash']),
             ];
         }
     }
@@ -77,11 +77,11 @@ class UserController extends Controller
     {
         $user = User::find(Auth::user()->id);
 
-        if ($request->has("socials")) {
+        if ($request->has('socials')) {
             $request->validate([
                 'socials.*.name' => ['required', 'string', new Enum(LinkType::class)],
                 'socials.*.url' => ['nullable', 'url', 'active_url'],
-                'socials.*.username' => ['nullable', 'alpha_dash']
+                'socials.*.username' => ['nullable', 'alpha_dash'],
             ]);
 
             foreach ($request->input('socials') as $socialLinkData) {
@@ -107,7 +107,6 @@ class UserController extends Controller
                 }
             }
         }
-
 
         if ($request->has('email')) {
             $validator = Validator::make(request()->only('email'), [
@@ -205,7 +204,7 @@ class UserController extends Controller
 
     public function show(User $user)
     {
-        $user->load("socials");
+        $user->load('socials');
 
         $activities = Activity::where('activities.user_id', $user->id)->leftJoin('participations', 'participations.activity_id', '=', 'activities.id')
             ->groupBy('activities.id')->orderBy('activities.created_at', 'DESC')

@@ -7,18 +7,16 @@ use Illuminate\Database\Eloquent\Model;
 
 class SocialLink extends Model
 {
-
     protected $guarded = [];
 
     protected $casts = [
-        'name' => LinkType::class
+        'name' => LinkType::class,
     ];
 
     public function user()
     {
         return $this->belongsTo(User::class);
     }
-
 
     public function getUrlAttribute($value)
     {

@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class ActivityPrice extends Model
 {
-
     protected $guarded = [];
 
     public $timestamps = false;

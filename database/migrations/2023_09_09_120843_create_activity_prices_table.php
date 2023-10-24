@@ -16,8 +16,8 @@ class CreateActivityPricesTable extends Migration
     {
         Schema::create('activity_prices', function (Blueprint $table) {
             $table->id();
-            $table->integer("per");
-            $table->decimal("price", 8, 0);
+            $table->integer('per');
+            $table->decimal('price', 8, 0);
             $table->foreignIdFor(Activity::class)->onDelete('CASCADE');
         });
     }

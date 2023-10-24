@@ -15,7 +15,7 @@ enum LinkType: string
     public function fullUrl($username)
     {
         return match ($this) {
-            LinkType::TIKTOK => "https://www.tiktok.com/@" . $username,
+            LinkType::TIKTOK => 'https://www.tiktok.com/@' . $username,
             LinkType::TWITTER => 'https://twitter.com/' . $username,
             LinkType::FACEBOOK => 'https://facebook.com/' . $username,
             LinkType::LINKEDIN => 'https://linkedin.com/' . $username,

@@ -165,7 +165,7 @@ Route::prefix('donation')->group(function () {
 });
 
 Route::prefix('participation')->middleware('jwt.verify')->group(function () {
-    Route::post('/', [ParticipationController::class, 'submit']);
+    Route::post('/{activity}', [ParticipationController::class, 'submit']);
     Route::get('/{activity}/participants', [ParticipationController::class, 'participants']);
 });
 
@@ -180,7 +180,6 @@ Route::post('/payments/midtrans-notification', [PaymentCallbackController::class
 
 Route::prefix('password')->group(function () {
     Route::get('/resetemail', [PasswordController::class, 'resetEmail']);
-
     Route::get('/reset', [PasswordController::class, 'resetPassword']);
     Route::post('/request-otp', [PasswordController::class, 'requestOtp']);
     Route::post('/verify-otp', [PasswordController::class, 'verifyOtp']);
@@ -247,3 +246,8 @@ Route::prefix('admin')->middleware(['jwt.verify', 'admin'])->group(function () {
     Route::get('/users', [UserAdminController::class, 'index']);
     Route::get('/galangdana', [CampaignAdminController::class, 'index']);
 });
+
+// Route::prefix("payment")->group(function () {
+//     Route::get("/webhooks");
+//     Route::get("/transactions");
+// })

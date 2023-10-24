@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\ParticipationStatus;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -15,7 +16,11 @@ class Participation extends Model
         'nomor_hp',
         'akun_linkedin',
         'pesan',
+        'status',
+        'kode_transaksi',
     ];
+
+    protected $casts = ['status' => ParticipationStatus::class];
 
     public function activity()
     {

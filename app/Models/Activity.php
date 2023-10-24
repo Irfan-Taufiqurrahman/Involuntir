@@ -54,4 +54,19 @@ class Activity extends Model
     {
         return $this->hasMany(ActivityPrice::class);
     }
+
+    public function participants()
+    {
+        return $this->hasMany(Participation::class);
+    }
+
+    public function tasks()
+    {
+        return $this->hasMany(Task::class);
+    }
+
+    public function criterias()
+    {
+        return $this->hasMany(Criteria::class);
+    }
 }

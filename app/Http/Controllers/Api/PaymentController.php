@@ -171,6 +171,7 @@ class PaymentController extends Controller
     //         ], 400);
     //     }
     // }
+
     public static function chargeBankTransfer($order_id, $total_amount, $transaction_object, $type)
     {
         try {

@@ -3,6 +3,7 @@
 namespace App\Services\Midtrans;
 
 use App\Models\Donation;
+use App\Models\Participation;
 use App\Models\Transaction;
 use Midtrans\Notification;
 
@@ -11,6 +12,8 @@ class CallbackService extends Midtrans
     public $notification;
 
     public Transaction $transaction;
+
+    public Participation $participation;
 
     public $donation;
 
@@ -66,6 +69,11 @@ class CallbackService extends Midtrans
         return $this->transaction;
     }
 
+    public function getParticipation()
+    {
+        return $this->participation;
+    }
+
     public function getDonation()
     {
         return $this->donation;
@@ -101,6 +109,11 @@ class CallbackService extends Midtrans
         } elseif ($this->type === 'T') {
             $transaction = Transaction::where('invoice_id', $transactionNumber)->first();
             $this->transaction = $transaction;
+        } elseif ($this->type === 'A') {
+            $transaction = Transaction::where('invoice_id', $transactionNumber)->first();
+            $this->transaction = $transaction;
+            $participation = Participation::where('kode_transaksi', $transactionNumber)->first();
+            $this->participation = $participation;
         }
         $this->transaction->payment_method = $notification->payment_type;
         $this->notification = $notification;
