@@ -56,7 +56,7 @@ class BankPaymentService extends Midtrans
             'custom_expiry' => [
                 'expiry_duration' => 24,
                 'unit' => 'hour',
-            ],
+            ],            
         ];
 
         try {

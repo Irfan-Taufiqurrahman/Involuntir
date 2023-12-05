@@ -42,7 +42,7 @@ class ApiRequestor extends Controller
                 'Content-Type: application/json',
                 'Accept: application/json',
                 'User-Agent: midtrans-php-v2.5.2',
-                'Authorization: Basic ' . base64_encode($server_key . ':'),
+                'Authorization: Basic U0ItTWlkLXNlcnZlci1NT1ZwMVp6VEROcmhfQ2VnRy1VcE1uZUs=',
             ],
             CURLOPT_RETURNTRANSFER => 1,
         ];

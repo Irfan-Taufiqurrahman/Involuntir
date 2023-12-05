@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 
 class Config extends Controller
 {
-    public static $serverKey = 'SB-Mid-server-SfD9vYaMCswFXQk_y4aiVmpZ';
+    public static $serverKey = 'SB-Mid-server-MOVp1ZzTDNrh_CegG-UpMneK';
 
     /**
      * Your merchant's client key

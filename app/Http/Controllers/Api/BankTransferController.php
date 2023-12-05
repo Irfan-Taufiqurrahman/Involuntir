@@ -32,7 +32,7 @@ class BankTransferController extends Controller
             'alamat_email' => 'required',
             'user_id' => 'required',
             'campaign_id' => 'required',
-            'bank_name' => 'required|min:3|in:bni,bri,mandiri,permata',
+            'bank_name' => 'required',
         ]);
 
         if ($validator->fails()) {
