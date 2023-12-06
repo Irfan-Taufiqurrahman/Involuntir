@@ -76,7 +76,8 @@ class EMoneyController extends Controller
             $responsePayment = new EMoneyPaymentService($donation, 'gopay');
             $response = $responsePayment->sendRequest();
             $donation->qr_code = $response->actions[0]->url;
-
+            $donation->deadline=$response->expiry_time;
+            $donation->status_pembayaran=$response->transaction_status;
             $donation->save();
 
             $donation->midtrans_response = $response;

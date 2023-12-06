@@ -27,7 +27,7 @@ class EMoneyPaymentService extends Midtrans
     {
 
         try {
-            \Midtrans\Config::$serverKey = config('midtrans.server_key');
+            \Midtrans\Config::$serverKey;
 
             $params = [
                 'payment_type' => $this->emoney_name,

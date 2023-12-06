@@ -28,7 +28,7 @@ class BankPaymentService extends Midtrans
         $this->bank_name = $bank_name;
         $this->headers = [
             'Accept' => 'application/json',
-            'Authorization' => 'Basic ' . base64_encode(config('midtrans.serverKey')),
+            'Authorization' => 'Basic ' . base64_encode(config('midtrans.server_key')),
             'Content-Type' => 'application/json',
         ];
     }
