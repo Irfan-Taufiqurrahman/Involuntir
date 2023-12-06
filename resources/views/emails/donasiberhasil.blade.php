@@ -220,7 +220,7 @@
                                                                             <p
                                                                                 style="margin: 0; font-size: 14px; text-align: center;">
                                                                                 <span style="font-size:12px;">© 2018-2021
-                                                                                    Peduly. All Right
+                                                                                    Involuntir. All Right
                                                                                     Reserved</span><br /><span
                                                                                     style="font-size:12px;">Jl. Kertajaya
                                                                                     No. 72, Surabaya, 60292</span>

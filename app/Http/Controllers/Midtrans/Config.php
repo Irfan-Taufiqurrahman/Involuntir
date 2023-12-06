@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 
 class Config extends Controller
 {
-    public static $serverKey = 'SB-Mid-server-MOVp1ZzTDNrh_CegG-UpMneK';
+    public static $serverKey;
 
     /**
      * Your merchant's client key
@@ -54,6 +54,19 @@ class Config extends Controller
 
     const SNAP_PRODUCTION_BASE_URL = 'https://app.midtrans.com/snap/v1';
 
+    public static function initialize()
+    {
+        self::$serverKey = getenv('MIDTRANS_SERVERKEY');
+
+        if (empty(self::$serverKey)) {
+            throw new \Exception('MIDTRANS_SERVERKEY is not set in the environment.');
+        }
+
+        // Set other configuration values as needed
+        self::$clientKey = getenv('MIDTRANS_CLIENTKEY'); // Replace with your actual client key
+        self::$isProduction = config('midtrans.is_production', true); // Use the value from the config or default to true
+        // Set other configuration values as needed
+    }
     /**
      * Get baseUrl
      *
@@ -78,3 +91,4 @@ class Config extends Controller
         return config('midtrans.is_production') ? Config::SNAP_PRODUCTION_BASE_URL : Config::SNAP_SANDBOX_BASE_URL;
     }
 }
+Config::initialize();

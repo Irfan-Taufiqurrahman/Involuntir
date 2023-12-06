@@ -78,14 +78,17 @@ class BankTransferController extends Controller
 
             $responsePayment = new BankPaymentService($donation, $campaign, $request->input('bank_name'));
             $response = $responsePayment->sendRequest();
-
-            if (isset($response->va_numbers[0]->va_number)) {
+            if ($response->va_numbers[0]->va_number !== null) {
                 $donation->nomor_va = $response->va_numbers[0]->va_number;
             } elseif (isset($response->permata_va_number)) {
                 $donation->nomor_va = $response->permata_va_number;
             } elseif (isset($response->bill_key) && isset($response->biller_code)) {
                 $donation->nomor_va = $response->biller_code . ',' . $response->bill_key;
             }
+            $donation->deadline=$response->expiry_time;
+            $donation->status_pembayaran=$response->transaction_status;
+
+           
 
             $donation->save();
 

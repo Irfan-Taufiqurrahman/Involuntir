@@ -155,8 +155,8 @@ Route::prefix('donation')->group(function () {
     Route::post('/', [DonationController::class, 'submit']);
     Route::get('/all', [DonationController::class, 'index']);
     Route::get('/checkreferal', [DonationController::class, 'checkReferalCode']);
-    Route::post('/bank_transfer', [BankTransferController::class, 'submit']);
-    Route::post('/emoney', [EMoneyController::class, 'submit']);
+    Route::post('/bank_transfer', [BankTransferController::class, 'submit'])->middleware('jwt.verify');
+    Route::post('/emoney', [EMoneyController::class, 'submit'])->middleware('jwt.verify');
     Route::post('/balance', [BalanceController::class, 'submit'])->middleware('jwt.verify');
 
     Route::get('/histories', [DonationController::class, 'histories'])->middleware('jwt.verify');
