@@ -29,7 +29,7 @@ class Config extends Controller
      *
      * @static
      */
-    public static $is3ds = false;
+    public static $is3ds = true;
 
     /**
      * Enable request params sanitizer (validate and modify charge request params).
@@ -37,7 +37,7 @@ class Config extends Controller
      *
      * @static
      */
-    public static $isSanitized = false;
+    public static $isSanitized = true;
 
     /**
      * Default options for every request
