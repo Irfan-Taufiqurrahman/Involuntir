@@ -73,9 +73,7 @@ class BankTransferController extends Controller
             $donation->deadline = $deadline;
             $donation->tanggal_donasi = $tanggal_donasi;
             $donation->status_donasi = 'Pending';
-
-            Mail::to($email)->send(new SubmitDonation($nama_lengkap, $nominal, $metode, $campaign->judul_campaign));
-
+                        
             $responsePayment = new BankPaymentService($donation, $campaign, $request->input('bank_name'));
             $response = $responsePayment->sendRequest();
             if (isset($response->va_numbers[0]->va_number)) {
@@ -87,9 +85,14 @@ class BankTransferController extends Controller
             }
             $donation->deadline=$response->expiry_time;
             $donation->status_pembayaran=$response->transaction_status;
-
+            
+            if($response->transaction_status='pending'){
+                Mail::to($email)->send(new SubmitDonation($nama_lengkap, $nominal, $bank_name, $campaign->judul_campaign));
+            }
+            else{
+                return response()->json(['msg' => 'failed'], 204);
+            }
            
-
             $donation->save();
 
             $donation->midtrans_response = $response;
@@ -101,8 +104,8 @@ class BankTransferController extends Controller
                 'no_hp' => $nomor_hp,
                 'kode_referal' => $kode_referensi,
             ]);
-
-            return response()->json(['data' => $donation, 'msg' => 'success'], 201);
+           
+            return response()->json(['msg' => 'success'], 201);
         } catch (Exception $err) {
             throw $err;
         }
