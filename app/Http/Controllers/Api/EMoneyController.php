@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Validator;
 
 class EMoneyController extends Controller
 {
-    public function generateKode($prefix = 'INVD')
+    public function generateKode($prefix = 'INVO')
     {
         $time = str_replace('.', '', microtime(true));
 

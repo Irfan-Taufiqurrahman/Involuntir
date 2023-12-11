@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Validator;
 
 class BankTransferController extends Controller
 {
-    public function generateKode($prefix = 'INVD')
+    public function generateKode($prefix = 'INVO')
     {
         $time = str_replace('.', '', microtime(true));
 
@@ -31,7 +31,7 @@ class BankTransferController extends Controller
             'nama_lengkap' => 'required',
             'alamat_email' => 'required',
             'user_id' => 'required',
-            'campaign_id' => 'required',
+            'activity_id' => 'required',
             'bank_name' => 'required',
         ]);
 
@@ -48,7 +48,7 @@ class BankTransferController extends Controller
         $bank_name = $request->input('bank_name');
         $pesan_baik = $request->input('pesan_baik');
         $uid = $request->input('user_id');
-        $campaign_id = $request->input('campaign_id');
+        $activity_id = $request->input('activity_id');
         $kode_donasi = $this->generateKode();
 
         $tanggal_donasi = Carbon::now(new \DateTimeZone('Asia/Jakarta'));
