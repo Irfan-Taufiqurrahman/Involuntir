@@ -227,7 +227,8 @@ class ActivityController extends Controller
             'category_id' => ['required', 'exists:categories,id'],
             'detail_activity' => 'required|string',
             'batas_waktu' => 'required|numeric',
-            'foto_activity' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            // 'foto_activity' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'foto_activity' => 'required|string',
             'lokasi' => 'required|string|max:255',
             'waktu_activity' => 'required|string',
             'tipe_activity' => 'required|in:Virtual,In-Person,Hybrid',
@@ -247,20 +248,20 @@ class ActivityController extends Controller
         $validated = $validator->validated();
 
         $slug = ! empty($request->judul_slug) ? $validated['judul_slug'] : Str::slug($request->judul_activity . ' ' . Str::random(6));
-        $photo = $request->file('foto_activity');
+        // $photo = $request->file('foto_activity');
         $activityType = $request->jenis_activity ?? ActivityType::FREE->value;
         $activityPrices = $request->biaya_activity ?? [];
 
-        if (! empty($photo)) {
-            $photo = $this->uploadImage($request, 'foto_activity', $slug);
-        }
+        // if (! empty($photo)) {
+        //     $photo = $this->uploadImage($request, 'foto_activity', $slug);
+        // }
 
         $activity = Activity::create([
             'category_id' => $validated['category_id'],
             'user_id' => $user->id,
             'judul_activity' => $request->judul_activity,
             'judul_slug' => $slug,
-            'foto_activity' => $photo,
+            'foto_activity' =>  $validated['foto_activity'],
             'detail_activity' => $request->detail_activity,
             'batas_waktu' => Carbon::now()->addDays($request->batas_waktu),
             'waktu_activity' => $request->waktu_activity,

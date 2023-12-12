@@ -38,14 +38,14 @@ class EMoneyPaymentService extends Midtrans
                 'customer_details' => [
                     'email' => $this->donation->email,
                     'first_name' => $this->donation->nama,
-                    'last_name' => 'Peduly',
+                    'last_name' => 'Involuntir',
                     'phone' => $this->donation->nomor_telp,
                 ],
                 'item_details' => [[
-                    'id' => $this->donation->campaign_id,
+                    'id' => $this->donation->activity_id,
                     'price' => $this->donation->donasi,
                     'quantity' => 1,
-                    'name' => $this->donation->campaign->judul_campaign,
+                    'name' => $this->donation->activity->judul_activity,
                 ]],
                 'custom_expiry' => [
                     'expiry_duration' => 24,

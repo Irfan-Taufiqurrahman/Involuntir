@@ -65,6 +65,16 @@ class Activity extends Model
         return $this->hasMany(Task::class);
     }
 
+    public function donations(): HasMany
+    {
+        return $this->hasMany(Donation::class);
+    }
+
+    public function totalDonations()
+    {
+        return $this->donations->sum('donasi');
+    }
+
     public function criterias()
     {
         return $this->hasMany(Criteria::class);
