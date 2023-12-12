@@ -35,7 +35,7 @@ class DonationController extends Controller
         }
     }
 
-    public function generateKode($prefix = 'INVO')
+    public function generateKode($prefix = 'INVD')
     {
         $time = str_replace('.', '', microtime(true));
 
