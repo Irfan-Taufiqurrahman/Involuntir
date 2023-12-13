@@ -227,7 +227,7 @@ class ActivityController extends Controller
         'category_id' => ['required', 'exists:categories,id'],
         'detail_activity' => 'required|string',
         'batas_waktu' => 'required|numeric',
-        'foto_activity' => 'required|string', // Corrected the type to 'string'
+        'foto_activity' => 'required|string', // sebelum production harus di ganti ke image dulu
         'lokasi' => 'required|string|max:255',
         'waktu_activity' => 'required|string',
         'tipe_activity' => 'required|in:Virtual,In-Person,Hybrid',
@@ -284,7 +284,7 @@ class ActivityController extends Controller
             $activity->prices()->updateOrCreate($value);
         }
         $activity->save();
-    }
+    }   
 
     $tasks = $request->tasks ?? [];
 
