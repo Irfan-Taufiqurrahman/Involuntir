@@ -214,101 +214,105 @@ class ActivityController extends Controller
     }
 
     public function create(Request $request)
-    {
-        $user = auth('api')->user();
+{
+    $user = auth('api')->user();
 
-        if (! $user) {
-            return response()->json(['message' => 'user not found!'], 404);
-        }
-
-        $validator = Validator::make($request->all(), [
-            'judul_activity' => 'required|string|max:255',
-            'judul_slug' => 'sometimes|string|unique:activities,judul_slug|max:255',
-            'category_id' => ['required', 'exists:categories,id'],
-            'detail_activity' => 'required|string',
-            'batas_waktu' => 'required|numeric',
-            // 'foto_activity' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            'foto_activity' => 'required|string',
-            'lokasi' => 'required|string|max:255',
-            'waktu_activity' => 'required|string',
-            'tipe_activity' => 'required|in:Virtual,In-Person,Hybrid',
-            'kuota' => 'required|numeric',
-            'tautan' => 'required|string',
-            'jenis_activity' => ['nullable', new Enum(ActivityType::class)],
-            'biaya_activity' => ['required_if:jenis_activity,paid', 'array'],
-            'biaya_activity.*.per' => ['required_if:jenis_activity,paid', 'numeric'],
-            'biaya_activity.*.price' => ['required_if:jenis_activity,paid', 'numeric'],
-
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json(['message' => $validator->errors()], 400);
-        }
-
-        $validated = $validator->validated();
-
-        $slug = ! empty($request->judul_slug) ? $validated['judul_slug'] : Str::slug($request->judul_activity . ' ' . Str::random(6));
-        // $photo = $request->file('foto_activity');
-        $activityType = $request->jenis_activity ?? ActivityType::FREE->value;
-        $activityPrices = $request->biaya_activity ?? [];
-
-        // if (! empty($photo)) {
-        //     $photo = $this->uploadImage($request, 'foto_activity', $slug);
-        // }
-
-        $activity = Activity::create([
-            'category_id' => $validated['category_id'],
-            'user_id' => $user->id,
-            'judul_activity' => $request->judul_activity,
-            'judul_slug' => $slug,
-            'foto_activity' =>  $validated['foto_activity'],
-            'detail_activity' => $request->detail_activity,
-            'batas_waktu' => Carbon::now()->addDays($request->batas_waktu),
-            'waktu_activity' => $request->waktu_activity,
-            'lokasi' => $request->lokasi,
-            'tipe_activity' => $request->tipe_activity,
-            'status_publish' => $request->status_publish,
-            'status' => 'Pending',
-            'kuota' => $request->kuota ? $request->kuota : 0,
-            'tautan' => $request->tautan ? $request->tautan : 'involuntir',
-            'jenis_activity' => $activityType,
-            'updated_at' => $request->status_publish === 'published' ? Carbon::now() : null,
-        ]);
-
-        if (! empty($activityType) && ActivityType::PAID->equals(ActivityType::from($activityType))) {
-
-            foreach ($activityPrices as $value) {
-                $activity->prices()->updateOrCreate($value);
-            }
-
-            $activity->save();
-        }
-
-        $tasks = $request->tasks ? json_decode($request->tasks) : [];
-
-        foreach ($tasks as $task) {
-            $task = Task::create([
-                'activity_id' => $activity->id,
-                'deskripsi' => $task,
-            ]);
-        }
-
-        $activity->tasks = $tasks;
-
-        $criterias = $request->criterias ? json_decode($request->criterias) : [];
-        foreach ($criterias as $criteria) {
-            Criteria::create([
-                'activity_id' => $activity->id,
-                'deskripsi' => $criteria,
-            ]);
-        }
-
-        $activity->criterias = $criterias;
-
-        $activity->load('prices');
-
-        return response()->json(['data' => $activity], 201);
+    if (!$user) {
+        return response()->json(['message' => 'user not found!'], 404);
     }
+
+    $validator = Validator::make($request->all(), [
+        'judul_activity' => 'required|string|max:255',
+        'judul_slug' => 'sometimes|string|unique:activities,judul_slug|max:255',
+        'category_id' => ['required', 'exists:categories,id'],
+        'detail_activity' => 'required|string',
+        'batas_waktu' => 'required|numeric',
+        'foto_activity' => 'required|string', // Corrected the type to 'string'
+        'lokasi' => 'required|string|max:255',
+        'waktu_activity' => 'required|string',
+        'tipe_activity' => 'required|in:Virtual,In-Person,Hybrid',
+        'status_publish' => 'required|in:drafted,published',
+        'kuota' => 'required|numeric',
+        'tautan' => 'required|string',
+        'jenis_activity' => ['nullable', new Enum(ActivityType::class)],
+        'biaya_activity' => ['required_if:jenis_activity,paid', 'array'],
+        'biaya_activity.*.per' => ['required_if:jenis_activity,paid', 'numeric'],
+        'biaya_activity.*.price' => ['required_if:jenis_activity,paid', 'numeric'],
+        'tasks' => 'sometimes|array',
+        'tasks.*.deskripsi' => 'required|string',
+        'criterias' => 'sometimes|array',
+        'criterias.*.deskripsi' => 'required|string',
+    ]);
+
+    if ($validator->fails()) {
+        return response()->json(['message' => $validator->errors()], 400);
+    }
+
+    $validated = $validator->validated();
+
+    $slug = !empty($request->judul_slug) ? $validated['judul_slug'] : Str::slug($request->judul_activity . ' ' . Str::random(6));
+    $photo = $request->file('foto_activity');
+    $activityType = $request->jenis_activity ?? ActivityType::FREE->value;
+    $activityPrices = $request->biaya_activity ?? [];
+
+    if (!empty($photo)) {
+        // Assuming you have an 'uploadImage' method
+        $photo = $this->uploadImage($request, 'foto_activity', $slug);
+    }
+
+    $activity = Activity::create([
+        'category_id' => $validated['category_id'],
+        'user_id' => $user->id,
+        'judul_activity' => $request->judul_activity,
+        'judul_slug' => $slug,
+        'foto_activity' => $photo,
+        'detail_activity' => $request->detail_activity,
+        'batas_waktu' => Carbon::now()->addDays($request->batas_waktu),
+        'waktu_activity' => $request->waktu_activity,
+        'lokasi' => $request->lokasi,
+        'tipe_activity' => $request->tipe_activity,
+        'status_publish' => $request->status_publish,
+        'status' => 'Pending',
+        'kuota' => $request->kuota ? $request->kuota : 0,
+        'tautan' => $request->tautan ? $request->tautan : 'involuntir',
+        'jenis_activity' => $activityType,
+        'updated_at' => $request->status_publish === 'published' ? Carbon::now() : null,
+    ]);
+
+    if (!empty($activityType) && ActivityType::PAID->equals(ActivityType::from($activityType))) {
+        foreach ($activityPrices as $value) {
+            $activity->prices()->updateOrCreate($value);
+        }
+        $activity->save();
+    }
+
+    $tasks = $request->tasks ?? [];
+
+    foreach ($tasks as $task) {
+        Task::create([
+            'activity_id' => $activity->id,
+            'deskripsi' => $task['deskripsi'],
+        ]);
+    }
+
+    $activity->tasks = $tasks;
+
+    $criterias = $request->criterias ?? [];
+
+    foreach ($criterias as $criteria) {
+        Criteria::create([
+            'activity_id' => $activity->id,
+            'deskripsi' => $criteria['deskripsi'],
+        ]);
+    }
+
+    $activity->criterias = $criterias;
+
+    $activity->load('prices','tasks','criterias');
+
+    return response()->json(['data' => $activity], 201);
+}
+
 
     public function update(Request $request, $id)
     {
