@@ -1428,16 +1428,11 @@ URL: http://127.0.0.1:8000/api/donation/bank_transfer
 
 | Key            | Value                     | Description |
 | -------------- | ------------------------- | ----------- |
-| nominal        | 20000                     |             |
+| activity_id    | 1                         |             |
 | metode         | bank_transfer             |             |
-| nama_lengkap   | lazu                      |             |
-| alamat_email   | lazuardi.akhmad@gmail.com |             |
-| nomor_ponsel   | 0812312312                |             |
-| kode_referensi | 321                       |             |
-| pesan_baik     | Semoga lekas sembuh       |             |
 | user_id        | 1                         |             |
-| campaign_id    | 1                         |             |
-| bank_name      | bni/permata/mandiri       |             |
+| nomor_ponsel   | 08564271736 |             |             |
+| bank_name      | bni/bri/mandiri           |             |
 
 **_More example Requests/Responses:_**
 
