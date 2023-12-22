@@ -16,8 +16,9 @@ class DatabaseSeeder extends Seeder
         // \App\Models\User::factory(10)->create();
         $this->call([
             // KabarTerbaruSeeder::class,
-            ActivitiesSeeder::class,
             CategorySeeder::class,
+            // UserSeeder::class,
+            // ActivitiesSeeder::class,
             ConnectCampaignToCategory::class,
         ]);
     }

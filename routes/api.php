@@ -95,48 +95,46 @@ Route::prefix('galangdana')->group(function () {
     Route::delete('/{campaign}/report', [CampaignReportController::class, 'cancelReport'])->middleware('jwt.verify');
 });
 
-Route::get('/galangdanasaya', [CampaignController::class, 'myCampaigns'])->middleware('jwt.verify');
+    Route::get('/galangdanasaya', [CampaignController::class, 'myCampaigns'])->middleware('jwt.verify');
 
-Route::prefix('aktivitas')->group(function () {
+    Route::prefix('aktivitas')->group(function () {
     Route::get('/', [ActivityController::class, 'index']);
     Route::get('/{activity}', [ActivityController::class, 'show']);
     Route::get('/byslug/{activity}', [ActivityController::class, 'bySlug']);
-
     Route::post('/create', [ActivityController::class, 'create'])->middleware('jwt.verify');
     Route::post('/create/publish', [ActivityController::class, 'publish'])->middleware('jwt.verify');
     Route::post('/create/draft', [ActivityController::class, 'draft'])->middleware('jwt.verify');
     Route::put('/{id}/update', [ActivityController::class, 'update'])->middleware('jwt.verify');
     Route::delete('/{activity:id}/delete', [ActivityController::class, 'destroy'])->middleware('jwt.verify');
-
     Route::get('isExist/{slug}', [ActivityController::class, 'isExist']);
 });
 
-Route::get('/aktivitassaya', [ActivityController::class, 'myActivities'])->middleware('jwt.verify');
+    Route::get('/aktivitassaya', [ActivityController::class, 'myActivities'])->middleware('jwt.verify');
 
-Route::prefix('kriteria')->group(function () {
+    Route::prefix('kriteria')->group(function () {
     Route::post('/{activity}', [CriteriaController::class, 'create'])->middleware('jwt.verify');
     Route::get('/{activity}', [CriteriaController::class, 'show']);
     Route::put('/{id}', [CriteriaController::class, 'update'])->middleware('jwt.verify');
     Route::delete('/{id}', [CriteriaController::class, 'delete'])->middleware('jwt.verify');
 });
 
-Route::prefix('tugas')->group(function () {
+    Route::prefix('tugas')->group(function () {
     Route::post('/{activity}', [TaskController::class, 'create'])->middleware('jwt.verify');
     Route::get('/{activity}', [TaskController::class, 'show']);
     Route::put('/{id}', [TaskController::class, 'update'])->middleware('jwt.verify');
     Route::delete('/{id}', [TaskController::class, 'delete'])->middleware('jwt.verify');
 });
 
-Route::prefix('kabar_terbaru')->middleware('jwt.verify')->group(function () {
+    Route::prefix('kabar_terbaru')->middleware('jwt.verify')->group(function () {
     Route::post('upload', [KabarTerbaruController::class, 'upload']);
     Route::post('store', [KabarTerbaruController::class, 'store']);
 });
 
-Route::prefix('urgent')->group(function () {
+    Route::prefix('urgent')->group(function () {
     Route::get('/', [UrgentCampaignsController::class, 'index']);
 });
 
-Route::prefix('fundraiser')->middleware(['jwt.verify', 'fundraiser'])->group(function () {
+    Route::prefix('fundraiser')->middleware(['jwt.verify', 'fundraiser'])->group(function () {
     Route::get('/getdonatur', [FundraiserController::class, 'getdonatur']);
     Route::get('/donations', [FundraiserController::class, 'getDonaturByReferral']);
     Route::get('/approve', [FundraiserController::class, 'approve']);
@@ -243,11 +241,7 @@ Route::prefix('companies')->group(function () {
 
 // ADMIN ROUTE
 Route::prefix('admin')->middleware(['jwt.verify', 'admin'])->group(function () {
-    Route::get('/users', [UserAdminController::class, 'index']);
+        Route::get('/users', [UserAdminController::class, 'index']);
     Route::get('/galangdana', [CampaignAdminController::class, 'index']);
 });
 
-// Route::prefix("payment")->group(function () {
-//     Route::get("/webhooks");
-//     Route::get("/transactions");
-// })
