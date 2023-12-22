@@ -16,8 +16,7 @@ return new class extends Migration
         Schema::create('activities', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedBigInteger('category_id')->index('category_id');
-            $table->unsignedInteger('user_id')->index('user_id');
-            $table->string('kode_donasi')->nullable();
+            $table->unsignedInteger('user_id')->index('user_id');            
             $table->string('judul_activity');
             $table->string('judul_slug')->nullable();
             $table->text('foto_activity')->nullable();

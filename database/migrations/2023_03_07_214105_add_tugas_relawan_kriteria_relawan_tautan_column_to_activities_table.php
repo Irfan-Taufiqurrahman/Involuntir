@@ -28,9 +28,14 @@ class AddTugasRelawanKriteriaRelawanTautanColumnToActivitiesTable extends Migrat
     public function down()
     {
         Schema::table('activities', function (Blueprint $table) {
-            $table->dropIfExists('tugas_relawan');
-            $table->dropIfExists('kriteria_relawan');
-            $table->dropIfExists('tautan');
+            // Drop foreign key constraint
+            $table->dropForeign(['activity_id']); // Replace 'activity_id' with the actual foreign key column name
+    
+            // Drop columns
+            $table->dropColumn('tugas_relawan');
+            $table->dropColumn('kriteria_relawan');
+            $table->dropColumn('tautan');
         });
     }
+    
 }

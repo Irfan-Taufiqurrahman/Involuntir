@@ -17,6 +17,8 @@ class DatabaseSeeder extends Seeder
         $this->call([
             // KabarTerbaruSeeder::class,
             CategorySeeder::class,
+            // UserSeeder::class,
+            // ActivitiesSeeder::class,
             ConnectCampaignToCategory::class,
         ]);
     }

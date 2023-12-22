@@ -30,7 +30,7 @@ class DonasiBerhasil extends Mailable
     public function build()
     {
         return $this->subject('Konfirmasi donasi')
-            ->from('noreply@peduly.com', 'Peduly')
+            ->from('noreply@involuntir.com', 'Involuntir')
             ->view('emails.donasiberhasil')
             ->with([
                 'nama_donatur' => $this->data->nama,
