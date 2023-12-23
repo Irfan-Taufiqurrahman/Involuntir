@@ -231,14 +231,7 @@ class AuthController extends Controller
                 ]
             );
 
-        // if(!$user->id)
-        //     $user = User::where('email', $socialiteUser->getEmail())->first();
-        // if(!KodeReferal::where('id_user', $user->id)->first()) {
-        //     KodeReferal::create([
-        //         'id_user' => $user->id,
-        //         'kode_referal' => $this->generateKodeReferal()
-        //     ]);
-        // }
+    
 
         $token = JWTAuth::fromUser($user);
 
