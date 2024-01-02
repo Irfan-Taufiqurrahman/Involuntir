@@ -43,7 +43,7 @@ return new class extends Migration
             $table->string('no_rek')->nullable();
             $table->rememberToken();
             $table->timestamps();
-            $table->date('deleted_at');
+            $table->date('deleted_at')->nullable();
 
             $table->unique(['email'], 'email');
         });

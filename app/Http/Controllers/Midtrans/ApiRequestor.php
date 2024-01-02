@@ -35,14 +35,14 @@ class ApiRequestor extends Controller
     public static function remoteCall($url, $server_key, $data_hash, $post = true)
     {
         $ch = curl_init();
-
+        $midtransServerKey = getenv('MIDTRANS_SERVERKEY');
         $curl_options = [
             CURLOPT_URL => $url,
             CURLOPT_HTTPHEADER => [
                 'Content-Type: application/json',
                 'Accept: application/json',
                 'User-Agent: midtrans-php-v2.5.2',
-                'Authorization: Basic ' . base64_encode($server_key . ':'),
+                'Authorization: Basic ' . base64_encode($midtransServerKey . ':'),
             ],
             CURLOPT_RETURNTRANSFER => 1,
         ];
@@ -59,7 +59,7 @@ class ApiRequestor extends Controller
 
             $curl_options = array_replace_recursive($curl_options, Config::$curlOptions, $headerOptions);
         }
-
+        $server_key = $midtransServerKey;
         if ($post) {
             $curl_options[CURLOPT_POST] = 1;
 

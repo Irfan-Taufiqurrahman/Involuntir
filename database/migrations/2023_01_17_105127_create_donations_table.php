@@ -17,7 +17,7 @@ return new class extends Migration
             $table->increments('id');
             $table->unsignedInteger('user_id')->index();
             $table->string('nama')->nullable();
-            $table->unsignedInteger('campaign_id')->index();
+            $table->unsignedInteger('activity_id')->index();
             $table->string('judul_slug')->nullable();
             $table->integer('biaya_persen')->nullable()->default(15);
             $table->decimal('donasi', 65, 0)->nullable();

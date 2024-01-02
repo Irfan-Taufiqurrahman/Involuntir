@@ -340,6 +340,7 @@ class ActivityController extends Controller
             'category_id' => ['sometimes', 'required', 'exists:categories,id'],
             'detail_activity' => 'sometimes|required|string',
             'batas_waktu' => 'sometimes|required|numeric',
+            // 'foto_activity' => 'sometimes|nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'foto_activity' => 'sometimes|nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'lokasi' => 'sometimes|required|string|max:255',
             'waktu_activity' => 'sometimes|required|string',
