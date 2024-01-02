@@ -53,7 +53,7 @@ class PaymentCallbackController extends Controller
 
                     $donation = $callback->getDonation();
 
-                    $data = Donation::with('campaign')->where('kode_donasi', $donation->kode_donasi)->first();
+                    $data = Donation::with('activity')->where('kode_donasi', $donation->kode_donasi)->first();
 
                     $fundraiser = User::find($data->campaign->user_id);
 
@@ -146,8 +146,7 @@ class PaymentCallbackController extends Controller
 
             return response()->json([
                 'success' => true,
-                'data' => $data,
-                'message' => 'Notifikasi berhasil diproses',
+                $callback
             ]);
         } else {
             return response()
