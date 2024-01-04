@@ -16,46 +16,19 @@ use Illuminate\Support\Facades\Mail;
 
 class PaymentCallbackController extends Controller
 {
+    
     public function receive()
     {
         $callback = new CallbackService();
-
+        $dataOrderId=$callback->getNotification();
         if ($callback->isSignatureKeyVerified()) {
+        
+            $donation = $callback->getDonation();
+            if(substr($dataOrderId->order_id, 0, 4) === 'INVO'){    
 
-            switch ($callback->getType()) {
-                case 'T':
-                    $transaction = $callback->getTransaction();
+                    $data = Donation::where('kode_donasi', $donation->kode_donasi)->first();
 
-                    $data = Transaction::where('invoice_id', $transaction->invoice_id)->with('balance')->first();
-
-                    if ($callback->isSuccess()) {
-                        if ($transaction->payment_method === 'bank_transfer') {
-                            $data->balance->amount = $data->balance->amount + config('midtrans.fee_bank_transfer')($data->amount);
-                        } elseif ($transaction->payment_method === 'gopay') {
-                            $data->balance->amount = $data->balance->amount + config('midtrans.fee_qris')($data->amount);
-                        }
-                        $data->status = 'approved';
-                        $data->balance->save();
-                        $data->save();
-                    }
-
-                    if ($callback->isExpire()) {
-                        $data->status = 'rejected';
-                        $data->save();
-                    }
-
-                    if ($callback->isCancelled()) {
-                        $data->status = 'rejected';
-                        $data->save();
-                    }
-                    break;
-                case 'D':
-
-                    $donation = $callback->getDonation();
-
-                    $data = Donation::with('campaign')->where('kode_donasi', $donation->kode_donasi)->first();
-
-                    $fundraiser = User::find($data->campaign->user_id);
+                    $fundraiser = User::find($data->user_id);
 
                     if ($callback->isSuccess()) {
                         $data->update([
@@ -94,62 +67,49 @@ class PaymentCallbackController extends Controller
                         }
                         Mail::to($data->email)->send(new DonasiGagal($data));
                     }
-
-                    break;
-
-                case 'A':
-
-                    $transaction = $callback->getTransaction();
-                    $participation = $callback->getParticipation();
-
-                    if ($callback->isSuccess()) {
-                        if ($transaction->payment_method === 'bank_transfer') {
-                            $transaction->balance->amount = $transaction->balance->amount + config('midtrans.fee_bank_transfer')($transaction->amount);
-                        } elseif ($transaction->payment_method === 'gopay') {
-                            $transaction->balance->amount = $transaction->balance->amount + config('midtrans.fee_qris')($transaction->amount);
-                        }
-
-                        $participation->status = ParticipationStatus::APPROVED;
-                        $participation->save();
-
-                        $transaction->status = 'approved';
-                        $transaction->balance->save();
-                        $transaction->save();
-
-                        Mail::to($participation->user->email)->send(new ParticipationSuccess($participation, $transaction));
-                    }
-
-                    if ($callback->isExpire()) {
-
-                        $participation->status = ParticipationStatus::REJECTED;
-                        $participation->save();
-
-                        $transaction->status = 'rejected';
-                        $transaction->save();
-
-                        Mail::to($participation->user->email)->send(new ParticipationFailed($participation, $transaction));
-                    }
-
-                    if ($callback->isCancelled()) {
-
-                        $participation->status = ParticipationStatus::REJECTED;
-                        $participation->save();
-
-                        $transaction->status = 'rejected';
-                        $transaction->save();
-
-                        Mail::to($participation->user->email)->send(new ParticipationFailed($participation, $transaction));
-                    }
-
-                    break;
-            }
-
             return response()->json([
                 'success' => true,
-                'data' => $data,
-                'message' => 'Notifikasi berhasil diproses',
+                'data' => $dataOrderId->transaction_status,
+                'message' => 'Notifikasi berhasil diproses INVO',
             ]);
-        } else {
+        } else if(substr($dataOrderId->order_id, 0, 4)  === 'INVD'){
+    
+            // pastikan $notification berisi data yang sesuai
+
+            // URL tujuan untuk mengirim POST request
+            $destinationUrl = "https://api.peduly.com/api/payments/midtrans-notification";
+            
+            // Data yang akan dikirim dalam payload
+            $postData = [
+              json_encode($dataOrderId), // mengonversi $notification ke dalam bentuk JSON             
+            ];
+            
+            // Inisialisasi cURL
+            $ch = curl_init($destinationUrl);
+            
+            // Set opsi cURL
+            curl_setopt($ch, CURLOPT_POST, 1);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $postData);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            
+            // Eksekusi cURL untuk mengirim POST request
+            $response = curl_exec($ch);
+            
+            // Cek apakah request berhasil atau tidak
+            if ($response === false) {
+                // Penanganan kesalahan jika cURL gagal
+                echo 'Error: ' . curl_error($ch);
+            } else {
+                // Penanganan response yang diterima dari server
+                echo 'Response: ' . $response;
+            }
+            
+            // Tutup koneksi cURL
+            curl_close($ch);
+         }
+     }
+    
+     else {
             return response()
                 ->json([
                     'error' => true,

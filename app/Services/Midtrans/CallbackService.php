@@ -4,18 +4,17 @@ namespace App\Services\Midtrans;
 
 use App\Models\Donation;
 use App\Models\Participation;
-use App\Models\Transaction;
 use Midtrans\Notification;
 
 class CallbackService extends Midtrans
 {
     public $notification;
 
-    public Transaction $transaction;
+    // public Transaction $transaction;
 
     public Participation $participation;
 
-    public $donation;
+    public Donation $donation;
 
     public $serverKey;
 
@@ -44,9 +43,10 @@ class CallbackService extends Midtrans
     {
         $statusCode = $this->notification->status_code;
         $transactionStatus = $this->notification->transaction_status;
+        $transactionId=$this->notification->order_id;
         $fraudStatus = ! empty($this->notification->fraud_status) ? ($this->notification->fraud_status == 'accept') : true;
 
-        return $statusCode == 200 && $fraudStatus && ($transactionStatus == 'settlement' || $transactionStatus == 'capture');
+        return $statusCode == 200 && $fraudStatus && ($transactionStatus == 'settlement' || $transactionStatus == 'capture') && $transactionId !== null;
     }
 
     public function isExpire()
@@ -64,11 +64,6 @@ class CallbackService extends Midtrans
         return $this->notification;
     }
 
-    public function getTransaction()
-    {
-        return $this->transaction;
-    }
-
     public function getParticipation()
     {
         return $this->participation;
@@ -81,11 +76,11 @@ class CallbackService extends Midtrans
 
     protected function _createLocalSignatureKey()
     {
-        $transactionId = $this->transaction->invoice_id;
+        $donationId = $this->donation->kode_donasi;
         $statusCode = $this->notification->status_code;
-        $grossAmount = $this->transaction->amount . '.' . '00';
+        $grossAmount = $this->donation->donasi . '.' . '00';
         $serverKey = $this->serverKey;
-        $input = $transactionId . $statusCode . $grossAmount . $serverKey;
+        $input = $donationId . $statusCode . $grossAmount . $serverKey;
         $signature = openssl_digest($input, 'sha512');
 
         return $signature;
@@ -97,25 +92,15 @@ class CallbackService extends Midtrans
 
         $transactionNumber = $notification->order_id;
         // get the third character from string
-        $this->type = substr($transactionNumber, 3, 1);
+      
 
-        if ($this->type === 'D') {
-            $transaction = new Transaction();
+                
             $donation = Donation::where('kode_donasi', $transactionNumber)->first();
-            $transaction->invoice_id = $donation->kode_donasi;
-            $transaction->amount = $donation->donasi;
-            $this->transaction = $transaction;
+            $donation->kode_donasi;
+            $donation->donasi;            
             $this->donation = $donation;
-        } elseif ($this->type === 'T') {
-            $transaction = Transaction::where('invoice_id', $transactionNumber)->first();
-            $this->transaction = $transaction;
-        } elseif ($this->type === 'A') {
-            $transaction = Transaction::where('invoice_id', $transactionNumber)->first();
-            $this->transaction = $transaction;
-            $participation = Participation::where('kode_transaksi', $transactionNumber)->first();
-            $this->participation = $participation;
-        }
-        $this->transaction->payment_method = $notification->payment_type;
+ 
+        $this->donation->metode_pembayaran = $notification->payment_type;
         $this->notification = $notification;
     }
 
