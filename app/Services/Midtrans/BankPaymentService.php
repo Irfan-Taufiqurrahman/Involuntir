@@ -4,7 +4,7 @@ namespace App\Services\Midtrans;
 
 use App\Http\Controllers\Midtrans\ApiRequestor;
 use App\Http\Controllers\Midtrans\Config;
-use App\Models\Campaign;
+use App\Models\Activity;
 use App\Models\Donation;
 use Exception;
 
@@ -18,13 +18,13 @@ class BankPaymentService extends Midtrans
 
     protected $ch;
 
-    protected Campaign $campaign;
+    protected Activity $activity;
 
-    public function __construct($donation, $campaign, $bank_name)
+    public function __construct($donation, $activity, $bank_name)
     {
         parent::__construct();
         $this->donation = $donation;
-        $this->campaign = $campaign;
+        $this->activity = $activity;
         $this->bank_name = $bank_name;
         $this->headers = [
             'Accept' => 'application/json',
@@ -51,7 +51,7 @@ class BankPaymentService extends Midtrans
                 'id' => $this->donation->campaign_id,
                 'price' => $this->donation->donasi,
                 'quantity' => 1,
-                'name' => $this->campaign->judul_campaign,
+                'name' => $this->activity->judul_activity,
             ]],
             'custom_expiry' => [
                 'expiry_duration' => 24,

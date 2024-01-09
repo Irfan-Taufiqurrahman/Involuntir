@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'mercant_id' => env('MIDTRANS_MERCHAT_ID'),
+    'mercant_id' => env('MIDTRANS_MERCHANT_ID'),
     'client_key' => env('MIDTRANS_CLIENTKEY'),
     'server_key' => env('MIDTRANS_SERVERKEY'),
 

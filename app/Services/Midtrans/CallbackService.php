@@ -92,8 +92,6 @@ class CallbackService extends Midtrans
 
         $transactionNumber = $notification->order_id;
         // get the third character from string
-      
-
                 
             $donation = Donation::where('kode_donasi', $transactionNumber)->first();
             $donation->kode_donasi;
