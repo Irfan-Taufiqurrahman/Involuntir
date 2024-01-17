@@ -48,7 +48,7 @@ class EMoneyPaymentService extends Midtrans
                     'name' => $this->donation->activity->judul_activity,
                 ]],
                 'custom_expiry' => [
-                    'expiry_duration' => 24,
+                    'expiry_duration' => 3,
                     'unit' => 'hour',
                 ],
             ];

@@ -43,7 +43,7 @@ class SubmitDonation extends Mailable
         $besok = Carbon::tomorrow(new \DateTimeZone('Asia/Jakarta'))->isoFormat('dddd, D MMMM Y');
 
         return $this->subject('Instruksi Transaksi')
-            ->from('noreply@involuntir.com', 'Involuntir')
+        ->from('noreplyinvoluntir@gmail.com', 'Involuntir')
             ->view('emails.instruksi')->with([
                 'nama' => $this->nama_lengkap,
                 'nominal' => $this->nominal,

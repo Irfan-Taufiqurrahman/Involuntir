@@ -30,7 +30,7 @@ class DonasiBerhasil extends Mailable
     public function build()
     {
         return $this->subject('Konfirmasi donasi')
-            ->from('noreply@involuntir.com', 'Involuntir')
+            ->from('noreplyinvoluntir@gmail.com', 'Involuntir')
             ->view('emails.donasiberhasil')
             ->with([
                 'nama_donatur' => $this->data->nama,
@@ -38,6 +38,7 @@ class DonasiBerhasil extends Mailable
                 'nominal' => number_format(floatval($this->data->donasi)),
                 'metode' => $this->data->metode_pembayaran,
                 'judul' => $this->data->judul_campaign,
+                'tautan'=>$this->data->tautan,
             ]);
     }
 }

@@ -146,13 +146,73 @@ class DonationController extends Controller
     }
 
     // ganti id donasi
-    public function detailsHistory(Request $request)
+    public function detailsHistory($id_donation)
     {
-        $donation = DB::table('donations')->where('donations.id', $request->id)->join('campaigns', 'campaigns.id', '=', 'donations.campaign_id')->get(['donations.id', 'kode_donasi', 'foto_campaign', 'judul_campaign', 'donasi', 'metode_pembayaran', 'status_donasi', 'donations.created_at', 'deadline']);
-
-        return response()->json(['message' => 'successfully fetching donation detail', 'data' => $donation[0], 'error' => false]);
+        // Fetch the donation by ID
+        $donation = Donation::find($id_donation);
+    
+        // Check if the donation exists
+        if (!$donation) {
+            return response()->json(['message' => 'Donation not found', 'error' => true], 404);
+        }
+    
+        // Access the related activity to get the desired information
+        $activity = $donation->activity;
+    
+        // Prepare the data for the response
+        $responseData = [
+            'id' => $donation->id,
+            'kode_donasi' => $donation->kode_donasi,
+            'foto_activity' => $activity->foto_activity,
+            'judul_activity' => $activity->judul_activity,
+            'donasi' => $donation->donasi,
+            'metode_pembayaran' => $donation->metode_pembayaran,
+            'status_donasi' => $donation->status_donasi,
+            'created_at' => $donation->created_at,
+            'deadline' => $donation->deadline,
+        ];
+    
+        // Return the response
+        return response()->json(['message' => 'Successfully fetching donation detail', 'data' => $responseData, 'error' => false]);
     }
 
+
+
+    public function riwayat($user_id)
+    {
+        // Mengambil data riwayat transaksi beserta data aktivitas terkait
+        $riwayatDonasi = Donation::with('activity')
+            ->where('user_id', $user_id)
+            ->get();
+
+        // Mengonversi struktur data
+        $riwayatDonasiFormatted = [];
+
+        foreach ($riwayatDonasi as $donasi) {
+            $riwayatDonasiFormatted[] = [
+                'id' => $donasi->id,
+                'month_year' => date('m-Y', strtotime($donasi->created_at)),
+                'total_donasi' => 0, // Anda dapat mengganti ini sesuai dengan logika bisnis Anda
+                'jumlah_donasi' => count($riwayatDonasi),
+                'donasi' => [
+                    'id' => $donasi->id,
+                    'judul_activity' => $donasi->activity->judul_activity,
+                    'foto_activity' => $donasi->activity->foto_activity,
+                    'user_id' => $donasi->user_id,
+                    'judul_slug' => $donasi->judul_slug,
+                    'donasi' => $donasi->donasi,
+                    'status_donasi' => $donasi->status_donasi,
+                    'activity_id' => $donasi->activity->id,
+                    'created_at' => $donasi->created_at,
+                ]
+            ];
+        }
+
+        // Mengembalikan data dalam format JSON
+        return response()->json($riwayatDonasiFormatted);
+    }
+
+    
     public function transactionHistory($kode_donasi)
     {
         $donation = Donation::where('kode_donasi', $kode_donasi)->first();

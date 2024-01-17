@@ -31,22 +31,26 @@ class PaymentCallbackController extends Controller
         if ($callback->isSuccess()) {
             $data->update([
                 'status_donasi' => 'Approved',
+                'qr_code' => null,
             ]);
+        Mail::to($data->email)->send(new DonasiBerhasil($data));
            
         }
 
         if ($callback->isExpire()) {
             $data->update([
                 'status_donasi' => 'Rejected',
+                'qr_code' => null,
             ]);
-          
+            Mail::to($data->email)->send(new DonasiGagal($data));
         }
 
         if ($callback->isCancelled()) {
             $data->update([
                 'status_donasi' => 'Rejected',
+                'qr_code' => null,
             ]);
-         
+            Mail::to($data->email)->send(new DonasiGagal($data));
         }
         return response()->json([
             'success' => true,

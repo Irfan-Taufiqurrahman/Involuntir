@@ -54,7 +54,7 @@ class BankPaymentService extends Midtrans
                 'name' => $this->activity->judul_activity,
             ]],
             'custom_expiry' => [
-                'expiry_duration' => 24,
+                'expiry_duration' => 3,
                 'unit' => 'hour',
             ],
         ];

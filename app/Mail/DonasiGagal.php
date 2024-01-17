@@ -23,7 +23,7 @@ class DonasiGagal extends Mailable
 
     protected $email;
 
-    protected $judul_campaign;
+    protected $judul_activity;
 
     protected $nama_fundraiser;
 
@@ -33,7 +33,7 @@ class DonasiGagal extends Mailable
         $this->nominal = number_format(floatval($donation->donasi));
         $this->metode = $donation->metode_pembayaran;
         $this->email = $donation->email;
-        $this->judul_campaign = $donation->campaign->judul_campaign;
+        $this->judul_campaign = $donation->activity->judul_activity;
         $this->nama_fundraiser = $donation->nama_fundraiser;
     }
 
@@ -45,13 +45,13 @@ class DonasiGagal extends Mailable
     public function build()
     {
         return $this->subject('Gagal Transaksi')
-            ->from('noreply@peduly.com', 'Peduly')
+        ->from('noreplyinvoluntir@gmail.com', 'Involuntir')
             ->view('emails.donasigagal')->with([
                 'nama_donatur' => $this->nama_donatur,
                 'nama_fundraiser' => $this->nama_fundraiser,
                 'nominal' => $this->nominal,
                 'metode' => $this->metode,
-                'judul' => $this->judul_campaign,
+                'judul' => $this->judul_activity,
             ]);
     }
 }

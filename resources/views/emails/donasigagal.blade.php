@@ -24,14 +24,12 @@
                                                             class="image_block" role="presentation"
                                                             style="mso-table-lspace: 0; mso-table-rspace: 0;" width="100%">
                                                             <tr>
-                                                                <td
-                                                                    style="width:100%;padding-right:0px;padding-left:0px;padding-top:5px;">
-                                                                    <div style="line-height:10px"><img
-                                                                            src="https://api.peduly.com/icon/icon/peduly-mini.png"
-                                                                            style="display: block; height: auto; border: 0; width: 137px; max-width: 100%;"
-                                                                            width="137" /></div>
+                                                                <td style="width:100%; padding: 5px; text-align: center;">
+                                                                    <div style="line-height: 10px;">
+                                                                        <img src="https://api.involuntir.com/images/logo/logo_involuntir_1.png" style="display: inline-block;" />
+                                                                    </div>
                                                                 </td>
-                                                            </tr>
+                                                        </tr>
                                                         </table>
                                                         <table border="0" cellpadding="0" cellspacing="0"
                                                             class="text_block" role="presentation"
@@ -223,7 +221,7 @@
                                                                             <p
                                                                                 style="margin: 0; font-size: 14px; text-align: center;">
                                                                                 <span style="font-size:12px;">© 2018-2021
-                                                                                    Peduly. All Right
+                                                                                    Involuntir. All Right
                                                                                     Reserved</span><br /><span
                                                                                     style="font-size:12px;">Jl. Kertajaya
                                                                                     No. 72, Surabaya, 60292</span>

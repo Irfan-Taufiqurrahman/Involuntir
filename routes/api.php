@@ -107,6 +107,7 @@ Route::prefix('galangdana')->group(function () {
     Route::put('/{id}/update', [ActivityController::class, 'update'])->middleware('jwt.verify');
     Route::delete('/{activity:id}/delete', [ActivityController::class, 'destroy'])->middleware('jwt.verify');
     Route::get('isExist/{slug}', [ActivityController::class, 'isExist']);
+    Route::get('/peserta/{activity}',[ActivityController::class, 'showPeserta'])->middleware('jwt.verify');
 });
 
     Route::get('/aktivitassaya', [ActivityController::class, 'myActivities'])->middleware('jwt.verify');
@@ -157,7 +158,7 @@ Route::prefix('donation')->group(function () {
     Route::post('/emoney', [EMoneyController::class, 'submit'])->middleware('jwt.verify');
     Route::post('/balance', [BalanceController::class, 'submit'])->middleware('jwt.verify');
 
-    Route::get('/histories', [DonationController::class, 'histories'])->middleware('jwt.verify');
+    Route::get('/riwayat/{user_id}', [DonationController::class, 'riwayat'])->middleware('jwt.verify');
     Route::get('/histories/{id}/details', [DonationController::class, 'detailsHistory'])->middleware('jwt.verify');
     Route::get('/transaction/{kode_id}', [DonationController::class, 'transactionHistory']);
 });

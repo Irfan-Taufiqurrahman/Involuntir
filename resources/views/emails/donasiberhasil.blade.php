@@ -24,14 +24,12 @@
                                                             class="image_block" role="presentation"
                                                             style="mso-table-lspace: 0; mso-table-rspace: 0;" width="100%">
                                                             <tr>
-                                                                <td
-                                                                    style="width:100%;padding-right:0px;padding-left:0px;padding-top:5px;">
-                                                                    <div style="line-height:10px"><img
-                                                                            src="https://api.peduly.com/icon/icon/peduly-mini.png"
-                                                                            style="display: block; height: auto; border: 0; width: 137px; max-width: 100%;"
-                                                                            width="137" /></div>
+                                                                <td style="width:100%; padding: 5px; text-align: center;">
+                                                                    <div style="line-height: 10px;">
+                                                                        <img src="https://api.involuntir.com/images/logo/logo_involuntir_1.png" style="display: inline-block;" />
+                                                                    </div>
                                                                 </td>
-                                                            </tr>
+                                                        </tr>
                                                         </table>
                                                         <table border="0" cellpadding="0" cellspacing="0"
                                                             class="text_block" role="presentation"
@@ -93,6 +91,23 @@
                                                                                 </td>
                                                                             </tr>
                                                                         </table>
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+                                                        </table>
+                                                        <table border="0" cellpadding="0" cellspacing="0"
+                                                            class="text_block" role="presentation"
+                                                            style="mso-table-lspace: 0; mso-table-rspace: 0; word-break: break-word;"
+                                                            width="100%">
+                                                            <tr>
+                                                                <td
+                                                                    style="padding-top:10px;padding-right:10px;padding-bottom:26px;padding-left:10px;">
+                                                                    <div style="font-family: Arial, sans-serif">
+                                                                        <div
+                                                                            style="font-size: 14px; font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif; color: #000000; line-height: 1.2;">
+                                                                            <p style="margin: 0;"><span
+                                                                                    style="font-size:12px;">Silahkan join grup whatsapp dengan klik tombol dibawah ini untuk informasi lebih lanjut </span></p>
+                                                                        </div>
                                                                     </div>
                                                                 </td>
                                                             </tr>

@@ -8,6 +8,7 @@ use App\Models\Activity;
 use App\Models\Category;
 use App\Models\Criteria;
 use App\Models\Participation;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use App\Models\Task;
 use Carbon\Carbon;
 use Illuminate\Http\Client\HttpClientException;
@@ -227,17 +228,18 @@ class ActivityController extends Controller
             'category_id' => ['required', 'exists:categories,id'],
             'detail_activity' => 'required|string',
             'batas_waktu' => 'required|numeric',
-            'foto_activity' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            // 'foto_activity' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'foto_activity' => 'string',
             'lokasi' => 'required|string|max:255',
             'waktu_activity' => 'required|string',
             'tipe_activity' => 'required|in:Virtual,In-Person,Hybrid',
             'kuota' => 'required|numeric',
             'tautan' => 'required|string',
+            'link_guidebook'=>'string',
             'jenis_activity' => ['nullable', new Enum(ActivityType::class)],
             'biaya_activity' => ['required_if:jenis_activity,paid', 'array'],
             'biaya_activity.*.per' => ['required_if:jenis_activity,paid', 'numeric'],
             'biaya_activity.*.price' => ['required_if:jenis_activity,paid', 'numeric'],
-
         ]);
 
         if ($validator->fails()) {
@@ -260,7 +262,7 @@ class ActivityController extends Controller
             'user_id' => $user->id,
             'judul_activity' => $request->judul_activity,
             'judul_slug' => $slug,
-            'foto_activity' => $photo,
+            'foto_activity' => $validated['foto_activity'],
             'detail_activity' => $request->detail_activity,
             'batas_waktu' => Carbon::now()->addDays($request->batas_waktu),
             'waktu_activity' => $request->waktu_activity,
@@ -271,6 +273,7 @@ class ActivityController extends Controller
             'kuota' => $request->kuota ? $request->kuota : 0,
             'tautan' => $request->tautan ? $request->tautan : 'involuntir',
             'jenis_activity' => $activityType,
+            'link_guidebook'=> $request->link_guidebook,
             'updated_at' => $request->status_publish === 'published' ? Carbon::now() : null,
         ]);
 
@@ -410,4 +413,33 @@ class ActivityController extends Controller
 
         return response()->json(['data' => $activities], 200);
     }
+    public function showPeserta($activity) {
+        // Find the activity based on the slug
+        $data_activity = Activity::where('judul_slug', $activity)->first();
+    
+        if (!$data_activity) {
+            return response()->json(['message' => 'Activity not found'], 404);
+        }
+    
+        // Retrieve donations related to the activity using the relationship
+        $donations = $data_activity->donations;
+    
+        // Format the donation data according to the specified schema
+        $formattedDonations = [];
+        foreach ($donations as $donation) {
+            $formattedDonations[] = [
+                'id' => $donation->id,
+                'name' => $donation->nama,
+                'nominal' => (int) $donation->donasi,
+                'nomor_telp' => (int) $donation->nomor_telp,
+                'kode_donasi' => $donation->kode_donasi,
+                'date' => $donation->tanggal_donasi,
+                'status_donasi' => $donation->status_donasi,
+            ];
+        }
+    
+        return response()->json(['message' => 'success', 'data' => $formattedDonations,
+        ]);
+    }
+    
 }

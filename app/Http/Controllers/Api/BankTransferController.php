@@ -80,8 +80,7 @@ class BankTransferController extends Controller
             $donation->activity_id = $activity->id;
             $donation->deadline = $deadline;
             $donation->tanggal_donasi = $tanggal_donasi;
-            $donation->status_donasi = 'Pending';
-                        
+            $donation->status_donasi = 'Pending';                        
             $responsePayment = new BankPaymentService($donation, $activity, $request->input('bank_name'));
             $response = $responsePayment->sendRequest();
             if (isset($response->va_numbers[0]->va_number)) {
