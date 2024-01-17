@@ -1428,107 +1428,29 @@ URL: http://127.0.0.1:8000/api/donation/bank_transfer
 
 | Key            | Value                     | Description |
 | -------------- | ------------------------- | ----------- |
-| nominal        | 20000                     |             |
+| activity_id    | 1                         |             |
 | metode         | bank_transfer             |             |
-| nama_lengkap   | lazu                      |             |
-| alamat_email   | lazuardi.akhmad@gmail.com |             |
-| nomor_ponsel   | 0812312312                |             |
-| kode_referensi | 321                       |             |
-| pesan_baik     | Semoga lekas sembuh       |             |
 | user_id        | 1                         |             |
-| campaign_id    | 1                         |             |
-| bank_name      | bni/permata/mandiri       |             |
+| nomor_ponsel   | 08564271736 |             |             |
+| bank_name      | bni/bri/mandiri           |             |
 
 **_More example Requests/Responses:_**
 
 ##### I. Example Request: Donation Bank
 
 **_Query:_**
-| Key | Value | Description |
-| --- | ------|-------------|
-| nominal | 20000 | |
-| metode | bank_transfer | |
-| nama_lengkap | lazu | |
-| alamat_email | lazuardi.akhmad@gmail.com | |
-| nomor_ponsel | 0812312312 | |
-| kode_referensi | 321 | |
-| pesan_baik | Semoga lekas sembuh | |
-| user_id | 1 | |
-| campaign_id | 1 | |
-| bank_name | bni/permata/mandiri | |
+| Key            | Value                     | Description |
+| -------------- | ------------------------- | ----------- |
+| activity_id    | 1                         |             |
+| metode         | bank_transfer             |             |
+| user_id        | 1                         |             |
+| nomor_ponsel   | 08564271736 |             |             |
+| bank_name      | bni/bri/mandiri           |             |
 
 ##### I. Example Response: Donation Bank
 
 ```js
 {
-    "data": {
-        "id": 1977,
-        "user_id": 1,
-        "nama": "Juan Angela Alma",
-        "campaign_id": 1055,
-        "judul_slug": null,
-        "biaya_persen": 15,
-        "donasi": "7000",
-        "kode_donasi": "INV16584614482087",
-        "prantara_donasi": null,
-        "metode_pembayaran": "bank_transfer",
-        "nomor_va": null,
-        "email": "juanalmaaa@gmail.com",
-        "nomor_telp": "83111064482",
-        "status_donasi": "Pending",
-        "status_pembayaran": null,
-        "snap_token": null,
-        "payment_url": null,
-        "status_pemberian_pertama": null,
-        "foto_pertama": null,
-        "status_pemberian_kedua": null,
-        "foto_kedua": null,
-        "status_pemberian_ketiga": null,
-        "foto_ketiga": null,
-        "status_terbaru": null,
-        "komentar": null,
-        "deadline": "2022-07-23 10:44:08",
-        "tanggal_donasi": "2022-07-22",
-        "created_at": "2022-07-22T03:44:10.000000Z",
-        "updated_at": null,
-        "midtrans_response": {
-            "status_code": "201",
-            "status_message": "Success, Bank Transfer transaction is created",
-            "transaction_id": "f3ea0941-e3e7-48ec-b766-acfae6bc1fad",
-            "order_id": "INV16584614482087",
-            "merchant_id": "G214967260",
-            "gross_amount": "7000.00",
-            "currency": "IDR",
-            "payment_type": "bank_transfer",
-            "transaction_time": "2022-07-22 10:44:33",
-            "transaction_status": "pending",
-            "va_numbers": [
-                {
-                    "bank": "bni",
-                    "va_number": "9886726063363587"
-                }
-            ],
-            "fraud_status": "accept"
-        },
-        "campaign": {
-            "id": 1055,
-            "user_id": 2194,
-            "judul_campaign": "Bantu permakanan dan biaya sekolah anak serta pemasangan keramik lantai  panti asuhan",
-            "judul_slug": "bantu-permakanan-dan-biaya-sekolah-anak-serta-pemasangan-keramik-lantai-panti-asuhan",
-            "foto_campaign": "bantu-permakanan-dan-biaya-sekolah-anak-serta-pemasangan-keramik-lantai-panti-asuhan.jpg",
-            "nominal_campaign": 30000000,
-            "tag_campaign": null,
-            "regencies": "kota surabaya",
-            "batas_waktu_campaign": "2022-09-09",
-            "detail_campaign": "Kami pengelola panti asuhan yabip yang saat ini mengasuh 26 anak yatim dan piatu. Berdiri dengan SK. Lembaga kesejahteraan sosial anak no. AHU-0079611.AH.01.07 tahun 2016\r\nSaat ini kami memiliki 3 panti asuhan.yang 2 sudah beroperasi.  Dan yg satu lagi msh pembangunan 30%. Tujuan penggalangan dana ini adalah untuk membiayai permakana dan biaya sekolah anak asuh serta pembelian keramik untuk menyelesaikan finishing lantai panti asuhan yabip 3. Karena akan segera kami operasional kan. Mengingat panti 1 dan 2 sudah penuh. Sehingga anak anak penghuni yg baru masuk akan kami tempatkan di panti 3.",
-            "update_campaign": null,
-            "kategori_campaign": "Panti Asuhan",
-            "status": "Approved",
-            "created_at": "2022-07-07T06:31:04.000000Z",
-            "updated_at": "2022-07-07T06:31:04.000000Z",
-            "deleted_at": null
-        }
-    },
     "msg": "success"
 }
 ```
