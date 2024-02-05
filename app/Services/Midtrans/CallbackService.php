@@ -74,6 +74,16 @@ class CallbackService extends Midtrans
         return $this->donation;
     }
 
+    public function isBank()
+    {
+        return $this->notification->payment_type == 'bank_transfer';
+    }
+
+    public function isQRCode()
+    {
+        return $this->notification->payment_type == 'emoney';
+    }
+
     protected function _createLocalSignatureKey()
     {
         $donationId = $this->donation->kode_donasi;

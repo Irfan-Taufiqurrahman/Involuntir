@@ -47,9 +47,8 @@
                                                                             <br>
                                                                             <p style="margin: 0;">Donasi kamu <strong
                                                                                     style="color:rgb(24, 221, 24);">berhasil</strong>
-                                                                                diterima untuk penggalangan
-                                                                                <strong>{{ $judul }} </strong>dari
-                                                                                <strong>{{ $nama_fundraiser }}.</strong>
+                                                                                diterima untuk pembayaran
+                                                                                <strong>{{ $judul }} </strong>
                                                                             </p>
                                                                             <p
                                                                                 style="margin: 0; mso-line-height-alt: 16.8px;">

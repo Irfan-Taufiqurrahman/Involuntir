@@ -271,7 +271,7 @@ class ActivityController extends Controller
             'status_publish' => $request->status_publish,
             'status' => 'Pending',
             'kuota' => $request->kuota ? $request->kuota : 0,
-            'tautan' => $request->tautan ? $request->tautan : 'involuntir',
+            'link_wa' => $request->tautan ? $request->tautan : 'involuntir',
             'jenis_activity' => $activityType,
             'link_guidebook'=> $request->link_guidebook,
             'updated_at' => $request->status_publish === 'published' ? Carbon::now() : null,

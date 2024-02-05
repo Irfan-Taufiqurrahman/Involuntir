@@ -32,6 +32,7 @@ class EMoneyController extends Controller
             'metode' => 'required|in:emoney',
             'user_id' => 'required',
             'emoney_name' => 'required',
+            'payment_channel'=>'required|in:Gopay,Shopeepay,Dana'
         ]);
 
         if ($validator->fails()) {
@@ -41,7 +42,7 @@ class EMoneyController extends Controller
       
         $metode = $request->input('metode');      
         $nomor_hp = $request->input('nomor_ponsel');
-      
+        $payment_channel=$request->input('payment_channel');
         $emoney_name = $request->input('emoney_name');
         $uid = $request->input('user_id');   
         $kode_donasi = $this->generateKode();
@@ -51,11 +52,8 @@ class EMoneyController extends Controller
 
         $activityId = $request->input('activity_id');
         $activity = Activity::findOrFail($activityId);
-        
-
-        
+                
         if (!$activity) {
-            // Handle the case when the Activity is not found.
             return response()->json(['message' => $activity], 404);
         }
         $user_id = $request->input('user_id');
@@ -70,6 +68,7 @@ class EMoneyController extends Controller
         $donation->kode_donasi = $kode_donasi;
         $donation->metode_pembayaran = $metode;
         $donation->nomor_telp = $nomor_hp;
+        $donation->payment_channel=$payment_channel;
         
         $donation->emoney_name = $emoney_name;
         $donation->user_id = $uid;
@@ -78,18 +77,19 @@ class EMoneyController extends Controller
         $donation->tanggal_donasi = $tanggal_donasi;
         $donation->status_donasi = 'Pending';
 
-        try {
-            Mail::to($user->email)->send(new SubmitDonation($user->name, $activity->prices[0]->price, $metode, $activity->judul_activity));
+        try {         
             $responsePayment = new EMoneyPaymentService($donation, 'gopay');
             $response = $responsePayment->sendRequest();
             $donation->qr_code = $response->actions[0]->url;
             $donation->deadline=$response->expiry_time;
             $donation->status_pembayaran=$response->transaction_status;
             $donation->save();
-
-            $donation->midtrans_response = $response;
-
-            // i don't know why must the kode_referal must be inserted to akun_anonim table, the database structure is very annoying
+            if($response->transaction_status='pending'){
+                Mail::to($user->email)->send(new SubmitDonation($user->name, $activity->prices[0]->price, $payment_channel, $activity->judul_activity,$donation->deadline));
+            }
+            else{
+                return response()->json(['msg' => 'failed'], 404);
+            }       
             DB::table('akun_anonim')->insert([
                 'id_donasi' => $donation->id,
                 'nama' =>  $user->name,

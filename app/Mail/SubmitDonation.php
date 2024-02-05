@@ -22,14 +22,16 @@ class SubmitDonation extends Mailable
 
     protected $bank_name;
 
-    protected $judul_campaign;
+    protected $judul_activity;
 
-    public function __construct($nama_lengkap, $nominal, $bank_name, $judul_campaign)
+    protected $deadline;
+    public function __construct($nama_lengkap, $nominal, $payment_channel, $judul_activity, $deadline)
     {
         $this->nama_lengkap = $nama_lengkap;
         $this->nominal = number_format(floatval($nominal));
-        $this->bank_name = $bank_name;
-        $this->judul_campaign = $judul_campaign;
+        $this->bank_name = $payment_channel;
+        $this->judul_activity = $judul_activity;
+        $this->deadline=$deadline;
     }
 
     /**
@@ -40,7 +42,7 @@ class SubmitDonation extends Mailable
     public function build()
     {
 
-        $besok = Carbon::tomorrow(new \DateTimeZone('Asia/Jakarta'))->isoFormat('dddd, D MMMM Y');
+      
 
         return $this->subject('Instruksi Transaksi')
         ->from('noreplyinvoluntir@gmail.com', 'Involuntir')
@@ -48,8 +50,8 @@ class SubmitDonation extends Mailable
                 'nama' => $this->nama_lengkap,
                 'nominal' => $this->nominal,
                 'bank_name' => $this->bank_name,
-                'judul' => $this->judul_campaign,
-                'hari' => $besok,
+                'judul' => $this->judul_activity,
+                'hari' => $this->deadline,
             ]);
     }
 }

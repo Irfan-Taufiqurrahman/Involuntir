@@ -36,8 +36,8 @@ class DonasiBerhasil extends Mailable
                 'nama_donatur' => $this->data->nama,
                 'nama_fundraiser' => $this->data->nama_fundraiser,
                 'nominal' => number_format(floatval($this->data->donasi)),
-                'metode' => $this->data->metode_pembayaran,
-                'judul' => $this->data->judul_campaign,
+                'metode' => $this->data->payment_channel,
+                'judul' => $this->data->activity->judul_activity,
                 'tautan'=>$this->data->tautan,
             ]);
     }

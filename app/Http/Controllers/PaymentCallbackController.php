@@ -28,34 +28,72 @@ class PaymentCallbackController extends Controller
 
         $fundraiser = User::find($data->activity->user_id);
 
-        if ($callback->isSuccess()) {
-            $data->update([
-                'status_donasi' => 'Approved',
-                'qr_code' => null,
+        if($callback->isBank()){
+            if ($callback->isSuccess()) {
+                $data->update([
+                    'status_donasi' => 'Approved',
+                    'nomor_va' => null,
+                ]);
+            Mail::to($data->email)->send(new DonasiBerhasil($data));  
+            return response()->json(['data'=>$data]);         
+            }
+    
+            if ($callback->isExpire()) {
+                $data->update([
+                    'status_donasi' => 'Rejected',
+                    'nomor_va' => null,
+                ]);
+                Mail::to($data->email)->send(new DonasiGagal($data));
+                return response()->json(['data'=>$data]);
+            }
+    
+            if ($callback->isCancelled()) {
+                $data->update([
+                    'status_donasi' => 'Rejected',
+                    'nomor_va' => null,
+                ]);
+                Mail::to($data->email)->send(new DonasiGagal($data));
+                return response()->json(['data'=>$data]);
+            }
+            return response()->json([
+                'success' => true, 
+                $data           
             ]);
-        Mail::to($data->email)->send(new DonasiBerhasil($data));
-           
         }
-
-        if ($callback->isExpire()) {
-            $data->update([
-                'status_donasi' => 'Rejected',
-                'qr_code' => null,
+        
+        else if($callback->isQRCode()){
+            if ($callback->isSuccess()) {
+                $data->update([
+                    'status_donasi' => 'Approved',
+                    'qr_code' => null,
+                ]);
+            Mail::to($data->email)->send(new DonasiBerhasil($data));
+            return response()->json(['data'=>$data]);   
+             
+            }
+    
+            if ($callback->isExpire()) {
+                $data->update([
+                    'status_donasi' => 'Rejected',
+                    'qr_code' => null,
+                ]);
+                Mail::to($data->email)->send(new DonasiGagal($data));
+                return response()->json(['data'=>$data]);  
+            }
+    
+            if ($callback->isCancelled()) {
+                $data->update([
+                    'status_donasi' => 'Rejected',
+                    'qr_code' => null,
+                ]);
+                Mail::to($data->email)->send(new DonasiGagal($data));
+                return response()->json(['data'=>$data]);  
+            }
+            return response()->json([
+                'success' => true,            
+                $data
             ]);
-            Mail::to($data->email)->send(new DonasiGagal($data));
-        }
-
-        if ($callback->isCancelled()) {
-            $data->update([
-                'status_donasi' => 'Rejected',
-                'qr_code' => null,
-            ]);
-            Mail::to($data->email)->send(new DonasiGagal($data));
-        }
-        return response()->json([
-            'success' => true,
-            $callback
-        ]);
+        }    
 
     }
 }

@@ -48,11 +48,8 @@
                                                                             <p style="margin: 0;">Donasi kamu <strong
                                                                                     style="color: red;">dibatalkan</strong>
                                                                                 untuk
-                                                                                penggalangan
-                                                                                <strong>{{ $judul }} </strong>dari
-                                                                                @if (isset($nama_fundraiser))
-                                                                                <strong>{{ $nama_fundraiser }}.</strong>
-                                                                                @endif
+                                                                                pembayaran
+                                                                                <strong>{{ $judul }} </strong>
                                                                             </p>
                                                                             <p
                                                                                 style="margin: 0; mso-line-height-alt: 16.8px;">

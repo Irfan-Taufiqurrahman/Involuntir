@@ -31,6 +31,7 @@ class BankTransferController extends Controller
             'user_id' => 'required',
             'activity_id' => 'required|exists:activities,id',
             'bank_name' => 'required',
+            'payment_channel'=>'required|in:BNI'
         ]);
 
         if ($validator->fails()) {
@@ -41,21 +42,17 @@ class BankTransferController extends Controller
         $metode = $request->input('metode');
         $nama_lengkap = $request->input('nama_lengkap');
         $email = $request->input('alamat_email');
-        $nomor_hp = $request->input('nomor_ponsel');
-        $kode_referensi = $request->input('kode_referensi');
-        $bank_name = $request->input('bank_name');
-        $pesan_baik = $request->input('pesan_baik');
+        $nomor_hp = $request->input('nomor_ponsel');      
+        $bank_name = $request->input('bank_name');        
         $uid = $request->input('user_id');
         $activity_id = $request->input('activity_id');
+        $payment_channel=$request->input('payment_channel');
         $kode_donasi = $this->generateKode();
-        $tanggal_donasi = Carbon::now(new \DateTimeZone('Asia/Jakarta'));
-        $deadline = date('created_at', strtotime('+1 day'));
+        $tanggal_donasi = Carbon::now(new \DateTimeZone('Asia/Jakarta'));      
 
         $activityId = $request->input('activity_id');
         $activity = Activity::findOrFail($activityId);
-        
-
-        
+                
         if (!$activity) {
             // Handle the case when the Activity is not found.
             return response()->json(['message' => $activity], 404);
@@ -72,13 +69,12 @@ class BankTransferController extends Controller
             $donation->email = $user->email;         
             $donation->kode_donasi = $kode_donasi;
             $donation->metode_pembayaran = $metode;
-            $donation->nomor_telp = $nomor_hp;
-            $donation->komentar = $pesan_baik;
+            $donation->payment_channel=$payment_channel;
+            $donation->nomor_telp = $nomor_hp;          
             $donation->bank_name = $bank_name;
             $donation->donasi = $activity->prices[0]->price;
             $donation->user_id = $uid;
-            $donation->activity_id = $activity->id;
-            $donation->deadline = $deadline;
+            $donation->activity_id = $activity->id;         
             $donation->tanggal_donasi = $tanggal_donasi;
             $donation->status_donasi = 'Pending';                        
             $responsePayment = new BankPaymentService($donation, $activity, $request->input('bank_name'));
@@ -94,10 +90,10 @@ class BankTransferController extends Controller
             $donation->status_pembayaran=$response->transaction_status;
             
             if($response->transaction_status='pending'){
-                Mail::to($email)->send(new SubmitDonation($nama_lengkap, $activity->prices[0]->price,$bank_name, $activity->judul_activity));
+                Mail::to($user->email)->send(new SubmitDonation($user->name, $activity->prices[0]->price, $payment_channel, $activity->judul_activity,$donation->deadline));
             }
             else{
-                return response()->json(['msg' => 'failed'], 204);
+                return response()->json(['msg' => 'failed'], 404);
             }
            
             $donation->save();
@@ -108,11 +104,10 @@ class BankTransferController extends Controller
                 'id_donasi' => $donation->id,
                 'nama' => $nama_lengkap,
                 'email' => $email,
-                'no_hp' => $nomor_hp,
-                'kode_referal' => $kode_referensi,
+                'no_hp' => $nomor_hp,               
             ]);
            
-            return response()->json(['msg' => 'success'], 201);
+            return response()->json(['msg' => 'success','virtual_account'=>$donation->nomor_va], 201);
         } catch (Exception $err) {
             throw $err;
         }

@@ -15,26 +15,11 @@ class DonasiGagal extends Mailable
      *
      * @return void
      */
-    protected $nominal;
+    protected $data;
 
-    protected $metode;
-
-    protected $nama_donatur;
-
-    protected $email;
-
-    protected $judul_activity;
-
-    protected $nama_fundraiser;
-
-    public function __construct($donation)
+    public function __construct($data)
     {
-        $this->nama_donatur = $donation->nama;
-        $this->nominal = number_format(floatval($donation->donasi));
-        $this->metode = $donation->metode_pembayaran;
-        $this->email = $donation->email;
-        $this->judul_campaign = $donation->activity->judul_activity;
-        $this->nama_fundraiser = $donation->nama_fundraiser;
+        $this->data = $data;
     }
 
     /**
@@ -45,13 +30,14 @@ class DonasiGagal extends Mailable
     public function build()
     {
         return $this->subject('Gagal Transaksi')
-        ->from('noreplyinvoluntir@gmail.com', 'Involuntir')
-            ->view('emails.donasigagal')->with([
-                'nama_donatur' => $this->nama_donatur,
-                'nama_fundraiser' => $this->nama_fundraiser,
-                'nominal' => $this->nominal,
-                'metode' => $this->metode,
-                'judul' => $this->judul_activity,
+            ->from('noreplyinvoluntir@gmail.com', 'Involuntir')
+            ->view('emails.donasigagal')
+            ->with([
+                'nama_donatur' => $this->data->nama,
+                'nama_fundraiser' => $this->data->nama_fundraiser,
+                'nominal' => number_format(floatval($this->data->donasi)),
+                'metode' => $this->data->payment_channel,
+                'judul' => $this->data->activity->judul_activity,                
             ]);
     }
 }
