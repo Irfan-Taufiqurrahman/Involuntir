@@ -98,7 +98,7 @@ Route::prefix('galangdana')->group(function () {
     Route::get('/galangdanasaya', [CampaignController::class, 'myCampaigns'])->middleware('jwt.verify');
 
     Route::prefix('aktivitas')->group(function () {
-    Route::get('/', [ActivityController::class, 'index']);
+    Route::get('/', [ActivityController::class, 'index'])->middleware(['jwt.verify']);
     Route::get('/{activity}', [ActivityController::class, 'show']);
     Route::get('/byslug/{activity}', [ActivityController::class, 'bySlug']);
     Route::post('/create', [ActivityController::class, 'create'])->middleware('jwt.verify');
@@ -241,8 +241,10 @@ Route::prefix('companies')->group(function () {
 });
 
 // ADMIN ROUTE
-Route::prefix('admin')->middleware(['jwt.verify', 'admin'])->group(function () {
+// Route::prefix('admin')->middleware(['jwt.verify', 'admin'])->group(function () {
+    Route::prefix('admin')->group(function () {
         Route::get('/users', [UserAdminController::class, 'index']);
+        Route::put('/change-user/{userId}',[UserAdminController::class, 'changeToOrganisasi']);
     Route::get('/galangdana', [CampaignAdminController::class, 'index']);
 });
 

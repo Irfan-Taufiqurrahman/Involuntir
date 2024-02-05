@@ -15,10 +15,13 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 
 class DonationController extends Controller
-{
-    public function index(): JsonResponse
+{    
+
+    public function index()
     {
-        return response()->json(Donation::orderBy('tanggal_donasi')->get());
+        $donations = Donation::orderBy('tanggal_donasi')
+            ->get(['kode_donasi', 'nama', 'tanggal_donasi', 'donasi', 'metode_pembayaran', 'status_donasi']);
+        return response()->json($donations);
     }
 
     public function checkReferalCode(Request $request)
