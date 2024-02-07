@@ -15,11 +15,12 @@ class UserAdminController extends Controller
         'status' => true,
         'data' => $users->map(function ($user) {
             return [
-                'nama' => $user->name, // Gantilah 'nama' sesuai dengan atribut yang sesuai di model User
+                'nama' => $user->name,
+                'username'=>$user->username,
                 'email' => $user->email,
                 'no_telp' => $user->no_telp,
                 'tipe' => $user->tipe,
-                'tanggal' => $user->created_at->format('Y-m-d'), // Sesuaikan format tanggal sesuai kebutuhan
+                'tanggal' => $user->created_at->format('Y-m-d'),
             ];
         }),
     ]);
@@ -29,15 +30,25 @@ public function changeToOrganisasi($userId)
         try {
             $user = User::findOrFail($userId);
 
-            // Pastikan bahwa pengguna memiliki tipe 'Individu' sebelum diubah
+            
             if ($user->tipe === 'Individu') {
                 $user->update(['tipe' => 'Organisasi']);
 
                 return response()->json([
                     'status' => true,
                     'message' => 'Tipe pengguna berhasil diubah menjadi Organisasi.',
-                ]);
-            } else {
+                ],200);
+            } 
+            if ($user->tipe === 'Organisasi') {
+                $user->update(['tipe' => 'Individu']);
+
+                return response()->json([
+                    'status' => true,
+                    'message' => 'Tipe pengguna berhasil diubah menjadi Individu.',
+                ],200);
+            }
+
+            else {
                 return response()->json([
                     'status' => false,
                     'message' => 'Pengguna sudah memiliki tipe Organisasi atau tipe lainnya.',

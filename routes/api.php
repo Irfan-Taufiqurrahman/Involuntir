@@ -97,8 +97,7 @@ Route::prefix('galangdana')->group(function () {
 
     Route::get('/galangdanasaya', [CampaignController::class, 'myCampaigns'])->middleware('jwt.verify');
 
-    Route::prefix('aktivitas')->group(function () {
-    Route::get('/', [ActivityController::class, 'index'])->middleware(['jwt.verify']);
+    Route::prefix('aktivitas')->group(function () {    
     Route::get('/{activity}', [ActivityController::class, 'show']);
     Route::get('/byslug/{activity}', [ActivityController::class, 'bySlug']);
     Route::post('/create', [ActivityController::class, 'create'])->middleware('jwt.verify');
@@ -151,8 +150,7 @@ Route::prefix('doa')->group(function () {
 });
 
 Route::prefix('donation')->group(function () {
-    Route::post('/', [DonationController::class, 'submit']);
-    Route::get('/all', [DonationController::class, 'index']);
+    Route::post('/', [DonationController::class, 'submit']);    
     Route::get('/checkreferal', [DonationController::class, 'checkReferalCode']);
     Route::post('/bank_transfer', [BankTransferController::class, 'submit'])->middleware('jwt.verify');
     Route::post('/emoney', [EMoneyController::class, 'submit'])->middleware('jwt.verify');
@@ -169,13 +167,6 @@ Route::prefix('participation')->middleware('jwt.verify')->group(function () {
 });
 
 Route::post('/payments/midtrans-notification', [PaymentCallbackController::class, 'receive']);
-// Route::prefix('payment')->group(function () {
-//     // Route::post('/token', [PaymentController::class, 'getToken']);
-//     // Route::post('/submit', [PaymentController::class, 'submitDonation']);
-//     // Route::get('/method', [PaymentController::class, 'paymentMethod']);
-// });
-
-// Route::post('/notification/push', [NotificationController::class, 'post']);
 
 Route::prefix('password')->group(function () {
     Route::get('/resetemail', [PasswordController::class, 'resetEmail']);
@@ -240,11 +231,11 @@ Route::prefix('companies')->group(function () {
     Route::get('/', [CompanyController::class, 'index']);
 });
 
-// ADMIN ROUTE
-// Route::prefix('admin')->middleware(['jwt.verify', 'admin'])->group(function () {
-    Route::prefix('admin')->group(function () {
-        Route::get('/users', [UserAdminController::class, 'index']);
-        Route::put('/change-user/{userId}',[UserAdminController::class, 'changeToOrganisasi']);
-    Route::get('/galangdana', [CampaignAdminController::class, 'index']);
+Route::prefix('admin')->middleware(['jwt.verify','admin'])->group(function () {
+    Route::get('/aktivitas', [ActivityController::class, 'index']);
+    Route::get('/users', [UserAdminController::class, 'index']);
+    Route::get('/donation/all', [DonationController::class, 'index']);
+    Route::put('/change-user/{userId}', [UserAdminController::class, 'changeToOrganisasi']);    
 });
+
 

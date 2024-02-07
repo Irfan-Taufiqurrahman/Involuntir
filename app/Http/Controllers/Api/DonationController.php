@@ -20,7 +20,7 @@ class DonationController extends Controller
     public function index()
     {
         $donations = Donation::orderBy('tanggal_donasi')
-            ->get(['kode_donasi', 'nama', 'tanggal_donasi', 'donasi', 'metode_pembayaran', 'status_donasi']);
+            ->get(['kode_donasi', 'nama', 'tanggal_donasi', 'donasi', 'payment_channel', 'status_donasi']);
         return response()->json($donations);
     }
 

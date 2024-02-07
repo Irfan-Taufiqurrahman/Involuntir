@@ -90,24 +90,28 @@ class ActivityController extends Controller
             }
 
             $activities = $this->data ? $this->data : $this->getAllActivitiesWithoutFiltering();
+            
+            $joinWithRelatedTables = Activity::leftJoin('users', 'activities.user_id', '=', 'users.id')
+            ->leftJoin('donations', function($join) {
+                $join->on('activities.id', '=', 'donations.activity_id');
+            })
+            ->select(        
+                'activities.id',
+                'judul_activity',   
+                'kuota',                    
+                'activities.created_at',    
+                DB::raw("DATEDIFF(batas_waktu, NOW()) AS sisa_waktu"), // Menghitung selisih hari antara NOW() dan batas_waktu
+                'users.username',
+                DB::raw('SUM(donations.status_donasi = "Approved") AS total_volunteer')
+            )
+            ->where('status_publish', 'published')
+            ->orWhereNull('status_publish')
+            ->groupBy('activities.id', 'judul_activity', 'kuota', 'activities.created_at', 'users.username', 'batas_waktu')           
+            ->orderBy('activities.created_at', 'desc')
+            ->get();
+        
+        
 
-            $joinWithRelatedTables = $activities->leftJoin('participations', 'participations.activity_id', '=', 'activities.id')
-                ->groupBy('activities.id')
-                ->where('status_publish', 'published')
-                ->orWhere('status_publish', null)
-                ->with('prices')
-                ->get([
-                    'activities.id',
-                    'judul_activity',
-                    'judul_slug',
-                    'foto_activity',
-                    'batas_waktu',
-                    'activities.created_at',
-                    'jenis_activity',
-                    'tipe_activity',
-                    DB::raw("CONCAT(DATEDIFF(batas_waktu, CURRENT_DATE), ' hari') as sisa_waktu"),
-                    DB::raw('COUNT(participations.id) as total_volunteer'),
-                ]);
 
             return response()->json(['data' => $joinWithRelatedTables]);
         } catch (HttpClientException $err) {
@@ -130,15 +134,9 @@ class ActivityController extends Controller
             ->where('id', $id_activist)
             ->get(['username', 'photo', 'name', 'status_akun', 'role', 'tipe', 'jenis_organisasi']);
 
-        $total_volunteer = DB::table('participations')
-            ->select(DB::raw('COUNT(participations.id) as total_volunteer'))
-            ->where('activity_id', '=', $id_activity)
-            ->get();
+         $total_volunteer = $data_activity->donations()->where('status_donasi', 'Approved')->count();
 
-        $volunteer = Participation::join('users', 'user_id', '=', 'users.id')
-            ->where('activity_id', $id_activity)
-            ->get(['photo', 'username',  'name', 'nomor_hp', 'participations.created_at']);
-
+        
         $tasks = Task::join('activities', 'activity_id', '=', 'activities.id')
             ->where('activity_id', $id_activity)
             ->get(DB::raw('tasks.id, tasks.deskripsi, tasks.created_at'));
@@ -159,7 +157,7 @@ class ActivityController extends Controller
                 'activity' => $data_activity,
                 'user' => $activist,
                 'total_volunteer' => $total_volunteer,
-                'volunteer' => $volunteer,
+                // 'volunteer' => $total_volunteer,
                 'tugas' => $tasks,
                 'kriteria' => $criterias,
                 'is_mine' => $user ? ($user->id === $id_activist) : false,
@@ -221,6 +219,10 @@ class ActivityController extends Controller
         if (! $user) {
             return response()->json(['message' => 'user not found!'], 404);
         }
+        if (!$user || $user->tipe !== 'Organisasi') {
+            return response()->json(['message' => 'Anda belum terdaftar sebagai organisasi'], 403);
+        }
+    
 
         $validator = Validator::make($request->all(), [
             'judul_activity' => 'required|string|max:255',
@@ -228,8 +230,8 @@ class ActivityController extends Controller
             'category_id' => ['required', 'exists:categories,id'],
             'detail_activity' => 'required|string',
             'batas_waktu' => 'required|numeric',
-            // 'foto_activity' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            'foto_activity' => 'string',
+            'foto_activity' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            // 'foto_activity' => 'string',
             'lokasi' => 'required|string|max:255',
             'waktu_activity' => 'required|string',
             'tipe_activity' => 'required|in:Virtual,In-Person,Hybrid',
@@ -262,7 +264,7 @@ class ActivityController extends Controller
             'user_id' => $user->id,
             'judul_activity' => $request->judul_activity,
             'judul_slug' => $slug,
-            'foto_activity' => $validated['foto_activity'],
+            'foto_activity' => $photo,
             'detail_activity' => $request->detail_activity,
             'batas_waktu' => Carbon::now()->addDays($request->batas_waktu),
             'waktu_activity' => $request->waktu_activity,
@@ -343,35 +345,59 @@ class ActivityController extends Controller
             'category_id' => ['sometimes', 'required', 'exists:categories,id'],
             'detail_activity' => 'sometimes|required|string',
             'batas_waktu' => 'sometimes|required|numeric',
-            // 'foto_activity' => 'sometimes|nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            'foto_activity' => 'sometimes|nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'foto_activity' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'lokasi' => 'sometimes|required|string|max:255',
             'waktu_activity' => 'sometimes|required|string',
             'tipe_activity' => 'sometimes|required|in:Virtual,In-Person,Hybrid',
             'kuota' => 'sometimes|required|numeric',
-            'tautan' => 'sometimes|required|string',
-            'jenis_activity' => 'nullable', // Validasi yang boleh bernilai null
-            'biaya_activity' => ['sometimes', 'nullable', 'array'], // Validasi yang boleh bernilai null
-            'biaya_activity.*.per' => ['sometimes', 'nullable', 'numeric'], // Validasi yang boleh bernilai null
-            'biaya_activity.*.price' => ['sometimes', 'nullable', 'numeric'], // Validasi yang boleh bernilai null
+            'link_wa' => 'sometimes|required|string',
+            'link_guidebook' => 'string',
+            'jenis_activity' => 'nullable',
+            'biaya_activity' => ['sometimes', 'nullable', 'array'],
+            'biaya_activity.*.per' => ['sometimes', 'nullable', 'numeric'],
+            'biaya_activity.*.price' => ['sometimes', 'nullable', 'numeric'],
+            
         ]);
-
+        
         if ($validator->fails()) {
             return response()->json(['message' => $validator->errors()], 400);
         }
-
+        
         $validated = $validator->validated();
+        $validated['batas_waktu']= Carbon::now()->addDays($request->batas_waktu);
+        // Handle biaya_activity separately
+        $biayaActivity = $validated['biaya_activity'] ?? null;
+        unset($validated['biaya_activity']);
 
         // Update hanya nilai yang berubah
         $activity->fill(array_filter($validated))->save();
 
+       
         $activityType = $validated['jenis_activity'] ?? null;
 
         if (! empty($activityType) && ActivityType::FREE->equals(ActivityType::from($activityType))) {
             // Menghapus semua biaya aktivitas jika jenis aktivitas berubah menjadi "free"
             $activity->prices()->delete();
         }
+        
+        if (!empty($biayaActivity)) {
+            foreach ($biayaActivity as $biaya) {
+                // Find the price by per and update the price value
+                $activity->prices()->updateOrCreate(['per' => $biaya['per']], ['price' => $biaya['price']]);
+            }
+        }
+        $tasks = $request->input('tasks', []);
+        $activity->tasks()->delete();
+        foreach ($tasks as $task) {
+            $activity->tasks()->create(['deskripsi' => $task]);
+        }
 
+        // Handle pembaruan kriteria (criterias)
+        $criterias = $request->input('criterias', []);
+        $activity->criterias()->delete();
+        foreach ($criterias as $criteria) {
+            $activity->criterias()->create(['deskripsi' => $criteria]);
+        }
         // Handle pembaruan tugas (tasks) dan kriteria (criterias) seperti dalam fungsi create
 
         $activity->load('prices');
@@ -402,17 +428,24 @@ class ActivityController extends Controller
     {
         $user = Auth::user();
 
-        $activities = Activity::where('activities.user_id', $user->id)->leftJoin('participations', 'participations.activity_id', '=', 'activities.id')
-            ->groupBy('activities.id')->orderBy('activities.created_at', 'DESC')
-            ->get([
-                'activities.id', 'judul_activity', 'judul_slug',
-                'foto_activity', 'batas_waktu',
-                'activities.created_at',
-                DB::raw('COUNT(participations.id) as total_volunteer'),
-            ]);
+        $activities = Activity::with('donations')
+            ->where('user_id', $user->id)
+            ->get()
+            ->map(function ($activity) {
+                return [
+                    'id' => $activity->id,
+                    'judul_activity' => $activity->judul_activity,
+                    'judul_slug' => $activity->judul_slug,
+                    'foto_activity' => $activity->foto_activity,
+                    'batas_waktu' => $activity->batas_waktu,
+                    'created_at' => $activity->created_at,
+                    'total_volunteer' => $activity->donations->where('status_donasi', 'Approved')->count(),
+                ];
+            });
 
-        return response()->json(['data' => $activities], 200);
+        return ['data' => $activities];
     }
+    
     public function showPeserta($activity) {
         // Find the activity based on the slug
         $data_activity = Activity::where('judul_slug', $activity)->first();
@@ -420,14 +453,17 @@ class ActivityController extends Controller
         if (!$data_activity) {
             return response()->json(['message' => 'Activity not found'], 404);
         }
-    
+        $total_volunteer = $data_activity->donations()->where('status_donasi', 'Approved')->count();
+
         // Retrieve donations related to the activity using the relationship
+        $total_donation = $data_activity->donations()
+        ->where('status_donasi', 'Approved')
+        ->sum('donasi');
         $donations = $data_activity->donations;
     
         // Format the donation data according to the specified schema
-        $formattedDonations = [];
-        foreach ($donations as $donation) {
-            $formattedDonations[] = [
+        $formattedDonations = array_map(function ($donation) {
+            return [
                 'id' => $donation->id,
                 'name' => $donation->nama,
                 'nominal' => (int) $donation->donasi,
@@ -436,10 +472,34 @@ class ActivityController extends Controller
                 'date' => $donation->tanggal_donasi,
                 'status_donasi' => $donation->status_donasi,
             ];
-        }
+        }, $donations);
+
     
-        return response()->json(['message' => 'success', 'data' => $formattedDonations,
+        return response()->json(['message' => 'success', 'total_donation' => $total_donation,'total_volunteer'=>$total_volunteer, 'data' => $formattedDonations
         ]);
+    }
+    public function endActivity(Request $request)
+    {
+        $user = auth('api')->user();
+
+        if (! $user) {
+            return response()->json(['message' => 'user not found!'], 404);
+        }
+        $validator = Validator::make($request->all(), [
+            'activity_id' => 'required|exists:activities,id',
+            'batas_waktu' => 'sometimes|required|numeric',           
+        ]);
+
+        $validator->validate();
+
+        $data_activity = Activity::find($request->activity_id);
+
+        if ($request->has('batas_waktu')) {
+            $data_activity->batas_waktu = Carbon::now()->addDays($request->batas_waktu);
+        }
+
+        $data_activity->save();
+        return response()->json(['message' => 'success']);
     }
     
 }
