@@ -230,8 +230,7 @@ class ActivityController extends Controller
             'category_id' => ['required', 'exists:categories,id'],
             'detail_activity' => 'required|string',
             'batas_waktu' => 'required|numeric',
-            'foto_activity' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            // 'foto_activity' => 'string',
+            'foto_activity' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',            
             'lokasi' => 'required|string|max:255',
             'waktu_activity' => 'required|string',
             'tipe_activity' => 'required|in:Virtual,In-Person,Hybrid',
@@ -314,96 +313,93 @@ class ActivityController extends Controller
         return response()->json(['data' => $activity], 201);
     }
 
-    public function update(Request $request, $id)
-    {
-        $user = auth('api')->user();
+    public function update(Request $request, Activity $activity)
+{
+    $user = auth('api')->user();
 
-        if (! $user) {
-            return response()->json(['message' => 'User not found!'], 404);
-        }
-
-        $activity = Activity::find($id);
-
-        if (empty($activity)) {
-            return response()->json(['message' => 'activitas tidak ada'], 404);
-        }
-
-        // Otorisasi: Hanya pemilik aktivitas yang dapat mengubahnya
-        if ($user->id !== intval($activity->user_id)) {
-            return response()->json(['message' => 'Unauthorized'], 401);
-        }
-
-        $validator = Validator::make($request->all(), [
-            'judul_activity' => 'sometimes|required|string|max:255',
-            'judul_slug' => [
-                'sometimes',
-                'nullable',
-                'string',
-                'max:255',
-                Rule::unique('activities')->ignore($activity->id),
-            ],
-            'category_id' => ['sometimes', 'required', 'exists:categories,id'],
-            'detail_activity' => 'sometimes|required|string',
-            'batas_waktu' => 'sometimes|required|numeric',
-            'foto_activity' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            'lokasi' => 'sometimes|required|string|max:255',
-            'waktu_activity' => 'sometimes|required|string',
-            'tipe_activity' => 'sometimes|required|in:Virtual,In-Person,Hybrid',
-            'kuota' => 'sometimes|required|numeric',
-            'link_wa' => 'sometimes|required|string',
-            'link_guidebook' => 'string',
-            'jenis_activity' => 'nullable',
-            'biaya_activity' => ['sometimes', 'nullable', 'array'],
-            'biaya_activity.*.per' => ['sometimes', 'nullable', 'numeric'],
-            'biaya_activity.*.price' => ['sometimes', 'nullable', 'numeric'],
-            
-        ]);
-        
-        if ($validator->fails()) {
-            return response()->json(['message' => $validator->errors()], 400);
-        }
-        
-        $validated = $validator->validated();
-        $validated['batas_waktu']= Carbon::now()->addDays($request->batas_waktu);
-        // Handle biaya_activity separately
-        $biayaActivity = $validated['biaya_activity'] ?? null;
-        unset($validated['biaya_activity']);
-
-        // Update hanya nilai yang berubah
-        $activity->fill(array_filter($validated))->save();
-
-       
-        $activityType = $validated['jenis_activity'] ?? null;
-
-        if (! empty($activityType) && ActivityType::FREE->equals(ActivityType::from($activityType))) {
-            // Menghapus semua biaya aktivitas jika jenis aktivitas berubah menjadi "free"
-            $activity->prices()->delete();
-        }
-        
-        if (!empty($biayaActivity)) {
-            foreach ($biayaActivity as $biaya) {
-                // Find the price by per and update the price value
-                $activity->prices()->updateOrCreate(['per' => $biaya['per']], ['price' => $biaya['price']]);
-            }
-        }
-        $tasks = $request->input('tasks', []);
-        $activity->tasks()->delete();
-        foreach ($tasks as $task) {
-            $activity->tasks()->create(['deskripsi' => $task]);
-        }
-
-        // Handle pembaruan kriteria (criterias)
-        $criterias = $request->input('criterias', []);
-        $activity->criterias()->delete();
-        foreach ($criterias as $criteria) {
-            $activity->criterias()->create(['deskripsi' => $criteria]);
-        }
-        // Handle pembaruan tugas (tasks) dan kriteria (criterias) seperti dalam fungsi create
-
-        $activity->load('prices');
-
-        return response()->json(['data' => $activity], 200);
+    if (!$user) {
+        return response()->json(['message' => 'User not found!'], 404);
     }
+    if ($user->tipe !== 'Organisasi') {
+        return response()->json(['message' => 'Anda belum terdaftar sebagai organisasi'], 403);
+    }
+
+    $validator = Validator::make($request->all(), [
+        'judul_activity' => 'required|string|max:255',
+        'judul_slug' => 'sometimes|string|unique:activities,judul_slug,' . $activity->id . '|max:255',
+        'category_id' => ['required', 'exists:categories,id'],
+        'detail_activity' => 'required|string',
+        'batas_waktu' => 'required|numeric',
+        'foto_activity' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',            
+        'lokasi' => 'required|string|max:255',
+        'waktu_activity' => 'required|string',
+        'tipe_activity' => 'required|in:Virtual,In-Person,Hybrid',
+        'kuota' => 'required|numeric',
+        'tautan' => 'required|string',
+        'link_guidebook' => 'string',
+        'jenis_activity' => ['nullable', new Enum(ActivityType::class)],
+        'biaya_activity' => ['required_if:jenis_activity,paid', 'array'],
+        'biaya_activity.*.per' => ['required_if:jenis_activity,paid', 'numeric'],
+        'biaya_activity.*.price' => ['required_if:jenis_activity,paid', 'numeric'],
+    ]);
+
+    if ($validator->fails()) {
+        return response()->json(['message' => $validator->errors()], 400);
+    }
+
+    $validated = $validator->validated();
+
+    $slug = !empty($request->judul_slug) ? $validated['judul_slug'] : Str::slug($request->judul_activity . ' ' . Str::random(6));
+    $photo = $request->file('foto_activity');
+    $activityType = $request->jenis_activity ?? ActivityType::FREE->value;
+    $activityPrices = $request->biaya_activity ?? [];
+
+    if (!empty($photo)) {
+        $photo = $this->uploadImage($request, 'foto_activity', $slug);
+    }
+
+    $activity->update([
+        'category_id' => $validated['category_id'],
+        'judul_activity' => $request->judul_activity,
+        'judul_slug' => $slug,
+        'foto_activity' => $photo,
+        'detail_activity' => $request->detail_activity,
+        'batas_waktu' => Carbon::now()->addDays($request->batas_waktu),
+        'waktu_activity' => $request->waktu_activity,
+        'lokasi' => $request->lokasi,
+        'tipe_activity' => $request->tipe_activity,
+        'status_publish' => $request->status_publish,
+        'status' => 'Pending',
+        'kuota' => $request->kuota ? $request->kuota : 0,
+        'link_wa' => $request->tautan ? $request->tautan : 'involuntir',
+        'jenis_activity' => $activityType,
+        'link_guidebook' => $request->link_guidebook,
+        'updated_at' => $request->status_publish === 'published' ? Carbon::now() : null,
+    ]);
+
+    if (!empty($activityType) && ActivityType::PAID->equals(ActivityType::from($activityType))) {
+        $activity->prices()->delete(); // Delete existing prices before updating
+        foreach ($activityPrices as $value) {
+            $activity->prices()->create($value);
+        }
+    }
+
+    $tasks = $request->tasks ? json_decode($request->tasks) : [];
+    $activity->tasks()->delete(); // Delete existing tasks before updating
+    foreach ($tasks as $task) {
+        $activity->tasks()->create(['deskripsi' => $task]);
+    }
+
+    $criterias = $request->criterias ? json_decode($request->criterias) : [];
+    $activity->criterias()->delete(); // Delete existing criterias before updating
+    foreach ($criterias as $criteria) {
+        $activity->criterias()->create(['deskripsi' => $criteria]);
+    }
+
+    $activity->load('prices');
+
+    return response()->json(['data' => $activity], 200);
+}
 
     private function getCategory(Category $category)
     {

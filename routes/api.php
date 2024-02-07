@@ -232,10 +232,10 @@ Route::prefix('companies')->group(function () {
 });
 
 Route::prefix('admin')->middleware(['jwt.verify','admin'])->group(function () {
-    Route::get('/aktivitas', [ActivityController::class, 'index']);
     Route::get('/users', [UserAdminController::class, 'index']);
     Route::get('/donation/all', [DonationController::class, 'index']);
     Route::put('/change-user/{userId}', [UserAdminController::class, 'changeToOrganisasi']);    
 });
 
+Route::get('/aktivitas', [ActivityController::class, 'index']);
 
