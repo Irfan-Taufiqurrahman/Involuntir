@@ -18,11 +18,21 @@ class DonationController extends Controller
 {    
 
     public function index()
-    {
-        $donations = Donation::orderBy('tanggal_donasi')
-            ->get(['kode_donasi', 'nama', 'tanggal_donasi', 'donasi', 'payment_channel', 'status_donasi']);
-        return response()->json($donations);
-    }
+{
+    $donations = Donation::orderBy('tanggal_donasi')
+        ->get(['kode_donasi', 'nama', 'tanggal_donasi', 'donasi', 'emoney_name', 'bank_name', 'status_donasi'])
+        ->map(function ($donation) {
+            if (is_null($donation->payment_channel)) {
+                $donation->payment_channel = $donation->emoney_name ?? $donation->bank_name;
+            }
+            unset($donation->emoney_name, $donation->bank_name);
+            return $donation;
+        });
+
+    return response()->json($donations);
+}
+
+    
 
     public function checkReferalCode(Request $request)
     {
