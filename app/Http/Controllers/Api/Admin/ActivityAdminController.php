@@ -127,6 +127,52 @@ class ActivityAdminController extends Controller
             return response()->json(['message' => $err->getMessage()], $err->getCode());
         }
     }
+    public function show()
+    {
+        try {
+            // Mendapatkan semua aktivitas, termasuk yang telah dihapus
+            $activities = Activity::withTrashed()->get();
+    
+            // Mendapatkan tanggal saat ini
+            $currentDate = now();
+    
+            // Menginisialisasi variabel untuk menyimpan jumlah aktivitas yang telah berakhir, termasuk yang telah dihapus, dan yang masih berlangsung
+            $finishedActivitiesCount = 0;
+            $ongoingActivitiesCount = 0;
+    
+            // Melakukan iterasi pada setiap aktivitas untuk menghitung jumlah aktivitas yang telah berakhir dan yang masih berlangsung
+            foreach ($activities as $activity) {
+                // Jika aktivitas telah dihapus, tambahkan ke jumlah aktivitas yang telah berakhir
+                if ($activity->deleted_at !== null) {
+                    $finishedActivitiesCount++;
+                    continue; // Lanjutkan ke aktivitas berikutnya
+                }
+    
+                // Mendapatkan tanggal batas_waktu aktivitas
+                $deadline = $activity->batas_waktu;
+    
+                // Memeriksa apakah tanggal batas_waktu lebih kecil dari tanggal saat ini, jika ya, maka aktivitas telah berakhir
+                if ($deadline < $currentDate) {
+                    $finishedActivitiesCount++;
+                } else {
+                    $ongoingActivitiesCount++;
+                }
+            }
+    
+            // Menyiapkan respons JSON
+            $response = [
+                'total' => $finishedActivitiesCount + $ongoingActivitiesCount,
+                'finished' => $finishedActivitiesCount,
+                'ongoing' => $ongoingActivitiesCount,
+            ];
+    
+            return response()->json($response);
+        } catch (\Exception $e) {
+            return response()->json(['message' => $e->getMessage()], 500);
+        }
+    }
+    
+
     
     
 }

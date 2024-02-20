@@ -34,9 +34,7 @@ class DonationController extends Controller
             });
     
         return response()->json($donations);
-    }
-    
-    
+    }    
 
     public function checkReferalCode(Request $request)
     {

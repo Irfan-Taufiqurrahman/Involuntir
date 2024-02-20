@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use Carbon\Carbon;
 
 class UserAdminController extends Controller
 {
@@ -61,6 +62,23 @@ class UserAdminController extends Controller
             ], 500);
         }
     }
+    public function getNewUser()
+    {
+        try {
+            // Mendapatkan tanggal 7 hari yang lalu dari tanggal saat ini
+            $sevenDaysAgo = Carbon::now()->subDays(7);
 
+            // Mengambil pengguna yang dibuat dalam 7 hari terakhir
+            $newUsers = User::where('created_at', '>=', $sevenDaysAgo)->get();
 
+            // Menyiapkan respons JSON
+            $response = [
+                'new_users' => $newUsers,
+            ];
+
+            return response()->json($response);
+        } catch (\Exception $e) {
+            return response()->json(['message' => $e->getMessage()], 500);
+        }
+    }
 }
