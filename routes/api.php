@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\ActivityController;
 use App\Http\Controllers\Api\AdaYangBaruController;
 use App\Http\Controllers\Api\Admin\CampaignAdminController;
 use App\Http\Controllers\Api\Admin\UserAdminController;
+use App\Http\Controllers\Api\Admin\ActivityAdminController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\BankTransferController;
 use App\Http\Controllers\Api\CampaignController;
@@ -95,16 +96,16 @@ Route::prefix('galangdana')->group(function () {
     Route::delete('/{campaign}/report', [CampaignReportController::class, 'cancelReport'])->middleware('jwt.verify');
 });
 
-    Route::get('/galangdanasaya', [CampaignController::class, 'myCampaigns'])->middleware('jwt.verify');
+Route::get('/galangdanasaya', [CampaignController::class, 'myCampaigns'])->middleware('jwt.verify');
 
+Route::get('/aktivitas', [ActivityController::class, 'index']);
     Route::prefix('aktivitas')->group(function () {    
     Route::get('/{activity}', [ActivityController::class, 'show']);
     Route::get('/byslug/{activity}', [ActivityController::class, 'bySlug']);
     Route::post('/create', [ActivityController::class, 'create'])->middleware('jwt.verify');
     Route::post('/create/publish', [ActivityController::class, 'publish'])->middleware('jwt.verify');
     Route::post('/create/draft', [ActivityController::class, 'draft'])->middleware('jwt.verify');
-    Route::put('/{id}/update', [ActivityController::class, 'update'])->middleware('jwt.verify');
-    Route::delete('/{activity:id}/delete', [ActivityController::class, 'destroy'])->middleware('jwt.verify');
+    Route::post('/{id}/update', [ActivityController::class, 'update'])->middleware('jwt.verify');
     Route::get('isExist/{slug}', [ActivityController::class, 'isExist']);
     Route::get('/peserta/{activity}',[ActivityController::class, 'showPeserta'])->middleware('jwt.verify');
 });
@@ -234,8 +235,11 @@ Route::prefix('companies')->group(function () {
 Route::prefix('admin')->middleware(['jwt.verify','admin'])->group(function () {
     Route::get('/users', [UserAdminController::class, 'index']);
     Route::get('/donation/all', [DonationController::class, 'index']);
+    Route::get('/aktivitas', [ActivityAdminController::class, 'index']);
     Route::put('/change-user/{userId}', [UserAdminController::class, 'changeToOrganisasi']);    
+    Route::delete('/aktivitas/{activity:id}/delete', [ActivityController::class, 'destroy'])->middleware('jwt.verify');    
+    Route::get('/transaction/{kode_id}', [DonationController::class, 'transactionHistory']);
+
 });
 
-Route::get('/aktivitas', [ActivityController::class, 'index']);
 

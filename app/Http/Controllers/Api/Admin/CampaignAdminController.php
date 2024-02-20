@@ -9,15 +9,15 @@ class CampaignAdminController extends Controller
 {
     public function index()
     {
-        $campaigns = DB::table('campaigns')
+        $campaigns = DB::table('activity')
             ->leftJoin('users', 'user_id', '=', 'users.id')
-            ->leftJoin('donations', 'campaigns.id', '=', 'donations.campaign_id')
-            ->groupBy('campaigns.id')
-            ->orderBy('campaigns.created_at', 'DESC')
-            ->select('campaigns.id',
-                'judul_campaign',
+            ->leftJoin('donations', 'activity.id', '=', 'donations.activity_id')
+            ->groupBy('activity.id')
+            ->orderBy('activity.created_at', 'DESC')
+            ->select('activity.id',
+                'judul_activity',
                 'users.name',
-                'nominal_campaign',
+                'nominal',
                 DB::raw("SUM(
                                             IF(
                                                donations.status_donasi = 'Approved',
@@ -31,7 +31,7 @@ class CampaignAdminController extends Controller
                                              CONCAT(DATEDIFF(batas_waktu_campaign, CURRENT_DATE), ' hari')
                                           )
                                           as sisa_waktu"),
-                'campaigns.status')
+                'activity.status')
             ->get();
 
         return response()->json(['data' => $campaigns]);

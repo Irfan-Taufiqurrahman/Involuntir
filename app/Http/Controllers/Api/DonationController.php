@@ -20,9 +20,23 @@ class DonationController extends Controller
     public function index()
     {
         $donations = Donation::orderBy('tanggal_donasi')
-            ->get(['kode_donasi', 'nama', 'tanggal_donasi', 'donasi', 'payment_channel', 'status_donasi']);
+            ->get(['id','kode_donasi', 'nama', 'tanggal_donasi', 'donasi', 'emoney_name','nomor_telp', 'bank_name', 'status_donasi'])
+            ->map(function ($donation) {
+                if (is_null($donation->payment_channel)) {
+                    if ($donation->emoney_name !== null) {
+                        $donation->payment_channel = ucfirst($donation->emoney_name);
+                    } elseif ($donation->bank_name !== null) {
+                        $donation->payment_channel = strtoupper($donation->bank_name);
+                    }
+                }
+                unset($donation->emoney_name, $donation->bank_name);
+                return $donation;
+            });
+    
         return response()->json($donations);
     }
+    
+    
 
     public function checkReferalCode(Request $request)
     {
@@ -237,6 +251,7 @@ class DonationController extends Controller
                     'emoney_name' => $donation->emoney_name,
                     'user_id' => $donation->user_id,
                     'deadline' => $donation->deadline,
+                    'judul_activity'=>$donation->activity->judul_activity,
                     'tanggal_donasi' => $donation->tanggal_donasi,
                     'status_donasi' => $donation->status_donasi,
                     'qr_code' => $donation->qr_code,
@@ -256,6 +271,7 @@ class DonationController extends Controller
                     'nomor_telp' => $donation->nomor_telp,
                     'komentar' => $donation->komentar,
                     'bank_name' => $donation->bank_name,
+                    'judul_activity'=>$donation->activity->judul_activity,
                     'user_id' => $donation->user_id,
                     'deadline' => $donation->deadline,
                     'tanggal_donasi' => $donation->tanggal_donasi,
@@ -264,27 +280,6 @@ class DonationController extends Controller
                     'updated_at' => $donation->updated_at,
                     'created_at' => $donation->created_at,
                     'id' => $donation->id,
-                ],
-            ]);
-        } elseif ($donation->metode_pembayaran === 'cod' || $donation->metode_pembayaran === 'manual') {
-            return response()->json([
-                'data' => [
-                    'donasi' => [
-                        'nama' => $donation->nama,
-                        'donasi' => $donation->donasi,
-                        'kode_donasi' => $donation->kode_donasi,
-                        'metode_pembayaran' => $donation->metode_pembayaran,
-                        'email' => $donation->email,
-                        'nomor_telp' => $donation->nomor_telp,
-                        'komentar' => $donation->komentar,
-                        'user_id' => $donation->user_id,
-                        'deadline' => $donation->deadline,
-                        'tanggal_donasi' => $donation->tanggal_donasi,
-                        'status_donasi' => $donation->status_donasi,
-                        'updated_at' => $donation->updated_at,
-                        'created_at' => $donation->created_at,
-                        'id' => $donation->id,
-                    ],
                 ],
             ]);
         } else {
@@ -299,6 +294,7 @@ class DonationController extends Controller
                         'nomor_telp' => $donation->nomor_telp,
                         'komentar' => $donation->komentar,
                         'user_id' => $donation->user_id,
+                        'judul_activity'=>$donation->activity->judul_activity,
                         'deadline' => $donation->deadline,
                         'tanggal_donasi' => $donation->tanggal_donasi,
                         'status_donasi' => $donation->status_donasi,

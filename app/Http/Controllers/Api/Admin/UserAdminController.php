@@ -8,28 +8,27 @@ use App\Models\User;
 class UserAdminController extends Controller
 {
     public function index()
-{
-    $users = User::paginate();
+    {
+        $users = User::all();
 
-    return response()->json([
-        'status' => true,
-        'data' => $users->map(function ($user) {
-            return [
-                'nama' => $user->name,
-                'username'=>$user->username,
-                'email' => $user->email,
-                'no_telp' => $user->no_telp,
-                'tipe' => $user->tipe,
-                'tanggal' => $user->created_at->format('Y-m-d'),
-            ];
-        }),
-    ]);
-}
-public function changeToOrganisasi($userId)
+        return response()->json([
+            'status' => true,
+            'data' => $users->map(function ($user) {
+                return [
+                    'nama' => $user->name,
+                    'username'=>$user->username,
+                    'email' => $user->email,
+                    'no_telp' => $user->no_telp,
+                    'tipe' => $user->tipe,
+                    'tanggal' => $user->created_at->format('Y-m-d'),
+                ];
+            }),
+        ]);
+    }
+    public function changeToOrganisasi($userId)
     {
         try {
             $user = User::findOrFail($userId);
-
             
             if ($user->tipe === 'Individu') {
                 $user->update(['tipe' => 'Organisasi']);
@@ -61,6 +60,6 @@ public function changeToOrganisasi($userId)
             ], 500);
         }
     }
-
+    
 
 }
