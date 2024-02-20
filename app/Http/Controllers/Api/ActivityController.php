@@ -227,13 +227,8 @@ class ActivityController extends Controller
             'category_id' => ['required', 'exists:categories,id'],
             'detail_activity' => 'required|string',
             'batas_waktu' => 'required|numeric',
-<<<<<<< HEAD
-            'foto_activity' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            // 'foto_activity' => 'string',
-=======
-            // 'foto_activity' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',          
-            'foto_activity'=>'required|string',  
->>>>>>> 7679520bc4096f5e78c09e77bbf075d81ceba070
+            'foto_activity' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',          
+            // 'foto_activity'=>'required|string',  
             'lokasi' => 'required|string|max:255',
             'waktu_activity' => 'required|string',
             'tipe_activity' => 'required|in:Virtual,In-Person,Hybrid',
@@ -426,11 +421,7 @@ class ActivityController extends Controller
         $activity->save();
     
         return response()->json(['message' => 'Activity updated successfully', 'activity' => $activity]);
-    }
-    
-   
-    
-
+    }    
 
     private function getCategory(Category $category)
     {
