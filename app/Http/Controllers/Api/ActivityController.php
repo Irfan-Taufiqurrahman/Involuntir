@@ -227,8 +227,13 @@ class ActivityController extends Controller
             'category_id' => ['required', 'exists:categories,id'],
             'detail_activity' => 'required|string',
             'batas_waktu' => 'required|numeric',
+<<<<<<< HEAD
             'foto_activity' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             // 'foto_activity' => 'string',
+=======
+            // 'foto_activity' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',          
+            'foto_activity'=>'required|string',  
+>>>>>>> 7679520bc4096f5e78c09e77bbf075d81ceba070
             'lokasi' => 'required|string|max:255',
             'waktu_activity' => 'required|string',
             'tipe_activity' => 'required|in:Virtual,In-Person,Hybrid',
@@ -261,7 +266,7 @@ class ActivityController extends Controller
             'user_id' => $user->id,
             'judul_activity' => $request->judul_activity,
             'judul_slug' => $slug,
-            'foto_activity' => $photo,
+            'foto_activity' => $validated['foto_activity'],
             'detail_activity' => $request->detail_activity,
             'batas_waktu' => Carbon::now()->addDays($request->batas_waktu),
             'waktu_activity' => $request->waktu_activity,
@@ -285,7 +290,7 @@ class ActivityController extends Controller
             $activity->save();
         }
 
-        $tasks = $request->tasks ? json_decode($request->tasks) : [];
+        $tasks = $request->tasks ? $request->tasks : "[]";
 
         foreach ($tasks as $task) {
             $task = Task::create([
@@ -296,7 +301,7 @@ class ActivityController extends Controller
 
         $activity->tasks = $tasks;
 
-        $criterias = $request->criterias ? json_decode($request->criterias) : [];
+        $criterias = $request->criterias ? $request->criterias : "[]";
         foreach ($criterias as $criteria) {
             Criteria::create([
                 'activity_id' => $activity->id,

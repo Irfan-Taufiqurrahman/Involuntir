@@ -18,6 +18,7 @@ class DonationController extends Controller
 {    
 
     public function index()
+<<<<<<< HEAD
     {
         $donations = Donation::orderBy('tanggal_donasi')
             ->get(['id','kode_donasi', 'nama', 'tanggal_donasi', 'donasi', 'emoney_name','nomor_telp', 'bank_name', 'status_donasi'])
@@ -36,6 +37,22 @@ class DonationController extends Controller
         return response()->json($donations);
     }
     
+=======
+{
+    $donations = Donation::orderBy('tanggal_donasi')
+        ->get(['kode_donasi', 'nama', 'tanggal_donasi', 'donasi', 'emoney_name', 'bank_name', 'status_donasi'])
+        ->map(function ($donation) {
+            if (is_null($donation->payment_channel)) {
+                $donation->payment_channel = $donation->emoney_name ?? $donation->bank_name;
+            }
+            unset($donation->emoney_name, $donation->bank_name);
+            return $donation;
+        });
+
+    return response()->json($donations);
+}
+
+>>>>>>> 7679520bc4096f5e78c09e77bbf075d81ceba070
     
 
     public function checkReferalCode(Request $request)

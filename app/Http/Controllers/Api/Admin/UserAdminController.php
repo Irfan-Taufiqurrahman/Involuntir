@@ -29,6 +29,7 @@ class UserAdminController extends Controller
     {
         try {
             $user = User::findOrFail($userId);
+
             
             if ($user->tipe === 'Individu') {
                 $user->update(['tipe' => 'Organisasi']);
@@ -60,6 +61,6 @@ class UserAdminController extends Controller
             ], 500);
         }
     }
-    
+
 
 }

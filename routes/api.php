@@ -239,7 +239,6 @@ Route::prefix('admin')->middleware(['jwt.verify','admin'])->group(function () {
     Route::put('/change-user/{userId}', [UserAdminController::class, 'changeToOrganisasi']);    
     Route::delete('/aktivitas/{activity:id}/delete', [ActivityController::class, 'destroy'])->middleware('jwt.verify');    
     Route::get('/transaction/{kode_id}', [DonationController::class, 'transactionHistory']);
-
 });
 
 
