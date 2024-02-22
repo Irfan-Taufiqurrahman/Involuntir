@@ -135,7 +135,7 @@ Route::get('/aktivitas', [ActivityController::class, 'index']);
     Route::get('/', [UrgentCampaignsController::class, 'index']);
 });
 
-    Route::prefix('fundraiser')->middleware(['jwt.verify', 'fundraiser'])->group(function () {
+Route::prefix('fundraiser')->middleware(['jwt.verify', 'fundraiser'])->group(function () {
     Route::get('/getdonatur', [FundraiserController::class, 'getdonatur']);
     Route::get('/donations', [FundraiserController::class, 'getDonaturByReferral']);
     Route::get('/approve', [FundraiserController::class, 'approve']);

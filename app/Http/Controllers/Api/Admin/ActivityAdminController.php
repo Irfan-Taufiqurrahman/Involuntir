@@ -109,7 +109,10 @@ class ActivityAdminController extends Controller
                 $priceValue = $price ? $price->price : null;
             
                 $madeBy = $user ? $user->name : null;
-            
+                $batasWaktu = strtotime($activity->batas_waktu);
+                $hariIni = time();
+                $selisihDetik = $batasWaktu - $hariIni;
+                $selisihHari = floor($selisihDetik / (60 * 60 * 24)); // Mengonversi selisih dalam detik menjadi hari
                 return [
                     'id' => $activity->id,
                     'name' => $activity->judul_activity,
@@ -117,7 +120,7 @@ class ActivityAdminController extends Controller
                     'made' => $madeBy,
                     'total_income' => $totalIncome,
                     'jumlah_volunteer' => $jumlahVolunteer,
-                    'batas_waktu' => $activity->batas_waktu,
+                    'batas_waktu' => $selisihHari,
                     'status_publish' => $activity->status_publish,
                 ];
             });

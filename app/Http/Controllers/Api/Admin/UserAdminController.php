@@ -16,6 +16,7 @@ class UserAdminController extends Controller
             'status' => true,
             'data' => $users->map(function ($user) {
                 return [
+                    'id'=>$user->id,
                     'nama' => $user->name,
                     'username'=>$user->username,
                     'email' => $user->email,
