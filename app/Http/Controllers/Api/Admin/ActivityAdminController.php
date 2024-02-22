@@ -138,8 +138,7 @@ class ActivityAdminController extends Controller
     
             // Menginisialisasi variabel untuk menyimpan jumlah aktivitas yang telah berakhir, termasuk yang telah dihapus, dan yang masih berlangsung
             $finishedActivitiesCount = 0;
-            $ongoingActivitiesCount = 0;
-    
+            $ongoingActivitiesCount = 0;    
             // Melakukan iterasi pada setiap aktivitas untuk menghitung jumlah aktivitas yang telah berakhir dan yang masih berlangsung
             foreach ($activities as $activity) {
                 // Jika aktivitas telah dihapus, tambahkan ke jumlah aktivitas yang telah berakhir

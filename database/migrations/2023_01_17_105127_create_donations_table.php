@@ -40,8 +40,7 @@ return new class extends Migration
             $table->mediumText('foto_kedua')->nullable();
             $table->string('status_pemberian_ketiga')->nullable();
             $table->mediumText('foto_ketiga')->nullable();
-            $table->longText('status_terbaru')->nullable();
-            $table->string('komentar')->nullable();
+            $table->longText('status_terbaru')->nullable();         
             $table->timestamp('deadline')->nullable();
             $table->date('tanggal_donasi')->nullable();
             $table->timestamp('created_at')->nullable()->useCurrent();
@@ -56,6 +55,7 @@ return new class extends Migration
      */
     public function down()
     {
+
         Schema::dropIfExists('donations');
     }
 };

@@ -192,10 +192,7 @@ Route::prefix('wishlists')->middleware('jwt.verify')->group(function () {
 Route::get('search', [SearchController::class, 'index']);
 
 Route::prefix('slides')->group(function () {
-    Route::get('/', [SliderController::class, 'index']);
     Route::post('/create', [SliderController::class, 'create']);
-    Route::put('/{id}/update', [SliderController::class, 'update']);
-    Route::delete('/{id}/delete', [SliderController::class, 'delete']);
 });
 
 Route::prefix('topup')->middleware('jwt.verify')->group(function () {
@@ -241,6 +238,10 @@ Route::prefix('admin')->middleware(['jwt.verify','admin'])->group(function () {
     Route::get('/transaction/{kode_id}', [DonationController::class, 'transactionHistory']);
     Route::get('/aktivitas/status',[ActivityAdminController::class,'show']);
     Route::get('/users/new-user',[UserAdminController::class, 'getNewUser']);
+    Route::post('/slides/create', [SliderController::class, 'create']);
+    Route::get('/slides/', [SliderController::class, 'index']);
+    Route::post('/slides/{id}/update', [SliderController::class, 'update']);
+    Route::delete('/slides/{id}/delete', [SliderController::class, 'delete']);
 });
 
 

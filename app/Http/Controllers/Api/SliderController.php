@@ -11,6 +11,14 @@ use function PHPUnit\Framework\fileExists;
 
 class SliderController extends Controller
 {
+    private function uploadImage(Request $request, $file, $judul_slug)
+    {
+        $fileName = $judul_slug . '.' . $request->file($file)->extension();
+        $path = 'images/images_carousel';
+        $request->file($file)->move(public_path($path), $fileName);
+
+        return env('APP_URL') . "/$path/$fileName";
+    }
     public function index()
     {
         // return full image url for each slider
@@ -29,6 +37,9 @@ class SliderController extends Controller
         // make validator and response with json
         $validator = Validator::make($request->all(), [
             'url' => 'nullable|url',
+            'title'=> 'required|nullable|string',
+            'start_date'=> 'required|nullable|string',
+            'end_date' => 'required|nullable|string',
             'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
@@ -40,20 +51,18 @@ class SliderController extends Controller
             ], 400);
         }
 
-        // check if the image is not null then upload the image
-        if ($request->hasFile('image')) {
-            $image = $request->file('image');
-            $name = time() . '.' . $image->getClientOriginalExtension();
-            $destinationPath = public_path('/images/images_carousel');
-            $image->move($destinationPath, $name);
-        } else {
-            $name = null;
+        $photo = $request->file('image');
+        if (! empty($photo)) {
+            $photo = $this->uploadImage($request, 'image', $request->title);
         }
 
         // create new slider and save it to database
         $slider = new Slider();
         $slider->url = $request->url;
-        $slider->image = $name;
+        $slider->name = $request->title;
+        $slider->start_date = $request->start_date;
+        $slider->end_date = $request->end_date;
+        $slider->image = $photo;
         $slider->save();
 
         // return response json with success message
@@ -82,8 +91,16 @@ class SliderController extends Controller
                 'message' => 'Slider Not Found',
             ], 404);
         }
+        $photo = $request->file('image');
+        if (! empty($photo)) {
+            $photo = $this->uploadImage($request, 'image', $request->title);
+        }
         // update the slider
         $slider->url = $request->url;
+        $slider->name = $request->title;
+        $slider->image = $photo;
+        $slider->start_date = $request->start_date;
+        $slider->end_date = $request->end_date;
         $slider->save();
 
         // return response json with success update message
@@ -101,10 +118,12 @@ class SliderController extends Controller
             ], 404);
         }
 
-        $oldImage = public_path('/images/images_carousel/' . $slider->image);
-        if ($slider->image && fileExists($oldImage)) {
-            unlink($oldImage);
+        $oldImagePath = public_path(env('APP_URL') . '/images/images_carousel/' . $slider->image);
+
+        if ($slider->image && file_exists($oldImagePath)) {
+            unlink($oldImagePath);
         }
+        
         // delete the slider
         $slider->delete();
 
