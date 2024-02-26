@@ -35,6 +35,8 @@ class RemoveColumnsFromDonationsTable extends Migration
      */
     public function down()
     {
+        
+          
         // If needed, you can add code to recreate the columns in the down method.
         // However, dropping columns is usually a one-way operation.
     }

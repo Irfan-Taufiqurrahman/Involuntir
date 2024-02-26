@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\AdaYangBaruController;
 use App\Http\Controllers\Api\Admin\CampaignAdminController;
 use App\Http\Controllers\Api\Admin\UserAdminController;
 use App\Http\Controllers\Api\Admin\ActivityAdminController;
+use App\Http\Controllers\Api\Admin\DashboardAdminController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\BankTransferController;
 use App\Http\Controllers\Api\CampaignController;
@@ -242,6 +243,8 @@ Route::prefix('admin')->middleware(['jwt.verify','admin'])->group(function () {
     Route::get('/slides/', [SliderController::class, 'index']);
     Route::post('/slides/{id}/update', [SliderController::class, 'update']);
     Route::delete('/slides/{id}/delete', [SliderController::class, 'delete']);
+    Route::get('/dashboard', [DashboardAdminController::class, 'show']);
+    Route::get('/aktivitas/{id}', [ActivityAdminController::class, 'showPeserta']);    
 });
 
 

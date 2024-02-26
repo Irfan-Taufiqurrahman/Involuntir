@@ -82,4 +82,8 @@ class Activity extends Model
     {
         return $this->hasMany(Criteria::class);
     }
+    public function vouchers(): HasMany
+    {
+        return $this->hasMany(Voucher::class, 'activityId');
+    }
 }

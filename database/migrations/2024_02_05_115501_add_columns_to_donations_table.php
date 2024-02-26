@@ -15,10 +15,8 @@ class AddColumnsToDonationsTable extends Migration
     {
         Schema::table('donations', function (Blueprint $table) {
             // Add columns
-            $table->dropColumn('komentar');
-            $table->dropColumn('snap_token');
-            $table->dropColumn('status_terbaru');
-            $table->dropColumn('payment_url');
+            // $table->dropColumn('komentar');
+          
         });
     }
 

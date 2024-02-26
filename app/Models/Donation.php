@@ -9,7 +9,7 @@ class Donation extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['nama', 'activity_id', 'judul_slug', 'biaya_persen', 'donasi', 'kode_donasi', 'perantara_donasi', 'metode_pembayaran', 'email', 'nomor_telp', 'status_donasi', 'snap_token', 'payment_url', 'komentar', 'deadline', 'tanggal_donasi', 'emoney_name', 'bank_name', 'qr_code','nomor_va'];
+    protected $fillable = ['nama', 'activity_id', 'judul_slug', 'biaya_persen', 'donasi', 'kode_donasi', 'perantara_donasi', 'metode_pembayaran', 'email', 'nomor_telp', 'status_donasi', 'snap_token', 'payment_url', 'komentar', 'deadline', 'tanggal_donasi', 'emoney_name', 'bank_name', 'qr_code'];
 
     public function activity()
     {

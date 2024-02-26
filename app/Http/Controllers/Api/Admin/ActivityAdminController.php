@@ -121,7 +121,9 @@ class ActivityAdminController extends Controller
                     'total_income' => $totalIncome,
                     'jumlah_volunteer' => $jumlahVolunteer,
                     'batas_waktu' => $selisihHari,
+                    'foto_activity'=>$activity->foto_activity,
                     'status_publish' => $activity->status_publish,
+                    'created_at'=> $activity->created_at,
                 ];
             });
            
@@ -173,6 +175,39 @@ class ActivityAdminController extends Controller
             return response()->json(['message' => $e->getMessage()], 500);
         }
     }
+    public function showPeserta($activity) {
+        // Find the activity based on the slug
+        $data_activity = Activity::where('id', $activity)->first();
+    
+        if (!$data_activity) {
+            return response()->json(['message' => 'Activity not found'], 404);
+        }
+        $total_volunteer = $data_activity->donations()->where('status_donasi', 'Approved')->count();
+    
+        // Retrieve donations related to the activity using the relationship
+        $total_donation = $data_activity->donations()
+        ->where('status_donasi', 'Approved')
+        ->sum('donasi');
+        $donations = $data_activity->donations->toArray();
+    
+        // Format the donation data according to the specified schema
+        $formattedDonations = array_map(function ($donation) {
+            return [
+                'id' => $donation['id'],
+                'name' => $donation['nama'],
+                'nominal' => (int) $donation['donasi'],
+                'nomor_telp' => (int) $donation['nomor_telp'],
+                'kode_donasi' => $donation['kode_donasi'],
+                'date' => $donation['tanggal_donasi'],
+                'status_donasi' => $donation['status_donasi'],
+            ];
+        }, $donations);
+    
+    
+        return response()->json(['message' => 'success', 'total_donation' => $total_donation,'total_volunteer'=>$total_volunteer, 'data' => $formattedDonations
+        ]);
+    }
+    
     
 
     

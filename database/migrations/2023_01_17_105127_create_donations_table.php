@@ -22,7 +22,7 @@ return new class extends Migration
             $table->integer('biaya_persen')->nullable()->default(15);
             $table->decimal('donasi', 65, 0)->nullable();
             $table->string('kode_donasi')->nullable();
-            $table->string('prantara_donasi')->nullable();
+            $table->string('perantara_donasi')->nullable(); // corrected column name
             $table->string('metode_pembayaran')->nullable();
             $table->string('nomor_va')->nullable();
             $table->string('bank_name')->nullable();
@@ -40,7 +40,8 @@ return new class extends Migration
             $table->mediumText('foto_kedua')->nullable();
             $table->string('status_pemberian_ketiga')->nullable();
             $table->mediumText('foto_ketiga')->nullable();
-            $table->longText('status_terbaru')->nullable();         
+            $table->longText('status_terbaru')->nullable();
+            $table->string('komentar')->nullable();
             $table->timestamp('deadline')->nullable();
             $table->date('tanggal_donasi')->nullable();
             $table->timestamp('created_at')->nullable()->useCurrent();
@@ -55,7 +56,6 @@ return new class extends Migration
      */
     public function down()
     {
-
         Schema::dropIfExists('donations');
     }
 };

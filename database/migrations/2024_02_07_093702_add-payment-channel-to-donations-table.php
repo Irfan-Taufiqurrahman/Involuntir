@@ -14,7 +14,7 @@ class AddPaymentChannelToDonationsTable extends Migration
     public function up()
     {
         Schema::table('donations', function (Blueprint $table) {
-            $table->string('payment_channel')->after('metode_pembayaran')->nullable();
+            // $table->string('payment_channel')->after('metode_pembayaran')->nullable();
         });
     }
 
@@ -26,7 +26,7 @@ class AddPaymentChannelToDonationsTable extends Migration
     public function down()
     {
         Schema::table('donations', function (Blueprint $table) {
-            $table->dropColumn('payment_channel');
+            // $table->dropColumn('payment_channel');
         });
     }
 }

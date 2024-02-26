@@ -105,7 +105,7 @@ class FundraiserController extends Controller
             if ($donation->komentar) {
                 Feed::create([
                     'user_id' => $donation->user_id,
-                    'content' => $donation->komentar,
+                    // 'content' => $donation->komentar,
                     'insertion_link' => env('FRONTEND_URL') . '/' . $data->campaign->judul_slug,
                     'insertion_link_title' => $donation->campaign->judul_campaign,
                 ]);
