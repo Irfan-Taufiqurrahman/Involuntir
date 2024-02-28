@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Mail\MailVerification;
 use App\Models\KodeReferal;
 use App\Models\User;
-use DB;
+use Illuminate\Support\Facades\DB;
 use GuzzleHttp\Exception\ClientException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -17,6 +17,8 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use Laravel\Socialite\Facades\Socialite;
 use Tymon\JWTAuth\Exceptions\JWTException;
+use Tymon\JWTAuth\Exceptions\TokenExpiredException;
+use Tymon\JWTAuth\Exceptions\TokenInvalidException;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
 class AuthController extends Controller
@@ -172,12 +174,12 @@ class AuthController extends Controller
             }
             $user->balance;
             // $user->kode_referal;
-        } catch (Tymon\JWTAuth\Exceptions\TokenExpiredException $e) {
-            return response()->json(['token_expired'], $e->getStatusCode());
-        } catch (Tymon\JWTAuth\Exceptions\TokenInvalidException $e) {
-            return response()->json(['token_invalid'], $e->getStatusCode());
-        } catch (Tymon\JWTAuth\Exceptions\JWTException $e) {
-            return response()->json(['token_absent'], $e->getStatusCode());
+        } catch (TokenExpiredException $e) {
+            return response()->json(['token_expired'], 401);
+        } catch (TokenInvalidException $e) {
+            return response()->json(['token_invalid'], 401);
+        } catch (JWTException $e) {
+            return response()->json(['token_absent'], 500);
         }
 
         $user = $user->load('socials');

@@ -9,15 +9,18 @@ class Voucher extends Model
 {
     use HasFactory;
 
+    protected $table = "vouchers";
+
     protected $fillable = [
-        'activityId',
-        'name',
-        'nominal',
+        'activity_id',
+        'judul_slug_activity',
+        'name_voucher',
+        'nominal_potongan',
         'deadline',
     ];
 
-    public function activity(): BelongsTo
+    public function activity()
     {
-        return $this->belongsTo(Activity::class, 'activityId');
+        return $this->belongsTo(Activity::class);
     }
 }

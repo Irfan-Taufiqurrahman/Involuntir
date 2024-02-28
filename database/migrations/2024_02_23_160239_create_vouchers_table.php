@@ -14,13 +14,13 @@ class CreateVouchersTable extends Migration
     public function up()
     {
         Schema::create('vouchers', function (Blueprint $table) {
-            $table->id();
-            $table->unsignedInteger('activity_id')->index();
-            $table->string('name');
-            $table->decimal('nominal', 10, 2);
-            $table->timestamp('deadline');
+            $table->bigIncrements('id');
+            $table->unsignedInteger('activity_id')->index('participations_activity_id_foreign');
+            $table->string('judul_slug_activity');
+            $table->string('name_voucher');
+            $table->decimal('nominal_potongan', 10, 2);
+            $table->string('deadline')->nullable();
             $table->timestamps();
-            $table->softDeletes();
         });
     }
 

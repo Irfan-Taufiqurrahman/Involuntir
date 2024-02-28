@@ -57,20 +57,28 @@ class UserController extends Controller
         return response()->json($response);
     }
 
-    public function kabupaten(Request $request): JsonResponse
+    public function kabupaten(int $provinceId): JsonResponse
     {
-        $provinceId = $request->input('provinceId');
-        $response = Http::get('https://emsifa.github.io/api-wilayah-indonesia/api/regencies/' . $provinceId . '.json')->json();
-
-        return response()->json($response);
+        $url = "https://emsifa.github.io/api-wilayah-indonesia/api/regencies/$provinceId.json";
+    
+        try {
+            $response = Http::get($url)->json();
+            return response()->json($response);
+        } catch (Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
     }
 
-    public function kecamatan(Request $request): JsonResponse
+    public function kecamatan(int $regencyId): JsonResponse
     {
-        $regencyId = $request->input('regencyId');
-        $response = Http::get('https://emsifa.github.io/api-wilayah-indonesia/api/districts/' . $regencyId . '.json')->json();
-
-        return response()->json($response);
+        $url = "https://emsifa.github.io/api-wilayah-indonesia/api/districts/$regencyId.json";
+    
+        try {
+            $response = Http::get($url)->json();
+            return response()->json($response);
+        } catch (Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
     }
 
     public function editProfil(Request $request): JsonResponse
@@ -183,15 +191,11 @@ class UserController extends Controller
                 return response()->json(['message' => 'Password updated successfully.'], 200);
             }
         } catch (Exception $e) {
-            if (isset($e->errorInfo[2])) {
-                $msg = $e->errorInfo[2];
-            } else {
-                $msg = $e->getMessage();
-            }
-
-            return response()->json(['message' => $msg], 400);
+            $msg = $e->getMessage();
+            return response()->json(['message' => $msg], 400);        
         }
     }
+
 
     public function kodeReferal()
     {
@@ -223,5 +227,15 @@ class UserController extends Controller
                 'activities' => $activities,
             ],
         ]);
+    }
+    
+    public function userHasDonation()
+    {
+        // Using Eloquent Model:
+        $donatedUsers = User::where('status', 'donated')->get();
+
+        // Using Query Builder:
+        // $donatedUsers = DB::table('users')->where('status', 'donated')->get();
+        return response()->json(['status' => true, 'msg' => 'Voucher created successfully!', 'data' => $donatedUsers], 200);
     }
 }

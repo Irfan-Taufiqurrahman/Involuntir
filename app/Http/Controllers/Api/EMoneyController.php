@@ -32,62 +32,74 @@ class EMoneyController extends Controller
             'metode' => 'required|in:emoney',
             'user_id' => 'required',
             'emoney_name' => 'required',
-            'payment_channel'=>'required|in:Gopay,Shopeepay,Dana'
         ]);
-
+    
         if ($validator->fails()) {
             return response()->json(['message' => $validator->errors()], 400);
         }
-
+    
       
         $metode = $request->input('metode');      
         $nomor_hp = $request->input('nomor_ponsel');
-        $payment_channel=$request->input('payment_channel');
         $emoney_name = $request->input('emoney_name');
         $uid = $request->input('user_id');   
         $kode_donasi = $this->generateKode();
-
+    
         $tanggal_donasi = Carbon::now(new \DateTimeZone('Asia/Jakarta'));
         $deadline = date('created_at', strtotime('+1 day'));
-
+    
         $activityId = $request->input('activity_id');
         $activity = Activity::findOrFail($activityId);
                 
         if (!$activity) {
             return response()->json(['message' => $activity], 404);
         }
+    
         $user_id = $request->input('user_id');
         $activityId = $request->input('activity_id');
         $activity = Activity::findOrFail($activityId);
         $user = User::find($user_id);
-
+    
         $donation = new Donation();
         $donation->nama = $user->name; 
         $donation->email = $user->email;  
-        $donation->donasi = $activity->prices[0]->price;
+    
+        // Check if the user has donated
+        if ($user->status == 'donated') {
+            // Check if the activity has vouchers
+            if ($activity->vouchers->isNotEmpty()) {
+                // Get the first voucher's nominal for the activity
+                $nominal_potongan = $activity->vouchers()->first()->nominal;
+                $donation->donasi = $activity->prices[0]->price - $nominal_potongan;
+            } else {
+                // If there are no vouchers, use the original price
+                $donation->donasi = $activity->prices[0]->price;
+            }
+        } else {
+            $donation->donasi = $activity->prices[0]->price;
+        }
+      
         $donation->kode_donasi = $kode_donasi;
         $donation->metode_pembayaran = $metode;
         $donation->nomor_telp = $nomor_hp;
-        $donation->payment_channel=$payment_channel;
-        
         $donation->emoney_name = $emoney_name;
         $donation->user_id = $uid;
         $donation->activity_id = $activity->id;
         $donation->deadline = $deadline;
         $donation->tanggal_donasi = $tanggal_donasi;
         $donation->status_donasi = 'Pending';
-
+        
         try {         
             $responsePayment = new EMoneyPaymentService($donation, 'gopay');
             $response = $responsePayment->sendRequest();
             $donation->qr_code = $response->actions[0]->url;
-            $donation->deadline=$response->expiry_time;
-            $donation->status_pembayaran=$response->transaction_status;
+            $donation->deadline = $response->expiry_time;
+            $donation->status_pembayaran = $response->transaction_status;
+            // dd($donation);exit();
             $donation->save();
-            if($response->transaction_status='pending'){
-                Mail::to($user->email)->send(new SubmitDonation($user->name, $activity->prices[0]->price, $payment_channel, $activity->judul_activity,$donation->deadline));
-            }
-            else{
+            if ($response->transaction_status == 'pending') {
+                Mail::to($user->email)->send(new SubmitDonation($user->name, $donation->donasi, $donation->emoney_name, $activity->judul_activity, $donation->deadline));
+            } else {
                 return response()->json(['msg' => 'failed'], 404);
             }       
             DB::table('akun_anonim')->insert([
@@ -97,7 +109,7 @@ class EMoneyController extends Controller
                 'no_hp' => $nomor_hp,
                 'kode_referal' => null,
             ]);
-
+    
             return response()->json(['msg' => 'success','data'=>$donation->kode_donasi], 201);
         } catch (Exception $err) {
             return response()->json(['message' => $err->getMessage()], 400);

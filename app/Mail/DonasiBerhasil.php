@@ -17,9 +17,21 @@ class DonasiBerhasil extends Mailable
      */
     protected $data;
 
-    public function __construct($data)
+    protected $bank_name;
+    protected $emoney_name;
+    protected $payment_channel;
+    protected $name;
+    protected $nominal;
+    protected $judul_activity;
+    protected $tautan;
+
+    public function __construct($payment_channel, $name, $nominal, $judul_activity, $tautan)
     {
-        $this->data = $data;
+        $this->payment_channel = $payment_channel;
+        $this->name = $name;
+        $this->nominal = $nominal;
+        $this->judul_activity = $judul_activity;
+        $this->tautan = $tautan;
     }
 
     /**
@@ -33,12 +45,11 @@ class DonasiBerhasil extends Mailable
             ->from('noreplyinvoluntir@gmail.com', 'Involuntir')
             ->view('emails.donasiberhasil')
             ->with([
-                'nama_donatur' => $this->data->nama,
-                'nama_fundraiser' => $this->data->nama_fundraiser,
-                'nominal' => number_format(floatval($this->data->donasi)),
-                'metode' => $this->data->payment_channel,
-                'judul' => $this->data->activity->judul_activity,
-                'tautan'=>$this->data->tautan,
+                'nama_donatur' => $this->name,
+                'nominal' => number_format(floatval($this->nominal)),
+                'metode' => $this->payment_channel,
+                'judul' => $this->judul_activity,
+                'tautan'=>$this->tautan,
             ]);
     }
 }

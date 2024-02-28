@@ -31,14 +31,12 @@ class BankTransferController extends Controller
             'user_id' => 'required',
             'activity_id' => 'required|exists:activities,id',
             'bank_name' => 'required',
-            'payment_channel'=>'required|in:BNI'
         ]);
-
+    
         if ($validator->fails()) {
             return response()->json(['message' => $validator->errors()], 400);
         }
-
-       
+    
         $metode = $request->input('metode');
         $nama_lengkap = $request->input('nama_lengkap');
         $email = $request->input('alamat_email');
@@ -46,39 +44,48 @@ class BankTransferController extends Controller
         $bank_name = $request->input('bank_name');        
         $uid = $request->input('user_id');
         $activity_id = $request->input('activity_id');
-        $payment_channel=$request->input('payment_channel');
         $kode_donasi = $this->generateKode();
         $tanggal_donasi = Carbon::now(new \DateTimeZone('Asia/Jakarta'));      
-
-        $activityId = $request->input('activity_id');
-        $activity = Activity::findOrFail($activityId);
+    
+        $activity = Activity::findOrFail($activity_id);
                 
         if (!$activity) {
-            // Handle the case when the Activity is not found.
-            return response()->json(['message' => $activity], 404);
+            return response()->json(['message' => 'Activity not found'], 404);
         }
-        $user_id = $request->input('user_id');
-        $activityId = $request->input('activity_id');
-        $activity = Activity::findOrFail($activityId);
-        $user = User::find($user_id);
-
-
+    
+        $user = User::find($uid);
+    
         try {
             $donation = new Donation();
             $donation->nama = $user->name; 
             $donation->email = $user->email;         
             $donation->kode_donasi = $kode_donasi;
             $donation->metode_pembayaran = $metode;
-            $donation->payment_channel=$payment_channel;
             $donation->nomor_telp = $nomor_hp;          
             $donation->bank_name = $bank_name;
-            $donation->donasi = $activity->prices[0]->price;
+            
+            // Check if the user has donated
+            if ($user->status == 'donated') {
+                // Check if the activity has vouchers
+                if ($activity->vouchers->isNotEmpty()) {
+                    // Get the first voucher's nominal for the activity
+                    $nominal_potongan = $activity->vouchers()->first()->nominal;
+                    $donation->donasi = $activity->prices[0]->price - $nominal_potongan;
+                } else {
+                    // If there are no vouchers, use the original price
+                    $donation->donasi = $activity->prices[0]->price;
+                }
+            } else {
+                $donation->donasi = $activity->prices[0]->price;
+            }
+    
             $donation->user_id = $uid;
             $donation->activity_id = $activity->id;         
             $donation->tanggal_donasi = $tanggal_donasi;
             $donation->status_donasi = 'Pending';                        
-            $responsePayment = new BankPaymentService($donation, $activity, $request->input('bank_name'));
+            $responsePayment = new BankPaymentService($donation, $activity, $bank_name);
             $response = $responsePayment->sendRequest();
+    
             if (isset($response->va_numbers[0]->va_number)) {
                 $donation->nomor_va = $response->va_numbers[0]->va_number;
             } elseif (isset($response->permata_va_number)) {
@@ -86,20 +93,17 @@ class BankTransferController extends Controller
             } elseif (isset($response->bill_key) && isset($response->biller_code)) {
                 $donation->nomor_va = $response->biller_code . ',' . $response->bill_key;
             }
-            $donation->deadline=$response->expiry_time;
-            $donation->status_pembayaran=$response->transaction_status;
-            
-            if($response->transaction_status='pending'){
-                Mail::to($user->email)->send(new SubmitDonation($user->name, $activity->prices[0]->price, $payment_channel, $activity->judul_activity,$donation->deadline));
-            }
-            else{
+            $donation->deadline = $response->expiry_time;
+            $donation->status_pembayaran = $response->transaction_status;
+            // dd($donation);exit();
+            if($response->transaction_status == 'pending'){
+                Mail::to($user->email)->send(new SubmitDonation($user->name, $donation->donasi, $donation->bank_name, $activity->judul_activity, $donation->deadline));
+            } else {
                 return response()->json(['msg' => 'failed'], 404);
             }
-           
+    
             $donation->save();
-
-            $donation->midtrans_response = $response;
-
+    
             DB::table('akun_anonim')->insert([
                 'id_donasi' => $donation->id,
                 'nama' => $nama_lengkap,

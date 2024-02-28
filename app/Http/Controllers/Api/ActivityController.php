@@ -6,11 +6,12 @@ use App\Enums\ActivityType;
 use App\Http\Controllers\Controller;
 use App\Models\Activity;
 use App\Models\Category;
-use App\Models\ActivityPrice    ;
+use App\Models\ActivityPrice;
 use App\Models\Criteria;
 use App\Models\Participation;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use App\Models\Task;
+use App\Models\Voucher;
 use Carbon\Carbon;
 use Illuminate\Http\Client\HttpClientException;
 use Illuminate\Http\JsonResponse;
@@ -133,7 +134,11 @@ class ActivityController extends Controller
 
          $total_volunteer = $data_activity->donations()->where('status_donasi', 'Approved')->count();
 
-        
+        // Fetch all vouchers related to the activity
+        $vouchers = Voucher::whereHas('activity', function ($query) use ($id_activity) {
+            $query->where('id', $id_activity);
+        })->get();
+
         $tasks = Task::join('activities', 'activity_id', '=', 'activities.id')
             ->where('activity_id', $id_activity)
             ->get(DB::raw('tasks.id, tasks.deskripsi, tasks.created_at'));
@@ -155,6 +160,7 @@ class ActivityController extends Controller
                 'user' => $activist,
                 'total_volunteer' => $total_volunteer,
                 // 'volunteer' => $total_volunteer,
+                'vouchers' => $vouchers,
                 'tugas' => $tasks,
                 'kriteria' => $criterias,
                 'is_mine' => $user ? ($user->id === $id_activist) : false,
@@ -220,7 +226,6 @@ class ActivityController extends Controller
             return response()->json(['message' => 'Anda belum terdaftar sebagai organisasi'], 403);
         }
     
-
         $validator = Validator::make($request->all(), [
             'judul_activity' => 'required|string|max:255',
             'judul_slug' => 'sometimes|string|unique:activities,judul_slug|max:255',
@@ -275,6 +280,16 @@ class ActivityController extends Controller
             'link_guidebook'=> $request->link_guidebook,
             'updated_at' => $request->status_publish === 'published' ? Carbon::now() : null,
         ]);
+
+        if ($request->has('name_voucher') && $request->has('nominal_potongan')) {
+            $voucher = Voucher::create([
+                'activity_id' => $activity->id,
+                'judul_slug_activity' => $activity->judul_slug, // Auto-fill judul_slug
+                'name_voucher' => $request->name_voucher,
+                'nominal_potongan' => $request->nominal_potongan,
+            ]);
+        }
+
 
         if (! empty($activityType) && ActivityType::PAID->equals(ActivityType::from($activityType))) {
 
@@ -336,7 +351,7 @@ class ActivityController extends Controller
             'judul_slug' => 'sometimes|string|unique:activities,judul_slug,'.$activity->id.'|max:255',
             'category_id' => ['required', 'exists:categories,id'],
             'detail_activity' => 'required|string',
-            'batas_waktu' => 'required|numeric',
+            'batas_waktu' => 'required',
             'foto_activity' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'lokasi' => 'required|string|max:255',
             'waktu_activity' => 'required|string',
@@ -374,6 +389,20 @@ class ActivityController extends Controller
         $activity->link_wa = $request->tautan;
         $activity->link_guidebook = $request->link_guidebook;
     
+        if ($activity->exists) {
+            // Accessing voucher information:
+            $voucher = $activity->voucher; // Assuming `hasOne` relationship
+    
+            // Updating voucher (if needed):
+            if ($request->has('name_voucher') && $request->has('nominal_potongan')) {
+                $voucher->update([
+                    'name_voucher' => $request->name_voucher,
+                    'nominal_potongan' => $request->nominal_potongan,
+                ]);
+            }
+        }
+    
+
         // Simpan aktivitas yang telah diperbarui
         if (!empty($request->tasks)) {
             $tasks = json_decode($request->tasks);

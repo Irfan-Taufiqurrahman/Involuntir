@@ -30,6 +30,7 @@ use App\Http\Controllers\Api\SliderController;
 use App\Http\Controllers\Api\TaskController;
 use App\Http\Controllers\Api\TokenController;
 use App\Http\Controllers\Api\UserController;
+use App\Http\Controllers\Api\VoucherController;
 use App\Http\Controllers\Api\WishlistController;
 use App\Http\Controllers\BalanceController;
 use App\Http\Controllers\KabarTerbaruController;
@@ -69,8 +70,9 @@ Route::middleware('jwt.verify')->group(function () {
     Route::get('/pekerjaan', [UserController::class, 'pekerjaan']);
     Route::get('/organisasi', [UserController::class, 'organisasi']);
     Route::get('/prov', [UserController::class, 'provinsi']);
-    Route::get('/kab', [UserController::class, 'kabupaten']);
-    Route::get('/kec', [UserController::class, 'kecamatan']);
+    Route::get('/kab/{provinceId}', [UserController::class, 'kabupaten']);
+    Route::get('/kec/{regencyId}', [UserController::class, 'kecamatan']);
+    Route::get('/userdons', [UserController::class, 'userHasDonation']);
 });
 
 Route::prefix('galangdana')->group(function () {
@@ -163,6 +165,14 @@ Route::prefix('donation')->group(function () {
     Route::get('/transaction/{kode_id}', [DonationController::class, 'transactionHistory']);
 });
 
+Route::prefix('voucher')->group(function() {
+    Route::get('/voucher', [VoucherController::class, 'show']);
+    Route::get('/byslug/{activity}', [VoucherController::class, 'bySlug']);
+    // Route::post('/voucher', [VoucherController::class, 'create']);
+    // Route::put('/voucher/{id}', [VoucherController::class, 'update']);
+    Route::delete('/voucher/{id}', [VoucherController::class, 'delete']);
+});
+
 Route::prefix('participation')->middleware('jwt.verify')->group(function () {
     Route::post('/{activity}', [ParticipationController::class, 'submit']);
     Route::get('/{activity}/participants', [ParticipationController::class, 'participants']);
@@ -244,7 +254,7 @@ Route::prefix('admin')->middleware(['jwt.verify','admin'])->group(function () {
     Route::post('/slides/{id}/update', [SliderController::class, 'update']);
     Route::delete('/slides/{id}/delete', [SliderController::class, 'delete']);
     Route::get('/dashboard', [DashboardAdminController::class, 'show']);
-    Route::get('/aktivitas/{id}', [ActivityAdminController::class, 'showPeserta']);    
+    Route::get('/aktivitas/{id}', [ActivityAdminController::class, 'showPeserta']);
 });
 
 

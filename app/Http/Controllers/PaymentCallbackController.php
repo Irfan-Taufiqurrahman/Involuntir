@@ -34,7 +34,7 @@ class PaymentCallbackController extends Controller
                     'status_donasi' => 'Approved',
                     'nomor_va' => null,
                 ]);
-            Mail::to($data->email)->send(new DonasiBerhasil($data));  
+                Mail::to($data->email)->send(new DonasiBerhasil($data->bank_name, $data->name, $data->donasi, $data->activity->judul_activity, $data->activity->link_wa));  
             return response()->json(['data'=>$data]);         
             }
     
@@ -67,9 +67,8 @@ class PaymentCallbackController extends Controller
                     'status_donasi' => 'Approved',
                     'qr_code' => null,
                 ]);
-            Mail::to($data->email)->send(new DonasiBerhasil($data));
+                Mail::to($data->email)->send(new DonasiBerhasil($data->bank_name, $data->name, $data->donasi, $data->activity->judul_activity, $data->activity->link_wa)); 
             return response()->json(['data'=>$data]);   
-             
             }
     
             if ($callback->isExpire()) {
