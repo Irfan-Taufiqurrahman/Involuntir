@@ -60,18 +60,18 @@
                                                                                 style="margin: 0; mso-line-height-alt: 16.8px;">
                                                                                 <br />
                                                                             </p>
-                                                                            <p style="margin: 0;">Nominal Donasi: <strong>Rp
-                                                                                    {{ $nominal }}</strong><br />Metode
-                                                                                Pembayaran:
-                                                                                <strong>{{ $metode }}</strong>
+                                                                            <p style="margin: 0; border-top: 1px solid #ccc; border-bottom: 1px solid #ccc; padding: 10px 15px;">
+                                                                                <span style="display: inline-block; width: 50%;">Nominal:</span>
+                                                                                <span style="display: inline-block; text-align: right;">Rp {{ number_format(floatval(str_replace(',', '', $nominal)), 0, ',', '.') }},00</span>
                                                                             </p>
-                                                                            <p
-                                                                                style="margin: 0; mso-line-height-alt: 16.8px;">
-                                                                                <br />
-                                                                            </p>
+                                                                            <p style="margin: 0; border-bottom: 1px solid #ccc; padding: 10px 15px;">
+                                                                                <span style="display: inline-block; width: 50%;">Metode pembayaran:</span>
+                                                                                <span style="display: inline-block; text-align: right;">{{ strtoupper($metode) }}</span>
+                                                                            </p>                                     
                                                                         </div>
-                                                                </td>
+                                                                </td>    
                                                             </tr>
+                                                            <div style="color:#717171; border-radius:1rem; padding: 1rem; background-color: #fbf4e3">Tetaplah jadi warga baik dan semoga rezekinya semakin lancar setiap hari</div>
                                                         </table>
                                                         <table border="0" cellpadding="10" cellspacing="0"
                                                             class="divider_block" role="presentation"
@@ -85,7 +85,7 @@
                                                                             width="100%">
                                                                             <tr>
                                                                                 <td class="divider_inner"
-                                                                                    style="font-size: 1px; line-height: 1px; border-top: 1px solid #C4C4C4;">
+                                                                                    style="font-size: 1px; line-height: 1px;">
                                                                                     <span></span>
                                                                                 </td>
                                                                             </tr>
@@ -107,6 +107,7 @@
                                                                             <p style="margin: 0;"><span
                                                                                     style="font-size:12px;">Silahkan join grup whatsapp dengan klik tombol dibawah ini untuk informasi lebih lanjut </span></p>
                                                                         </div>
+                                                                        <a href= {{ $tautan }} ><button>Masuk Grub WA</button></a>
                                                                     </div>
                                                                 </td>
                                                             </tr>

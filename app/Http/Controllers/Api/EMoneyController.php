@@ -37,7 +37,6 @@ class EMoneyController extends Controller
         if ($validator->fails()) {
             return response()->json(['message' => $validator->errors()], 400);
         }
-    
       
         $metode = $request->input('metode');      
         $nomor_hp = $request->input('nomor_ponsel');
@@ -67,11 +66,34 @@ class EMoneyController extends Controller
         // Check if the user has donated
         if ($user->status == 'donated') {
             // Check if the activity has vouchers
-            if ($activity->vouchers->isNotEmpty()) {
-                // Get the first voucher's nominal for the activity
-                $nominal_potongan = $activity->vouchers()->first()->nominal;
-                $donation->donasi = $activity->prices[0]->price - $nominal_potongan;
-            } else {
+            // dd($user);exit();
+            if ($activity->vouchers->count() > 0) {
+                $voucher = $activity->vouchers()->first();
+                if ($request->has('used_voucher') && $request->input('used_voucher') === true) {
+
+                    if ($voucher->kuota_voucher > 0) {
+
+                        // Hitung potongan dan terapkan jika voucher digunakan
+                        $discountAmount = $activity->prices[0]->price * ($voucher->presentase_diskon / 100);
+                        // dd($discountAmount);exit();
+                        $donation->donasi = $activity->prices[0]->price - $discountAmount;
+
+                        // Kurangi kuota voucher dan simpan perubahan
+                        // $voucher->decrement('kuota_voucher');
+                        $voucher->save();
+                        
+                        // Catat penggunaan voucher
+                        $donation->voucher_id = $voucher->id;
+                        $donation->used_voucher = true;
+                    } else {
+                        // Kuota voucher habis, tampilkan pesan error
+                        return response()->json(['message' => 'Kuota voucher sudah habis'], 422);
+                    }
+                }else {
+                    // Pengguna tidak menggunakan voucher, gunakan harga asli
+                    $donation->donasi = $activity->prices[0]->price;
+                }    
+            }else {
                 // If there are no vouchers, use the original price
                 $donation->donasi = $activity->prices[0]->price;
             }

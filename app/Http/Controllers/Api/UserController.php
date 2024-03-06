@@ -57,7 +57,16 @@ class UserController extends Controller
         return response()->json($response);
     }
 
-    public function kabupaten(int $provinceId): JsonResponse
+    public function kabupaten(Request $request): JsonResponse
+    {
+        $provinceId = $request->input('provinceId');
+        $response = Http::get('https://emsifa.github.io/api-wilayah-indonesia/api/regencies/' . $provinceId . '.json')->json();
+
+        return response()->json($response);
+    }
+
+
+    public function kab(int $provinceId): JsonResponse
     {
         $url = "https://emsifa.github.io/api-wilayah-indonesia/api/regencies/$provinceId.json";
     
@@ -69,7 +78,16 @@ class UserController extends Controller
         }
     }
 
-    public function kecamatan(int $regencyId): JsonResponse
+    public function kecamatan(Request $request): JsonResponse
+    {
+        $regencyId = $request->input('regencyId');
+        $response = Http::get('https://emsifa.github.io/api-wilayah-indonesia/api/districts/' . $regencyId . '.json')->json();
+
+        return response()->json($response);
+    }
+
+
+    public function kec(int $regencyId): JsonResponse
     {
         $url = "https://emsifa.github.io/api-wilayah-indonesia/api/districts/$regencyId.json";
     

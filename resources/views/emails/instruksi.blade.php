@@ -53,9 +53,9 @@
                                                                                 style="margin: 0; mso-line-height-alt: 16.8px;">
                                                                                 <br />
                                                                             </p>
-                                                                            <p style="margin: 0;">Segera lakukan pembayaran
-                                                                                 sebelum <strong>{{ $hari }}
-                                                                                    .</strong></p>
+                                                                            
+                                                                            <p style="margin: 0;">Segera lakukan pembayaran sebelum <strong>{{ \Carbon\Carbon::parse($hari)->translatedFormat('l, j F Y \p\u\k\u\l H:i') }}</strong>.</p>
+
                                                                             <p
                                                                                 style="margin: 0; mso-line-height-alt: 16.8px;">
                                                                                 <br />
@@ -66,24 +66,24 @@
                                                                                 style="margin: 0; mso-line-height-alt: 16.8px;">
                                                                                 <br />
                                                                             </p>
-                                                                            <p style="margin: 0;"> Nominal :
-                                                                                {{ $nominal }}<br/>
+                                                                            <!-- Perubahan -->
+                                                                            <p style="margin: 0; border-top: 1px solid #ccc; border-bottom: 1px solid #ccc; padding: 10px 15px;">
+                                                                            <span style="display: inline-block; width: 50%;">Nominal:</span>
+                                                                            <span style="display: inline-block; text-align: right;">Rp {{ number_format(floatval(str_replace(',', '', $nominal)), 0, ',', '.') }},00</span>
                                                                             </p>
-                                                                            <p style="margin: 0;"> Metode pembayaran :
-                                                                                {{ $bank_name }}<br/>
-                                                                            </p>  
-                                                                              
+                                                                            <p style="margin: 0; border-bottom: 1px solid #ccc; padding: 10px 15px;">
+                                                                            <span style="display: inline-block; width: 50%;">Metode pembayaran:</span>
+                                                                            <span style="display: inline-block; text-align: right;">{{ strtoupper($bank_name) }}</span>
+                                                                            </p>
+      
                                                                             <p
                                                                                 style="margin: 0; mso-line-height-alt: 16.8px;">
                                                                                 <br />
                                                                             </p>
                                                                             <p style="margin: 0;">Ketika pembayaran berhasil,
                                                                                 kamu akan mendapatkan notifikasi via email.
-                                                                                Apabila hingga <strong>{{ $hari }}
-                                                                                    pukul 23.59 WIB</strong> pembayaran belum
-                                                                                kami
-                                                                                terima, maka <strong>Pembayaran akan dibatalkan
-                                                                                    otomatis oleh sistem.</strong></p>
+                                                                                Apabila melewati batas waktu belum ada pembayaran, maka Pembayaran akan dibatalkan
+                                                                                    otomatis oleh sistem.</p>
                                                                         </div>
                                                                     </div>
                                                                 </td>
@@ -242,8 +242,7 @@
                                                                                 <span style="font-size:12px;">© 2018-2021
                                                                                     Involuntir. All Right
                                                                                     Reserved</span><br /><span
-                                                                                    style="font-size:12px;">Jl. Kertajaya
-                                                                                    No. 72, Surabaya, 60292</span>
+                                                                                    style="font-size:12px;">Gedung Siola, Koridor Co-working Space, Jl. Tunjungan No.1, Kec. Genteng, Kota SBY, Jawa Timur 60275</span>
                                                                             </p>
                                                                         </div>
                                                                     </div>

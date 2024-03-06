@@ -51,6 +51,7 @@ class User extends Authenticatable implements JWTSubject, MustVerifyEmail, CanRe
         'foto_ktp',
         'bank',
         'no_rek',
+        'total_donated',
         'status',
     ];
 

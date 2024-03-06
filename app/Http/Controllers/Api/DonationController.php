@@ -16,7 +16,6 @@ use Illuminate\Support\Facades\Validator;
 
 class DonationController extends Controller
 {    
-
     public function index()
     {
         $donations = Donation::orderBy('tanggal_donasi')

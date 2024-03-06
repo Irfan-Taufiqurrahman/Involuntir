@@ -12,6 +12,7 @@ use App\Models\Feed;
 use Illuminate\Http\Request;
 use App\Models\Transaction;
 use App\Models\User;
+use App\Models\Voucher;
 use App\Services\Midtrans\CallbackService;
 use Illuminate\Support\Facades\Mail;
 
@@ -27,13 +28,31 @@ class PaymentCallbackController extends Controller
         $data = Donation::with('activity')->where('kode_donasi', $donation->kode_donasi)->first();
 
         $fundraiser = User::find($data->activity->user_id);
-
+        // dd($fundraiser);exit();
         if($callback->isBank()){
             if ($callback->isSuccess()) {
                 $data->update([
                     'status_donasi' => 'Approved',
                     'nomor_va' => null,
                 ]);
+                //disini logic
+                if ($data->status_donasi === 'Approved') {
+                    if ($data->used_voucher) {
+                        // Kurangi 1 pada 'kuota_voucher' di tabel 'vouchers' berdasarkan 'voucher_id'
+                        $voucher = Voucher::find($data->voucher_id);
+                        if ($voucher) {
+                            $voucher->decrement('kuota_voucher');
+                        }
+                    }                    
+                    // Penggantian value 'status' pada tabel 'users' menjadi 'donated'
+                    $user = User::find($data->activity->user_id);
+                    if ($user) {
+                        $user->update(['status' => 'donated']);
+                        $user->increment('total_donated');
+                    }
+                }
+            
+
                 Mail::to($data->email)->send(new DonasiBerhasil($data->bank_name, $data->name, $data->donasi, $data->activity->judul_activity, $data->activity->link_wa));  
             return response()->json(['data'=>$data]);         
             }

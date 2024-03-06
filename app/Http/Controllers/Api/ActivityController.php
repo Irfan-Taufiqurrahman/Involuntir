@@ -8,6 +8,7 @@ use App\Models\Activity;
 use App\Models\Category;
 use App\Models\ActivityPrice;
 use App\Models\Criteria;
+use App\Models\Donation;
 use App\Models\Participation;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use App\Models\Task;
@@ -154,6 +155,31 @@ class ActivityController extends Controller
 
         $data_activity->sisa_hari = $batas_waktu->diffInDays($now);
 
+        // Check if user is logged in
+        if ($user) {
+            $user_donations = $user->total_donated;
+            // dd($user_donations);exit();
+            
+            $vouchers = $vouchers->map(function ($voucher) use ($user_donations) {
+                $minimumDonated = $voucher->minimum_donated;
+    
+                if ($user_donations >= $minimumDonated) {
+                    // dd($user_donations);exit();
+
+                    $voucher->status = 'available';
+                } else {
+                    $remainingDonations = $minimumDonated - $user_donations;
+                    $message = "Maaf anda tidak bisa menggunakan voucher ini, lakukan aktivitas lagi sebanyak $remainingDonations kali, agar anda bisa klaim voucher ini.";
+                    $voucher->message = $message;
+                    $voucher->status = 'not available';
+                }
+    
+                return $voucher;
+            });
+        }
+    
+
+
         return response()->json([
             'data' => [
                 'activity' => $data_activity,
@@ -231,7 +257,7 @@ class ActivityController extends Controller
             'judul_slug' => 'sometimes|string|unique:activities,judul_slug|max:255',
             'category_id' => ['required', 'exists:categories,id'],
             'detail_activity' => 'required|string',
-            'batas_waktu' => 'required|numeric',
+            'batas_waktu' => 'required',
             'foto_activity' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',          
             // 'foto_activity'=>'required|string',  
             'lokasi' => 'required|string|max:255',
@@ -268,7 +294,7 @@ class ActivityController extends Controller
             'judul_slug' => $slug,
             'foto_activity' => $validated['foto_activity'],
             'detail_activity' => $request->detail_activity,
-            'batas_waktu' => Carbon::now()->addDays($request->batas_waktu),
+            'batas_waktu' => $request->waktu_activity,
             'waktu_activity' => $request->waktu_activity,
             'lokasi' => $request->lokasi,
             'tipe_activity' => $request->tipe_activity,
@@ -281,15 +307,22 @@ class ActivityController extends Controller
             'updated_at' => $request->status_publish === 'published' ? Carbon::now() : null,
         ]);
 
-        if ($request->has('name_voucher') && $request->has('nominal_potongan')) {
-            $voucher = Voucher::create([
-                'activity_id' => $activity->id,
-                'judul_slug_activity' => $activity->judul_slug, // Auto-fill judul_slug
-                'name_voucher' => $request->name_voucher,
-                'nominal_potongan' => $request->nominal_potongan,
-            ]);
+        // Create vouchers if present in the request
+        if ($request->has('vouchers') && is_array($request->vouchers)) {
+            $maxVouchers = min(count($request->vouchers), 5); // Batasi maksimal 5 jenis voucher
+            for ($i = 0; $i < $maxVouchers; $i++) {
+                $voucherData = $request->vouchers[$i];
+                $voucher = Voucher::create([
+                    'activity_id' => $activity->id,
+                    'judul_slug_activity' => $activity->judul_slug,
+                    'name_voucher' => $voucherData['name_voucher'],
+                    'minimum_donated' => $voucherData['minimum_donated'],
+                    'kuota_voucher' => $voucherData['kuota_voucher'],
+                    'presentase_diskon' => $voucherData['presentase_diskon'],
+                ]);
+                // dd($voucher);exit();
+            }
         }
-
 
         if (! empty($activityType) && ActivityType::PAID->equals(ActivityType::from($activityType))) {
 
@@ -378,6 +411,7 @@ class ActivityController extends Controller
     
         // Update aktivitas
         $activity->judul_activity = $request->judul_activity;
+        $activity->judul_slug = $request->judul_slug;
         $activity->category_id = $request->category_id;
         $activity->detail_activity = $request->detail_activity;
         $activity->batas_waktu = $request->batas_waktu;
@@ -389,18 +423,28 @@ class ActivityController extends Controller
         $activity->link_wa = $request->tautan;
         $activity->link_guidebook = $request->link_guidebook;
     
-        if ($activity->exists) {
-            // Accessing voucher information:
-            $voucher = $activity->voucher; // Assuming `hasOne` relationship
-    
-            // Updating voucher (if needed):
-            if ($request->has('name_voucher') && $request->has('nominal_potongan')) {
-                $voucher->update([
-                    'name_voucher' => $request->name_voucher,
-                    'nominal_potongan' => $request->nominal_potongan,
+        // Update vouchers if present in the request
+        if ($request->has('vouchers') && is_array($request->vouchers)) {
+            // Remove existing vouchers associated with the activity
+            $activity->vouchers()->delete();
+
+            // Create new vouchers from the request
+            $maxVouchers = min(count($request->vouchers), 5); // Limit to 5 vouchers
+            for ($i = 0; $i < $maxVouchers; $i++) {
+                $voucherData = $request->vouchers[$i];
+                Voucher::create([
+                    'activity_id' => $activity->id,
+                    'judul_slug_activity' => $activity->judul_slug,
+                    'name_voucher' => $voucherData['name_voucher'],
+                    'minimum_donated' => $voucherData['minimum_donated'],
+                    'kuota_voucher' => $voucherData['kuota_voucher'],
+                    'presentase_diskon' => $voucherData['presentase_diskon'],
                 ]);
             }
         }
+
+    
+
     
 
         // Simpan aktivitas yang telah diperbarui
@@ -534,7 +578,7 @@ class ActivityController extends Controller
         }
         $validator = Validator::make($request->all(), [
             'activity_id' => 'required|exists:activities,id',
-            'batas_waktu' => 'sometimes|required|numeric',           
+            'batas_waktu' => 'sometimes|required',           
         ]);
 
         $validator->validate();
@@ -542,7 +586,7 @@ class ActivityController extends Controller
         $data_activity = Activity::find($request->activity_id);
 
         if ($request->has('batas_waktu')) {
-            $data_activity->batas_waktu = Carbon::now()->addDays($request->batas_waktu);
+            $data_activity->batas_waktu = $request->batas_waktu;
         }
 
         $data_activity->save();

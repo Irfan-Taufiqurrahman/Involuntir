@@ -70,8 +70,10 @@ Route::middleware('jwt.verify')->group(function () {
     Route::get('/pekerjaan', [UserController::class, 'pekerjaan']);
     Route::get('/organisasi', [UserController::class, 'organisasi']);
     Route::get('/prov', [UserController::class, 'provinsi']);
-    Route::get('/kab/{provinceId}', [UserController::class, 'kabupaten']);
-    Route::get('/kec/{regencyId}', [UserController::class, 'kecamatan']);
+    Route::get('/kab', [UserController::class, 'kabupaten']);
+    Route::get('/kec', [UserController::class, 'kecamatan']);
+    Route::get('/kabupaten/{provinceId}', [UserController::class, 'kab']);
+    Route::get('/kecamatan/{regencyId}', [UserController::class, 'kec']);
     Route::get('/userdons', [UserController::class, 'userHasDonation']);
 });
 

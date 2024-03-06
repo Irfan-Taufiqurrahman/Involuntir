@@ -40,10 +40,7 @@ class SubmitDonation extends Mailable
      * @return $this
      */
     public function build()
-    {
-
-      
-
+    { 
         return $this->subject('Instruksi Transaksi')
         ->from('noreplyinvoluntir@gmail.com', 'Involuntir')
             ->view('emails.instruksi')->with([

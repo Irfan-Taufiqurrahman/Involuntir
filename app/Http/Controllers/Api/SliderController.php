@@ -24,7 +24,7 @@ class SliderController extends Controller
         // return full image url for each slider
         $sliders = Slider::all();
         foreach ($sliders as $slider) {
-            $slider->image = config('app.url') . '/images/images_carousel/' . $slider->image;
+            $slider->image = config('app.url') . $slider->image;
         }
 
         return response()->json([

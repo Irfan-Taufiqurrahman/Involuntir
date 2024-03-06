@@ -7,6 +7,7 @@ use App\Mail\SubmitDonation;
 use App\Models\Activity;
 use App\Models\Donation;
 use App\Models\User;
+use App\Models\Voucher;
 use App\Services\Midtrans\BankPaymentService;
 use Carbon\Carbon;
 use Exception;
@@ -64,20 +65,46 @@ class BankTransferController extends Controller
             $donation->nomor_telp = $nomor_hp;          
             $donation->bank_name = $bank_name;
             
-            // Check if the user has donated
-            if ($user->status == 'donated') {
-                // Check if the activity has vouchers
-                if ($activity->vouchers->isNotEmpty()) {
-                    // Get the first voucher's nominal for the activity
-                    $nominal_potongan = $activity->vouchers()->first()->nominal;
-                    $donation->donasi = $activity->prices[0]->price - $nominal_potongan;
-                } else {
-                    // If there are no vouchers, use the original price
+        // Check if the user has donated
+        if ($user->status == 'donated') {
+            // Check if the activity has vouchers
+            // dd($user);exit();
+            if ($activity->vouchers->count() > 0) {
+                // Get the voucher based on the selected voucher_id
+                $voucher = Voucher::find($request->voucher_id);
+                // dd($voucher);exit();
+
+                if ($request->has('used_voucher') && $request->input('used_voucher') === true) {
+
+                    if ($voucher->kuota_voucher > 0) {
+
+                        // Hitung potongan dan terapkan jika voucher digunakan
+                        $discountAmount = $activity->prices[0]->price * ($voucher->presentase_diskon / 100);
+                        // dd($discountAmount);exit();
+                        $donation->donasi = $activity->prices[0]->price - $discountAmount;
+
+                        // Kurangi kuota voucher dan simpan perubahan
+                        // $voucher->decrement('kuota_voucher');
+                        $voucher->save();
+                        
+                        // Catat penggunaan voucher
+                        $donation->voucher_id = $voucher->id;
+                        $donation->used_voucher = true;
+                    } else {
+                        // Kuota voucher habis, tampilkan pesan error
+                        return response()->json(['message' => 'Kuota voucher sudah habis'], 422);
+                    }
+                }else {
+                    // Pengguna tidak menggunakan voucher, gunakan harga asli
                     $donation->donasi = $activity->prices[0]->price;
-                }
-            } else {
+                }    
+            }else {
+                // If there are no vouchers, use the original price
                 $donation->donasi = $activity->prices[0]->price;
             }
+        } else {
+            $donation->donasi = $activity->prices[0]->price;
+        }
     
             $donation->user_id = $uid;
             $donation->activity_id = $activity->id;         

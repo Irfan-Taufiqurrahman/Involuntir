@@ -22,12 +22,12 @@ class VoucherController extends Controller
 
     public function bySlug($activity)
     {
-        $user = Auth::user();
-    
+        $user = auth('api')->user(); // Get authenticated user
+
         // Check if the user has a status of "donated"
         if ($user && $user->status === 'donated') {
             // Find vouchers by judul_slug_activity
-            $vouchers = Voucher::where('judul_slug_activity', $activity)->get();
+            $vouchers = Voucher::where('judul_slug_activity', $activity)->get();            
     
             if ($vouchers->isEmpty()) {
                 return response()->json(['message' => 'No vouchers found for the given judul_slug_activity'], 404);
@@ -46,7 +46,7 @@ class VoucherController extends Controller
         $request->validate([
             'activity_id' => 'required|exists:activities,id',
             'name_voucher' => 'required|string',
-            'nominal_potongan' => 'required', // Adjust validation as needed
+            'presentase_diskon' => 'required', // Adjust validation as needed
         ]);
     
         // Retrieve the activity based on activity_id
@@ -60,7 +60,7 @@ class VoucherController extends Controller
             'activity_id' => $request->activity_id,
             'judul_slug' => $judul_slug, // Auto-fill judul_slug
             'name_voucher' => $request->name_voucher,
-            'nominal_potongan' => $request->nominal,
+            'presentase_diskon' => $request->nominal,
         ]);
     
         // Return response

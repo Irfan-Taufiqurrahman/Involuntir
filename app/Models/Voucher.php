@@ -15,12 +15,20 @@ class Voucher extends Model
         'activity_id',
         'judul_slug_activity',
         'name_voucher',
-        'nominal_potongan',
+        'minimum_donated',
+        'presentase_diskon',
         'deadline',
+        'kuota_voucher',
     ];
 
     public function activity()
     {
         return $this->belongsTo(Activity::class);
     }
+
+    public function donations()
+    {
+        return $this->hasMany(Donation::class);
+    }
+
 }

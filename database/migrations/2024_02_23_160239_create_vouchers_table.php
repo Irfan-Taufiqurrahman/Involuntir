@@ -18,7 +18,9 @@ class CreateVouchersTable extends Migration
             $table->unsignedInteger('activity_id')->index('participations_activity_id_foreign');
             $table->string('judul_slug_activity');
             $table->string('name_voucher');
-            $table->decimal('nominal_potongan', 10, 2);
+            $table->integer('minimum_donated')->default(1);
+            $table->unsignedBigInteger('kuota_voucher')->default(0);
+            $table->decimal('presentase_diskon', 10, 2);
             $table->string('deadline')->nullable();
             $table->timestamps();
         });
