@@ -133,7 +133,7 @@ class ActivityController extends Controller
             ->where('id', $id_activist)
             ->get(['username', 'photo', 'name', 'status_akun', 'role', 'tipe', 'jenis_organisasi']);
 
-         $total_volunteer = $data_activity->donations()->where('status_donasi', 'Approved')->count();
+        $total_volunteer_approved = $data_activity->donations()->where('status_donasi', 'Approved')->count();
 
         // Fetch all vouchers related to the activity
         $vouchers = Voucher::whereHas('activity', function ($query) use ($id_activity) {
@@ -178,13 +178,11 @@ class ActivityController extends Controller
             });
         }
     
-
-
         return response()->json([
             'data' => [
                 'activity' => $data_activity,
                 'user' => $activist,
-                'total_volunteer' => $total_volunteer,
+                'total_volunteer' => $total_volunteer_approved,
                 // 'volunteer' => $total_volunteer,
                 'vouchers' => $vouchers,
                 'tugas' => $tasks,
@@ -286,7 +284,7 @@ class ActivityController extends Controller
         if (! empty($photo)) {
             $photo = $this->uploadImage($request, 'foto_activity', $slug);
         }
-
+        
         $activity = Activity::create([
             'category_id' => $validated['category_id'],
             'user_id' => $user->id,
@@ -294,7 +292,8 @@ class ActivityController extends Controller
             'judul_slug' => $slug,
             'foto_activity' => $validated['foto_activity'],
             'detail_activity' => $request->detail_activity,
-            'batas_waktu' => $request->waktu_activity,
+            //ini yg diganti broooo
+            'batas_waktu' => $request->batas_waktu,
             'waktu_activity' => $request->waktu_activity,
             'lokasi' => $request->lokasi,
             'tipe_activity' => $request->tipe_activity,
@@ -442,10 +441,6 @@ class ActivityController extends Controller
                 ]);
             }
         }
-
-    
-
-    
 
         // Simpan aktivitas yang telah diperbarui
         if (!empty($request->tasks)) {

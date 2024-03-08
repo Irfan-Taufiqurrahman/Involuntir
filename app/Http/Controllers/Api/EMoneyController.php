@@ -132,7 +132,10 @@ class EMoneyController extends Controller
                 'kode_referal' => null,
             ]);
     
-            return response()->json(['msg' => 'success','data'=>$donation->kode_donasi], 201);
+            return response()->json([
+                'msg' => 'success',
+                'data'=>$donation->kode_donasi
+            ], 201);
         } catch (Exception $err) {
             return response()->json(['message' => $err->getMessage()], 400);
         }

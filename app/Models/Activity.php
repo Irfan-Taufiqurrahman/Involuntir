@@ -85,6 +85,6 @@ class Activity extends Model
 
     public function vouchers()
     {
-        return $this->hasOne(Voucher::class);
+        return $this->hasMany(Voucher::class);
     }
 }

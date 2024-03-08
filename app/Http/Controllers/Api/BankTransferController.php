@@ -65,46 +65,46 @@ class BankTransferController extends Controller
             $donation->nomor_telp = $nomor_hp;          
             $donation->bank_name = $bank_name;
             
-        // Check if the user has donated
-        if ($user->status == 'donated') {
-            // Check if the activity has vouchers
-            // dd($user);exit();
-            if ($activity->vouchers->count() > 0) {
-                // Get the voucher based on the selected voucher_id
-                $voucher = Voucher::find($request->voucher_id);
-                // dd($voucher);exit();
+            // Check if the user has donated
+            if ($user->status == 'donated') {
+                // Check if the activity has vouchers
+                // dd($user);exit();
+                if ($activity->vouchers->count() > 0) {
+                    // Get the voucher based on the selected voucher_id
+                    $voucher = Voucher::find($request->voucher_id);
+                    // dd($voucher);exit();
 
-                if ($request->has('used_voucher') && $request->input('used_voucher') === true) {
+                    if ($request->has('used_voucher') && $request->input('used_voucher') === true) {
 
-                    if ($voucher->kuota_voucher > 0) {
+                        if ($voucher->kuota_voucher > 0) {
 
-                        // Hitung potongan dan terapkan jika voucher digunakan
-                        $discountAmount = $activity->prices[0]->price * ($voucher->presentase_diskon / 100);
-                        // dd($discountAmount);exit();
-                        $donation->donasi = $activity->prices[0]->price - $discountAmount;
+                            // Hitung potongan dan terapkan jika voucher digunakan
+                            $discountAmount = $activity->prices[0]->price * ($voucher->presentase_diskon / 100);
+                            // dd($discountAmount);exit();
+                            $donation->donasi = $activity->prices[0]->price - $discountAmount;
 
-                        // Kurangi kuota voucher dan simpan perubahan
-                        // $voucher->decrement('kuota_voucher');
-                        $voucher->save();
-                        
-                        // Catat penggunaan voucher
-                        $donation->voucher_id = $voucher->id;
-                        $donation->used_voucher = true;
-                    } else {
-                        // Kuota voucher habis, tampilkan pesan error
-                        return response()->json(['message' => 'Kuota voucher sudah habis'], 422);
-                    }
+                            // Kurangi kuota voucher dan simpan perubahan
+                            // $voucher->decrement('kuota_voucher');
+                            $voucher->save();
+                            
+                            // Catat penggunaan voucher
+                            $donation->voucher_id = $voucher->id;
+                            $donation->used_voucher = true;
+                        } else {
+                            // Kuota voucher habis, tampilkan pesan error
+                            return response()->json(['message' => 'Kuota voucher sudah habis'], 422);
+                        }
+                    }else {
+                        // Pengguna tidak menggunakan voucher, gunakan harga asli
+                        $donation->donasi = $activity->prices[0]->price;
+                    }    
                 }else {
-                    // Pengguna tidak menggunakan voucher, gunakan harga asli
+                    // If there are no vouchers, use the original price
                     $donation->donasi = $activity->prices[0]->price;
-                }    
-            }else {
-                // If there are no vouchers, use the original price
+                }
+            } else {
                 $donation->donasi = $activity->prices[0]->price;
             }
-        } else {
-            $donation->donasi = $activity->prices[0]->price;
-        }
     
             $donation->user_id = $uid;
             $donation->activity_id = $activity->id;         
@@ -112,7 +112,7 @@ class BankTransferController extends Controller
             $donation->status_donasi = 'Pending';                        
             $responsePayment = new BankPaymentService($donation, $activity, $bank_name);
             $response = $responsePayment->sendRequest();
-    
+            
             if (isset($response->va_numbers[0]->va_number)) {
                 $donation->nomor_va = $response->va_numbers[0]->va_number;
             } elseif (isset($response->permata_va_number)) {
@@ -138,7 +138,11 @@ class BankTransferController extends Controller
                 'no_hp' => $nomor_hp,               
             ]);
            
-            return response()->json(['msg' => 'success','virtual_account'=>$donation->nomor_va], 201);
+            return response()->json([
+            'msg' => 'success',
+            'virtual_account'=>$donation->nomor_va,
+            'kode_donasi'=>$donation->kode_donasi
+        ], 201);
         } catch (Exception $err) {
             throw $err;
         }
