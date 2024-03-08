@@ -150,10 +150,12 @@ class ActivityController extends Controller
 
         $user = auth('api')->user();
 
-        $now = Carbon::createFromFormat('Y-m-d H:s:i', Carbon::now());
-        $batas_waktu = Carbon::createFromFormat('Y-m-d H:s:i', $data_activity->batas_waktu);
-
+        $now = Carbon::now();
+        //$now = Carbon::createFromFormat('Y-m-d H:s:i', Carbon::now());
+        $batas_waktu = Carbon::parse($data_activity->batas_waktu);
+        //$batas_waktu = Carbon::createFromFormat('Y-m-d H:s:i', $data_activity->batas_waktu);
         $data_activity->sisa_hari = $batas_waktu->diffInDays($now);
+        // dd($data_activity);exit();    
 
         // Check if user is logged in
         if ($user) {
@@ -290,7 +292,7 @@ class ActivityController extends Controller
             'user_id' => $user->id,
             'judul_activity' => $request->judul_activity,
             'judul_slug' => $slug,
-            'foto_activity' => $validated['foto_activity'],
+            'foto_activity' => $photo,
             'detail_activity' => $request->detail_activity,
             //ini yg diganti broooo
             'batas_waktu' => $request->batas_waktu,
@@ -403,7 +405,6 @@ class ActivityController extends Controller
         $slug = ! empty($request->judul_slug) ? $validated['judul_slug'] : Str::slug($request->judul_activity . ' ' . Str::random(6));
         $photo = $request->file('foto_activity');
         
-
         if (! empty($photo)) {
             $photo = $this->uploadImage($request, 'foto_activity', $slug);
         }
