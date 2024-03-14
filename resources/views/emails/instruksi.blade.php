@@ -27,7 +27,7 @@
                                                             <tr>
                                                                 <td style="width:100%; padding: 5px; text-align: center;">
                                                                     <div style="line-height: 10px;">
-                                                                        <img src="https://api.involuntir.com/images/logo/logo_involuntir_1.png" style="display: inline-block;" />
+                                                                        <img height="150" width="150" src="https://api.involuntir.com/images/logo/logo-involuntir-new.png" style="display: inline-block;" />
                                                                     </div>
                                                                 </td>
                                                         </tr>
