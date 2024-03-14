@@ -27,7 +27,7 @@
                                                             <tr>
                                                                 <td style="width:100%; padding: 5px; text-align: center;">
                                                                     <div style="line-height: 10px;">
-                                                                        <img src="https://api.involuntir.com/images/logo/logo_involuntir2.svg" style="display: inline-block;" />
+                                                                        <img src="https://api.involuntir.com/images/logo/logo_involuntir_1.png" style="display: inline-block;" />
                                                                     </div>
                                                                 </td>
                                                         </tr>
@@ -83,7 +83,7 @@
                                                                     </div>
                                                                     <!-- disini -->
                                                                     <div class="button-container">
-                                                                    <a href="https://involuntir.com/aktivitas/kegiatanpuzzle/pembayaran/status/{{$id_donation}}">
+                                                                    <a href="https://involuntir.com/aktivitas/{{ $judul }}/pembayaran/status/{{$id_donation}}">
                                                                         <button class="button" style="background-color: #0d6efd; color: #fff; padding: 10px 20px; cursor: pointer; border: none; border-radius: 20px; width: 100%;">Lihat Cara Pembayaran</button>
                                                                     </a>
                                                                     </div>
