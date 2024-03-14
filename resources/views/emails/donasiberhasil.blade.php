@@ -45,9 +45,7 @@
                                                                                 <strong>{{ $nama_donatur }}</strong>,
                                                                             </p>
                                                                             <br>
-                                                                            <p style="margin: 0;">Donasi kamu <strong
-                                                                                    style="color:rgb(24, 221, 24);">berhasil</strong>
-                                                                                diterima untuk pembayaran
+                                                                            <p style="margin: 0;">Pemabayaran berhasil diterima untuk
                                                                                 <strong>{{ $judul }} </strong>
                                                                             </p>
                                                                             <p
@@ -55,7 +53,7 @@
                                                                                 <br />
                                                                             </p>
                                                                             <p style="margin: 0;"><strong>Rincian
-                                                                                    Donasi</strong></p>
+                                                                                    Pembayaran:</strong></p>
                                                                             <p
                                                                                 style="margin: 0; mso-line-height-alt: 16.8px;">
                                                                                 <br />
@@ -71,7 +69,7 @@
                                                                         </div>
                                                                 </td>    
                                                             </tr>
-                                                            <div style="color:#717171; border-radius:1rem; padding: 1rem; background-color: #fbf4e3">Tetaplah jadi warga baik dan semoga rezekinya semakin lancar setiap hari</div>
+                                                            <!-- <div style="color:#717171; border-radius:1rem; padding: 1rem; background-color: #fbf4e3">Tetaplah jadi warga baik dan semoga rezekinya semakin lancar setiap hari</div> -->
                                                         </table>
                                                         <table border="0" cellpadding="10" cellspacing="0"
                                                             class="divider_block" role="presentation"
@@ -104,10 +102,11 @@
                                                                     <div style="font-family: Arial, sans-serif">
                                                                         <div
                                                                             style="font-size: 14px; font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif; color: #000000; line-height: 1.2;">
-                                                                            <p style="margin: 0;"><span
-                                                                                    style="font-size:12px;">Silahkan join grup whatsapp dengan klik tombol dibawah ini untuk informasi lebih lanjut </span></p>
+                                                                            <p style="margin: 0;"><span style="font-size:14px;">Silahkan join grup whatsapp dengan klik tombol dibawah ini untuk informasi lebih lanjut </span></p>
                                                                         </div>
-                                                                        <a href= {{ $tautan }} ><button>Masuk Grub WA</button></a>
+                                                                        <a href={{ $tautan }}>
+                                                                            <button class="button" style="background-color: #0d6efd; color: #fff; padding: 10px 20px; cursor: pointer; border: none; border-radius: 20px; width: 100%; padding: 10px 15px; margin-top: 10px">Masuk Grub WA</button>
+                                                                        </a>
                                                                     </div>
                                                                 </td>
                                                             </tr>
@@ -234,11 +233,10 @@
                                                                             style="font-size: 14px; color: #717171; line-height: 1.2; font-family: Arial, Helvetica Neue, Helvetica, sans-serif;">
                                                                             <p
                                                                                 style="margin: 0; font-size: 14px; text-align: center;">
-                                                                                <span style="font-size:12px;">© 2018-2021
+                                                                                <span style="font-size:12px;">© 2022-2024
                                                                                     Involuntir. All Right
                                                                                     Reserved</span><br /><span
-                                                                                    style="font-size:12px;">Jl. Kertajaya
-                                                                                    No. 72, Surabaya, 60292</span>
+                                                                                    style="font-size:12px;">Gedung Siola, Koridor Co-working Space, Jl. Tunjungan No.1, Kec. Genteng, Kota SBY, Jawa Timur 60275</span>
                                                                             </p>
                                                                         </div>
                                                                     </div>

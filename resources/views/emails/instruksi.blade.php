@@ -45,16 +45,15 @@
                                                                             <p style="margin: 0;">Halo
                                                                                 <strong>{{ $nama }}</strong>,
                                                                             </p>
-                                                                            <p style="margin: 0;">Terima kasih atas pembayaran
-                                                                                kamu untuk
-                                                                                <strong>{{ $judul }}.</strong>
+                                                                            <p style="margin: 0;">segera lakukan pembayaran untuk
+                                                                                <strong>{{ $judul }} </strong>yang dibuat oleh <strong> {{ $creator_activity }} </strong>
                                                                             </p>
                                                                             <p
                                                                                 style="margin: 0; mso-line-height-alt: 16.8px;">
                                                                                 <br />
                                                                             </p>
                                                                             
-                                                                            <p style="margin: 0;">Segera lakukan pembayaran sebelum <strong>{{ \Carbon\Carbon::parse($hari)->translatedFormat('l, j F Y \p\u\k\u\l H:i') }}</strong>.</p>
+                                                                            <p style="margin: 0;">Batas Waktu Pembayaran <strong>{{ \Carbon\Carbon::parse($hari)->translatedFormat('l, j F Y \p\u\k\u\l H:i') }}</strong>.</p>
 
                                                                             <p
                                                                                 style="margin: 0; mso-line-height-alt: 16.8px;">
@@ -80,11 +79,13 @@
                                                                                 style="margin: 0; mso-line-height-alt: 16.8px;">
                                                                                 <br />
                                                                             </p>
-                                                                            <p style="margin: 0;">Ketika pembayaran berhasil,
-                                                                                kamu akan mendapatkan notifikasi via email.
-                                                                                Apabila melewati batas waktu belum ada pembayaran, maka Pembayaran akan dibatalkan
-                                                                                    otomatis oleh sistem.</p>
                                                                         </div>
+                                                                    </div>
+                                                                    <!-- disini -->
+                                                                    <div class="button-container">
+                                                                    <a href="https://involuntir.com/aktivitas/kegiatanpuzzle/pembayaran/status/{{$id_donation}}">
+                                                                        <button class="button" style="background-color: #0d6efd; color: #fff; padding: 10px 20px; cursor: pointer; border: none; border-radius: 20px; width: 100%;">Lihat Cara Pembayaran</button>
+                                                                    </a>
                                                                     </div>
                                                                 </td>
                                                             </tr>
@@ -239,7 +240,7 @@
                                                                             style="font-size: 14px; color: #717171; line-height: 1.2; font-family: Arial, Helvetica Neue, Helvetica, sans-serif;">
                                                                             <p
                                                                                 style="margin: 0; font-size: 14px; text-align: center;">
-                                                                                <span style="font-size:12px;">© 2018-2021
+                                                                                <span style="font-size:12px;">© 2022-2024
                                                                                     Involuntir. All Right
                                                                                     Reserved</span><br /><span
                                                                                     style="font-size:12px;">Gedung Siola, Koridor Co-working Space, Jl. Tunjungan No.1, Kec. Genteng, Kota SBY, Jawa Timur 60275</span>

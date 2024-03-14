@@ -294,7 +294,6 @@ class ActivityController extends Controller
             'judul_slug' => $slug,
             'foto_activity' => $photo,
             'detail_activity' => $request->detail_activity,
-            //ini yg diganti broooo
             'batas_waktu' => $request->batas_waktu,
             'waktu_activity' => $request->waktu_activity,
             'lokasi' => $request->lokasi,
@@ -365,7 +364,7 @@ class ActivityController extends Controller
     {
         $user = auth('api')->user();
     
-        if (! $user) {
+        if (!$user) {
             return response()->json(['message' => 'User not found!'], 404);
         }
     
@@ -375,14 +374,14 @@ class ActivityController extends Controller
             return response()->json(['message' => 'Activity not found'], 404);
         }
     
-        // Otorisasi: Hanya pemilik aktivitas yang dapat mengubahnya
+        // Authorization: Only the owner of the activity can update it
         if ($user->id !== intval($activity->user_id)) {
             return response()->json(['message' => 'Unauthorized'], 401);
         }
     
         $validator = Validator::make($request->all(), [
             'judul_activity' => 'required|string|max:255',
-            'judul_slug' => 'sometimes|string|unique:activities,judul_slug,'.$activity->id.'|max:255',
+            'judul_slug' => 'sometimes|string|unique:activities,judul_slug,' . $activity->id . '|max:255',
             'category_id' => ['required', 'exists:categories,id'],
             'detail_activity' => 'required|string',
             'batas_waktu' => 'required',
@@ -392,24 +391,34 @@ class ActivityController extends Controller
             'tipe_activity' => 'required|in:Virtual,In-Person,Hybrid',
             'kuota' => 'required|numeric',
             'tautan' => 'required|string',
-            'link_guidebook' => 'string',           
-            'biaya_activity' => 'nullable|numeric', // Biaya harus numerik, tetapi bisa kosong // Setiap elemen dalam array harus numerik
+            'link_guidebook' => 'string',
+            'biaya_activity' => ['nullable', 'array'], // Allow nullable for biaya_activity
+            'biaya_activity.*.per' => ['nullable', 'numeric'],
+            'biaya_activity.*.price' => ['nullable', 'numeric'],
         ]);
     
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()], 422);
         }
     
-        // Proses upload gambar jika ada
+        // Process image upload if any
         $validated = $validator->validated();
-        $slug = ! empty($request->judul_slug) ? $validated['judul_slug'] : Str::slug($request->judul_activity . ' ' . Str::random(6));
-        $photo = $request->file('foto_activity');
-        
-        if (! empty($photo)) {
-            $photo = $this->uploadImage($request, 'foto_activity', $slug);
+        if ($request->has('judul_activity')) {
+            $slug = !empty($request->judul_slug) ? $validated['judul_slug'] : Str::slug($request->judul_activity . ' ' . Str::random(6));
+        } else {
+            $slug = $activity->judul_slug;
         }
     
-        // Update aktivitas
+        $photo = $request->file('foto_activity');
+    
+        if (!empty($photo)) {
+            $photo = $this->uploadImage($request, 'foto_activity', $slug);
+        } else {
+            $photo = $activity->foto_activity;
+        }
+        $activityPrices = $request->biaya_activity ?? [];
+
+        // Update activity
         $activity->judul_activity = $request->judul_activity;
         $activity->judul_slug = $request->judul_slug;
         $activity->category_id = $request->category_id;
@@ -422,12 +431,22 @@ class ActivityController extends Controller
         $activity->kuota = $request->kuota;
         $activity->link_wa = $request->tautan;
         $activity->link_guidebook = $request->link_guidebook;
-    
+        
+        // Update biaya_activity field
+        if (!empty($request->biaya_activity)) {
+            // Delete existing prices before updating
+            $activity->prices()->delete();
+            
+            foreach ($activityPrices as $value) {
+                $activity->prices()->updateOrCreate($value);
+            }
+        }
+        
         // Update vouchers if present in the request
         if ($request->has('vouchers') && is_array($request->vouchers)) {
             // Remove existing vouchers associated with the activity
             $activity->vouchers()->delete();
-
+            
             // Create new vouchers from the request
             $maxVouchers = min(count($request->vouchers), 5); // Limit to 5 vouchers
             for ($i = 0; $i < $maxVouchers; $i++) {
@@ -442,55 +461,14 @@ class ActivityController extends Controller
                 ]);
             }
         }
-
-        // Simpan aktivitas yang telah diperbarui
-        if (!empty($request->tasks)) {
-            $tasks = json_decode($request->tasks);
         
-            // Hapus semua tasks terkait dengan aktivitas
-            $activity->tasks()->delete();
-        
-            // Tambahkan tasks yang baru
-            foreach ($tasks as $task) {
-                Task::create([
-                    'activity_id' => $activity->id,
-                    'deskripsi' => $task,
-                ]);
-            }
-        
-            // Muat ulang aktivitas dengan tasks yang baru
-            $activity->load('tasks');
-        }
-        
-        if (!empty($request->criterias)) {
-            $criterias = json_decode($request->criterias);
-        
-            // Hapus semua criterias terkait dengan aktivitas
-            $activity->criterias()->delete();
-        
-            // Tambahkan criterias yang baru
-            foreach ($criterias as $criteria) {
-                Criteria::create([
-                    'activity_id' => $activity->id,
-                    'deskripsi' => $criteria,
-                ]);
-            }
-        
-            // Muat ulang aktivitas dengan criterias yang baru
-            $activity->load('criterias');
-        }
-        if (!empty($request->biaya_activity)) {
-            $price = $request->biaya_activity;
-            $activityPrice = ActivityPrice::updateOrCreate(
-                ['activity_id' => $activity->id, 'per' => 1],
-                ['price' => $price]
-            );
-        }
-        
+    
         $activity->save();
     
         return response()->json(['message' => 'Activity updated successfully', 'activity' => $activity]);
-    }    
+    }
+    
+    
 
     private function getCategory(Category $category)
     {

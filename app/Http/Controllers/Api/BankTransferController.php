@@ -104,7 +104,7 @@ class BankTransferController extends Controller
                 }
             } else {
                 $donation->donasi = $activity->prices[0]->price;
-            }
+            }   
     
             $donation->user_id = $uid;
             $donation->activity_id = $activity->id;         
@@ -122,14 +122,15 @@ class BankTransferController extends Controller
             }
             $donation->deadline = $response->expiry_time;
             $donation->status_pembayaran = $response->transaction_status;
-            // dd($donation);exit();
+                    
+            $donation->save();
+
             if($response->transaction_status == 'pending'){
-                Mail::to($user->email)->send(new SubmitDonation($user->name, $donation->donasi, $donation->bank_name, $activity->judul_activity, $donation->deadline));
+                Mail::to($user->email)->send(new SubmitDonation($user->name, $donation->donasi, $donation->bank_name, $activity->judul_activity, $donation->deadline, $activity->user, $donation));
             } else {
                 return response()->json(['msg' => 'failed'], 404);
             }
     
-            $donation->save();
     
             DB::table('akun_anonim')->insert([
                 'id_donasi' => $donation->id,
