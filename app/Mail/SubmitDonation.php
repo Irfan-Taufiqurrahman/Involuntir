@@ -23,8 +23,9 @@ class SubmitDonation extends Mailable
     protected $user;
     protected $deadline;
     protected $donation;
+    protected $judul_slug;
 
-    public function __construct($nama_lengkap, $nominal, $payment_channel, $judul_activity, $deadline, $user, $donation)
+    public function __construct($nama_lengkap, $nominal, $payment_channel, $judul_activity, $deadline, $user, $donation, $judul_slug)
     {
         $this->nama_lengkap = $nama_lengkap;
         $this->nominal = number_format(floatval($nominal));
@@ -33,6 +34,7 @@ class SubmitDonation extends Mailable
         $this->deadline=$deadline;
         $this->user = $user;
         $this->donation = $donation;
+        $this->judul_slug = $judul_slug;
     }
     
     /**
@@ -52,6 +54,7 @@ class SubmitDonation extends Mailable
                 'hari' => $this->deadline,
                 'creator_activity' => $this->user->name,
                 'id_donation' => $this->donation->id,
+                'judul_slug' => $this->judul_slug,
             ]);
     }
 }

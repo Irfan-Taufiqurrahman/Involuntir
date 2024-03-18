@@ -120,7 +120,7 @@ class EMoneyController extends Controller
             // dd($donation);exit();
             $donation->save();
             if ($response->transaction_status == 'pending') {
-                Mail::to($user->email)->send(new SubmitDonation($user->name, $donation->donasi, $donation->emoney_name, $activity->judul_activity, $donation->deadline, $activity->user, $donation));
+                Mail::to($user->email)->send(new SubmitDonation($user->name, $donation->donasi, $donation->emoney_name, $activity->judul_activity, $donation->deadline, $activity->user, $donation, $activity->judul_slug));
             } else {
                 return response()->json(['msg' => 'failed'], 404);
             }       

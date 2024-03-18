@@ -68,11 +68,9 @@ class BankTransferController extends Controller
             // Check if the user has donated
             if ($user->status == 'donated') {
                 // Check if the activity has vouchers
-                // dd($user);exit();
                 if ($activity->vouchers->count() > 0) {
                     // Get the voucher based on the selected voucher_id
                     $voucher = Voucher::find($request->voucher_id);
-                    // dd($voucher);exit();
 
                     if ($request->has('used_voucher') && $request->input('used_voucher') === true) {
 
@@ -126,7 +124,7 @@ class BankTransferController extends Controller
             $donation->save();
 
             if($response->transaction_status == 'pending'){
-                Mail::to($user->email)->send(new SubmitDonation($user->name, $donation->donasi, $donation->bank_name, $activity->judul_activity, $donation->deadline, $activity->user, $donation));
+                Mail::to($user->email)->send(new SubmitDonation($user->name, $donation->donasi, $donation->bank_name, $activity->judul_activity, $donation->deadline, $activity->user, $donation, $activity->judul_slug));
             } else {
                 return response()->json(['msg' => 'failed'], 404);
             }

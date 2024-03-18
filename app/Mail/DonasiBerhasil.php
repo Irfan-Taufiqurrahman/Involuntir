@@ -23,15 +23,15 @@ class DonasiBerhasil extends Mailable
     protected $name;
     protected $nominal;
     protected $judul_activity;
-    protected $tautan;
+    protected $link_wa;
 
-    public function __construct($payment_channel, $name, $nominal, $judul_activity, $tautan)
+    public function __construct($payment_channel, $name, $nominal, $judul_activity, $link_wa)
     {
         $this->payment_channel = $payment_channel;
         $this->name = $name;
         $this->nominal = $nominal;
         $this->judul_activity = $judul_activity;
-        $this->tautan = $tautan;        
+        $this->link_wa = $link_wa;
     }
 
     /**
@@ -49,7 +49,7 @@ class DonasiBerhasil extends Mailable
                 'nominal' => number_format(floatval($this->nominal)),
                 'metode' => $this->payment_channel,
                 'judul' => $this->judul_activity,
-                'tautan'=>$this->tautan,
+                'tautan'=> $this->link_wa,
             ]);
     }
 }
