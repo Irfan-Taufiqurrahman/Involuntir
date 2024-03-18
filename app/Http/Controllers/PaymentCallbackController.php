@@ -86,6 +86,22 @@ class PaymentCallbackController extends Controller
                     'status_donasi' => 'Approved',
                     'qr_code' => null,
                 ]);
+                $uid = $donation->user_id;
+                $user = User::find($uid);
+                if ($data->status_donasi === 'Approved') {
+                    if ($user->used_voucher) {
+                        // Kurangi 1 pada 'kuota_voucher' di tabel 'vouchers' berdasarkan 'voucher_id'
+                        $voucher = Voucher::find($data->voucher_id);
+                        if ($voucher) {
+                            $voucher->decrement('kuota_voucher');
+                        }
+                    }                    
+                    // Penggantian value 'status' pada tabel 'users' menjadi 'donated'
+                    if ($user) {
+                        $user->update(['status' => 'donated']);
+                        $user->increment('total_donated');
+                    }
+                }
                 Mail::to($data->email)->send(new DonasiBerhasil($data->bank_name, $data->name, $data->donasi, $data->activity->judul_activity, $data->activity->link_wa)); 
             return response()->json(['data'=>$data]);   
             }
