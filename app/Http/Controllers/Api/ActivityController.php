@@ -108,6 +108,7 @@ class ActivityController extends Controller
                     'activities.created_at',
                     'jenis_activity',
                     'tipe_activity',
+                    'lokasi',
                     DB::raw("CONCAT(DATEDIFF(batas_waktu, CURRENT_DATE), ' hari') as sisa_waktu"),
                     DB::raw('COUNT(participations.id) as total_volunteer'),
                 ]);
@@ -503,6 +504,7 @@ class ActivityController extends Controller
                     'judul_slug' => $activity->judul_slug,
                     'foto_activity' => $activity->foto_activity,
                     'batas_waktu' => $activity->batas_waktu,
+                    'lokasi' => $activity->lokasi,
                     'created_at' => $activity->created_at,
                     'total_volunteer' => $activity->donations->where('status_donasi', 'Approved')->count(),
                 ];

@@ -80,6 +80,7 @@ class BankTransferController extends Controller
                             $discountAmount = $activity->prices[0]->price * ($voucher->presentase_diskon / 100);
                             // dd($discountAmount);exit();
                             $donation->donasi = $activity->prices[0]->price - $discountAmount;
+                            $donation->donasi = round($donation->donasi); // This line rounds the donation amount
 
                             // Kurangi kuota voucher dan simpan perubahan
                             // $voucher->decrement('kuota_voucher');
