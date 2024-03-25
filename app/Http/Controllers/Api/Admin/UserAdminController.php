@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Carbon\Carbon;
+use Illuminate\Http\Request;
 
 class UserAdminController extends Controller
 {
@@ -27,6 +28,65 @@ class UserAdminController extends Controller
             }),
         ]);
     }
+
+    public function indexPagination(Request $request)
+    {
+        // Define the number of users per page
+        $perPage = 20; // You can adjust this number as needed
+    
+        $page = $request->query('page', 1);
+    
+        $users = User::paginate($perPage, ['*'], 'page', $page);
+    
+        // Check if the current page has data
+        if ($users->isEmpty()) {
+            return response()->json(['error' => 'No data found for page ' . $page], 404);
+        }
+
+        $hasNextPage = $users->hasMorePages();
+
+        $responseData = [
+            'status' => true,
+            'current_page' => $users->currentPage(),
+            'total_pages' => $users->lastPage(),
+            'has_next_page' => $hasNextPage,
+            'users' => $users->items(),
+
+        ];
+    
+        return response()->json($responseData);
+    }
+
+    public function search(Request $request)
+    {
+        $perPage = 20; // Define the number of users per page
+        $query = $request->input('query');
+
+        if (empty($query)) {
+            return $this->indexPagination($request);
+        }
+
+        $users = User::where('name', 'like', "%{$query}%")
+                    ->orWhere('email', 'like', "%{$query}%")
+                    ->orWhere('username', 'like', "%{$query}%")
+                    ->paginate($perPage);
+
+        if ($users->isEmpty()) {
+            return response()->json(['error' => 'No users found matching the search query'], 404);
+        }
+
+        $responseData = [
+            'status' => true,
+            'current_page' => $users->currentPage(),
+            'total_pages' => $users->lastPage(),
+            'has_next_page' => $users->hasMorePages(),
+            'users' => $users->items(),
+        ];
+        
+        return response()->json($responseData);
+    }
+
+
     public function changeToOrganisasi($userId)
     {
         try {

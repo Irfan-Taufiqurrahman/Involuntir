@@ -243,7 +243,9 @@ Route::prefix('companies')->group(function () {
 });
 
 Route::prefix('admin')->middleware(['jwt.verify','admin'])->group(function () {
-    Route::get('/users', [UserAdminController::class, 'index']);
+    Route::get('/users', [UserAdminController::class, 'indexPagination']);
+    Route::get('/users/search', [UserAdminController::class, 'search']);
+    // Route::get('/users', [UserAdminController::class, 'index']);
     Route::get('/donation/all', [DonationController::class, 'index']);
     Route::get('/aktivitas', [ActivityAdminController::class, 'index']);
     Route::put('/change-user/{userId}', [UserAdminController::class, 'changeToOrganisasi']);    
